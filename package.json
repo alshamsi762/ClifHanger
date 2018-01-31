@@ -1,0 +1,22 @@
+{
+  "name": "cliffhanger",
+  "version": "1.0.0",
+  "description": "Pre Deployment Local Test Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alshamsi762/CliffHanger.git"
+  },
+  "author": "Anirudh Pal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alshamsi762/CliffHanger/issues"
+  },
+  "homepage": "https://github.com/alshamsi762/CliffHanger#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
