@@ -18,12 +18,19 @@
 	<!-- Body -->
 	<body class="container-fluid">
 		<p>
-      <!-- Put HTML Stuff Here. -->
-      I promise to contribute to this effort. I also promise not to plagarise other people's work.
-    </p>
+      		<!-- Put HTML Stuff Here. -->
+      		I promise to contribute to this effort. I also promise not to plagarise other people's work.
+    		</p>
+		<button onclick="myFunc()">Click Me</button>
+		<p id = "demo"></p>
 
 		<!-- JS Scripts -->
     <!-- Put your JavaScript Here. -->
+		<script>
+			function myFunc() {
+				document.getElementById("demo").innerHTML = "Hello World";
+			}
+		</script>
 		<script src="http://threejs.org/build/three.min.js"></script>
     
 	</body>
