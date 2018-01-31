@@ -4,12 +4,12 @@ class Player {
 
   // Constructor for Player
   constructor(id, health, position, offensive, defensive, name) {
-    this.id = id;
-    this.health = health;
-    this.position = position;
-    this.offensive = offensive;
-    this.defensive = defensive;
-    this.name = name;
+    this.id = id; // 0 - ()# of players - 1)
+    this.health = health; // Integer
+    this.position = position; // Integer, 1-(boardwidth^2)
+    this.offensive = offensive; // List of item objects
+    this.defensive = defensive; // List of item objects
+    this.name = name;  // String name
   }
 
   // Damage the player's health by the amount. Works for healing w/ < 0 values
