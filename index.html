@@ -4,7 +4,7 @@
 <!-- HTML Script -->
 <html>
 	<!-- Head -->
-	<head> 
+	<head>
 		<!-- Tab Title -->
     <title>
 			CliffHanger
@@ -27,11 +27,16 @@
 		<!-- JS Scripts -->
     <!-- Put your JavaScript Here. -->
 		<script>
-			function myFunc() {
-				document.getElementById("demo").innerHTML = "Hello World";
+			// Need a gameplay file w/ functions such as attack, move, ect.
+			var player1 = new Player(0, 100, "A1", null, null, "Andrew");
+			var player2 = new Player(1, 100, "A2", null, null, "Amjad");
+
+			function test() {
+				player1.damageHealthBy(10);
+				document.getElementById("demo").innerHTML = player1.health;
 			}
 		</script>
 		<script src="http://threejs.org/build/three.min.js"></script>
-    
+
 	</body>
 </html>
