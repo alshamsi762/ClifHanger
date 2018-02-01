@@ -38,3 +38,62 @@ test('Heal players by 10 until their healths equal 100', () => {
 test('Healing a dead player will not change their health', () => {
   expect(testplayer.testHealDeadPlayer()).toBe(0);
 })
+
+// Take a player and attempt to heal them with garbage input
+test('Heal a player with garbage input does nothing', () => {
+  expect(testplayer.testHealHealthByGarbage()).toBe(50);
+})
+
+// Take a player and add an offensive item to their inventory
+test('Add an offensive item to the player inventory', () => {
+  expect(testplayer.testPushOffensiveItem()).toBe(true);
+})
+
+// Take a player and attempt to add more than 6 items to the offensive item list
+test('Limit the amount of items that can be in the offensive inventory', () => {
+  expect(testplayer.testPushOffensiveItems()).toBe(true);
+})
+
+// Take a player and attempt to add garbage values to the offensive inventory
+test('Push to offensive inventory with garbage input does nothing', () => {
+  expect(testplayer.testPushOffensiveGarbage()).toBe(true);
+})
+
+// Take a player with an offensive item in their inventory and attempt to pop
+// the item off the stack
+test('Pop an offensive item from the player inventory', () => {
+  expect(testplayer.testPopOffensiveItem()).toBe(true);
+})
+
+// Take a player with full offensive inventory and attempt to pop all items plus
+// one more
+test('Popping all items from offensive inventory. Excessive calls return null', () => {
+  expect(testplayer.testPopOffensiveItems()).toBe(true);
+})
+
+// Take a player and add an defensive item to their inventory
+test('Add a defensive item to the player inventory', () => {
+  expect(testplayer.testPushDefensiveItem()).toBe(true);
+})
+
+// Take a player and attempt to add more than 6 items to the defensive item list
+test('Limit the amount of items that can be in the offensive inventory', () => {
+  expect(testplayer.testPushDefensiveItems()).toBe(true);
+})
+
+// Take a player and attempt to add garbage values to the defensive inventory
+test('Push to defensive inventory with garbage input does nothing', () => {
+  expect(testplayer.testPushDefensiveGarbage()).toBe(true);
+})
+
+// Take a player with an defensive item in their inventory and attempt to pop
+// the item off the stack
+test('Pop an defensive item from the player inventory', () => {
+  expect(testplayer.testPopDefensiveItem()).toBe(true);
+})
+
+// Take a player with full defensive inventory and attempt to pop all items plus
+// one more
+test('Popping all items from defensive inventory. Excessive calls return null', () => {
+  expect(testplayer.testPopDefensiveItems()).toBe(true);
+})

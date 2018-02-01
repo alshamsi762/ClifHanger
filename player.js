@@ -1,4 +1,5 @@
 /** Player Object & Functions **/
+const Item = require('./item.js');
 module.exports = class Player {
 
   // Constructor for Player
@@ -14,7 +15,7 @@ module.exports = class Player {
   // Damage the player's health by the amount.
   damageHealthBy(amount) {
     if (typeof(amount) != 'number') { return; }
-    if (amount % 1 !== 0) { return; }
+    if (amount % 1 !== 0 || amount < 0) { return; }
 
     if (this.health - amount < 0) {
       this.health = 0;
@@ -27,8 +28,8 @@ module.exports = class Player {
   // Heals the player's health by the amount.
   healHealthBy(amount) {
     if (typeof(amount) != 'number') { return; }
-    if (amount % 1 !== 0) { return; }
-    
+    if (amount % 1 !== 0 || amount < 0) { return; }
+
     if (this.health <= 0) {
       this.health = 0;
     } else if (this.health + amount <= 100) {
@@ -45,21 +46,37 @@ module.exports = class Player {
 
   // Push an offensive item to player's inventory
   pushOffensiveItem(offensiveItem) {
-    this.offensive.push(offensiveItem);
+    if (offensiveItem instanceof Item) {
+      if (this.offensive == null) { this.offensive = []; }
+      if (this.offensive.length < 6) {
+        this.offensive.push(offensiveItem);
+      }
+    }
   }
 
   // Push a defensive item to player's inventory
   pushDefensiveItem(defensiveItem) {
-    this.defensive.push(defensiveItem);
+    if (defensiveItem instanceof Item) {
+      if (this.defensive == null) { this.defensive = []; }
+      if (this.defensive.length < 6) {
+        this.defensive.push(defensiveItem);
+      }
+    }
   }
 
   // Pop an offensiveItem from the player's inventory
   popOffensiveItem() {
+    if (this.offensive.length == 0) {
+      return null;
+    }
     return this.offensive.pop();
   }
 
   // Pop a defensiveItem from the player's inventory
   popDefensiveItem() {
+    if (this.defensive.length == 0) {
+      return null;
+    }
     return this.defensive.pop();
   }
 

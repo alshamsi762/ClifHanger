@@ -1,5 +1,6 @@
 
 const Player = require('./player.js');
+const Item = require('./item.js');
 
 // Function to damage player's health by 10
 module.exports.testDamageHealthBy = function testDamageHealthBy() {
@@ -56,10 +57,10 @@ module.exports.testRandomDamageToDeath = function testRandomDamageToDeath() {
   return true;
 }
 
-// Function to attemt to input garbage values into the damageHealthBy function
+// Function to attempt to input garbage values into the damageHealthBy function
 module.exports.testDamageByGarbage = function testDamageByGarbage() {
   var player1 = new Player(0, 100, 0, null, null, "Andrew");
-  var garbage = [21.2, "Hello World", true, undefined, null, Symbol('foo')];
+  var garbage = [21.2, "Hello World", true, undefined, null, Symbol('foo'), -5];
   for (i = 0; i < garbage.length; i++) {
     player1.damageHealthBy(garbage[i]);
   }
@@ -92,4 +93,146 @@ module.exports.testHealDeadPlayer = function testHealDeadPlayer() {
   }
 
   return player1.getHealth();
+}
+
+// Function to attempt to input garbage values into the healHealBy function
+module.exports.testHealHealthByGarbage = function testHealHealthByGarbage() {
+  var player1 = new Player(0, 50, 0, null, null, "Andrew");
+  var garbage = [21.2, "Hello World", true, undefined, null, Symbol('foo'), -5];
+  for (i = 0; i < garbage.length; i++) {
+    player1.healHealthBy(garbage[i]);
+  }
+  return player1.getHealth();
+}
+
+// Function to test pushing offensiveItem to player inventory
+module.exports.testPushOffensiveItem = function testPushOffensiveItem() {
+  var player1 = new Player(0, 100, 0, null, null, "Andrew");
+  var item = new Item("Whip", 0, 0, 2, 10, 0.90, "Whip players two spaces away from you");
+  player1.pushOffensiveItem(item);
+  return (player1.offensive.length == 1);
+}
+
+// Function to test popping an offensiveItem from player inventory
+module.exports.testPopOffensiveItem = function testPopOffensiveItem() {
+  var player1 = new Player(0, 100, 0, null, null, "Andrew");
+  var item = new Item("Whip", 0, 0, 2, 10, 0.90, "Whip players two spaces away from you");
+  player1.pushOffensiveItem(item);
+  var itemAgain = player1.popOffensiveItem();
+  return (itemAgain instanceof Item && itemAgain === item);
+}
+
+// Function to test pushing more than max offensive inventory size
+module.exports.testPushOffensiveItems = function testPushOffensiveItems() {
+  var player1 = new Player(0, 100, 0, null, null, "Andrew");
+  var testItems = [];
+  for (i = 0; i < 7; i++) {
+    var item = new Item("item" + i, 0, 0, 2, 10, 0.90, "This is item" + i);
+    testItems.push(item);
+    player1.pushOffensiveItem(item);
+  }
+  for (i = 0; i < player1.offensive.length; i++) {
+    if (testItems[i] !== player1.offensive[i]) {
+      return false;
+    }
+  }
+
+  return (testItems.length > player1.offensive.length)
+}
+
+// Function to test popping more items than there are in the offensive inventory
+module.exports.testPopOffensiveItems = function testPopOffensiveItems() {
+  var player1 = new Player(0, 100, 0, null, null, "Andrew");
+  var testItems = [];
+  var testPopped = [];
+  for (i = 0; i < 7; i++) {
+    var item = new Item("item" + i, 0, 0, 2, 10, 0.90, "This is item" + i);
+    testItems.push(item);
+    player1.pushOffensiveItem(item);
+  }
+
+  for(i = 0; i < 7; i++) {
+    var itemAgain = player1.popOffensiveItem();
+    if (typeof itemAgain === undefined) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+// Function to test pushing garbage into offensive inventory
+module.exports.testPushOffensiveGarbage = function testPushOffensiveGarbage() {
+  var player1 = new Player(0, 100, 0, null, null, "Andrew");
+  var items = [21.2, "Hello World", true, undefined, null, Symbol('foo'), -5];
+  for (i = 0; i < items.length; i++) {
+    player1.pushOffensiveItem(items[i]);
+  }
+  return (player1.offensive == null);
+}
+
+// Function to test pushing defensive item to player inventory
+module.exports.testPushDefensiveItem = function testPushDefensiveItem() {
+  var player1 = new Player(0, 100, 0, null, null, "Andrew");
+  var item = new Item("Potion", 0, 0, 2, 10, 0.90, "Heal you up");
+  player1.pushDefensiveItem(item);
+  return (player1.defensive.length == 1);
+}
+
+// Function to test popping a defensive item from player inventory
+module.exports.testPopDefensiveItem = function testPopDefensiveItem() {
+  var player1 = new Player(0, 100, 0, null, null, "Andrew");
+  var item = new Item("Potion", 0, 0, 2, 10, 0.90, "Heal you up");
+  player1.pushDefensiveItem(item);
+  var itemAgain = player1.popDefensiveItem();
+  return (itemAgain instanceof Item && itemAgain === item);
+}
+
+// Function to test pushing more than max defensive inventory size
+module.exports.testPushDefensiveItems = function testPushDefensiveItems() {
+  var player1 = new Player(0, 100, 0, null, null, "Andrew");
+  var testItems = [];
+  for (i = 0; i < 7; i++) {
+    var item = new Item("item" + i, 0, 0, 2, 10, 0.90, "This is item" + i);
+    testItems.push(item);
+    player1.pushDefensiveItem(item);
+  }
+  for (i = 0; i < player1.defensive.length; i++) {
+    if (testItems[i] !== player1.defensive[i]) {
+      return false;
+    }
+  }
+
+  return (testItems.length > player1.defensive.length)
+}
+
+// Function to test popping more items than there are in the defensive inventory
+module.exports.testPopDefensiveItems = function testPopDefensiveItems() {
+  var player1 = new Player(0, 100, 0, null, null, "Andrew");
+  var testItems = [];
+  var testPopped = [];
+  for (i = 0; i < 7; i++) {
+    var item = new Item("item" + i, 0, 0, 2, 10, 0.90, "This is item" + i);
+    testItems.push(item);
+    player1.pushDefensiveItem(item);
+  }
+
+  for(i = 0; i < 7; i++) {
+    var itemAgain = player1.popDefensiveItem();
+    if (typeof itemAgain === undefined) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+// Function to test pushing garbage into defensive inventory
+module.exports.testPushDefensiveGarbage = function testPushDefensiveGarbage() {
+  var player1 = new Player(0, 100, 0, null, null, "Andrew");
+  var items = [21.2, "Hello World", true, undefined, null, Symbol('foo'), -5];
+  for (i = 0; i < items.length; i++) {
+    player1.pushDefensiveItem(items[i]);
+  }
+  return (player1.defensive == null);
 }
