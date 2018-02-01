@@ -1,10 +1,9 @@
 /** Player Object & Functions **/
-
-class Player {
+module.exports = class Player {
 
   // Constructor for Player
   constructor(id, health, position, offensive, defensive, name) {
-    this.id = id; // 0 - ()# of players - 1)
+    this.id = id; // 0 - (# of players - 1)
     this.health = health; // Integer
     this.position = position; // Integer, 1-(boardwidth^2)
     this.offensive = offensive; // List of item objects
@@ -12,9 +11,31 @@ class Player {
     this.name = name;  // String name
   }
 
-  // Damage the player's health by the amount. Works for healing w/ < 0 values
+  // Damage the player's health by the amount.
   damageHealthBy(amount) {
-    this.health -= amount;
+    if (typeof(amount) != 'number') { return; }
+    if (amount % 1 !== 0) { return; }
+
+    if (this.health - amount < 0) {
+      this.health = 0;
+    } else if (this.health > 0) {
+      this.health -= amount;
+    } else {
+      this.health = 0;
+    }
+  }
+  // Heals the player's health by the amount.
+  healHealthBy(amount) {
+    if (typeof(amount) != 'number') { return; }
+    if (amount % 1 !== 0) { return; }
+    
+    if (this.health <= 0) {
+      this.health = 0;
+    } else if (this.health + amount <= 100) {
+      this.health += amount;
+    } else {
+      this.health = 100;
+    }
   }
 
   // Change the player's position
