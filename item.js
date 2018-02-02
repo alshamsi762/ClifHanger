@@ -11,6 +11,10 @@ module.exports = class Item {
     this.damage = damage; // number
     this.rarity = rarity; //
     this.description = description  // String
+    this.OFFENSE = 0;
+    this.DEFENSE = 1;
+    this.BASIC = 0;
+    this.RADIUS = 1;
   }
 
 }
