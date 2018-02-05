@@ -301,5 +301,42 @@ module.exports = class Gameplay() {
     }
   }
 
+  // calculate moves required to go from a to b
+  // used to drop items at the beginning of the game
+  movesFrom(a, b)
+  {
+    var diff = Math.abs(a - b);
+    var moves = 0;
+    moves = moves + Math.floor(diff / 10) + (diff % 10);
+    return moves;
+  }
+
+  initialDrop()
+  {
+    var count = 0;
+    var itemPos = 0;
+    var item = null;
+    while(count < 10)
+    {
+      // item = call amjad's algorithm
+      item = this.items[Math.floor(Math.random() * 8)];
+      itemPos = Math.floor(Math.random() * 100);
+
+      // makes sure no item is dropped less than 2 moves away from all players
+      while(movesFrom(0, itemPos) < 2 || movesFrom(9, itemPos) < 2 || movesFrom(90, itemPos) < 2 || movesFrom(99, itemPos) < 2)
+      {
+        itemPos = Math.floor(Math.random() * 100);
+      }
+      this.board[itemPos].setLoot(item);
+      count++;
+    }
+  }
+
+  // Amjad's algorithm
+  randomItem()
+  {
+    // HARD AF! Probably going to use Andrew's instead
+  }
+
 
 }
