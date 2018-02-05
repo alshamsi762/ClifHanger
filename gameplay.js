@@ -114,6 +114,7 @@ class Gameplay() {
 
 
     // Array of all Items
+    this.BASIC = 0;
     this.POTION10 = 1;
     this.POTION30 = 2;
     this.RADIUS = 3;    // radius attack
@@ -121,49 +122,96 @@ class Gameplay() {
     this.TRAP = 5;
     this.LONG = 6;    // range attack, change name?
     this.STRONG = 7;    // stronger attack, more damage, change name?
+    this.MOVEX2 = 8;
 
-    var allItems = [1, 2, 3, 4, 5, 6, 7];    // not sure if this is feasible lol
+    var allItems = [0, 1, 2, 3, 4, 5, 6, 7, 8];    // not sure if this is feasible lol
     this.items = allItems;
 
 
-    var currPlayer = null, currItem = null, fullTurnCount = 0;
+    this.currPlayer = null, this.currItem = null, this.fullTurnCount = 0;
   }
 
   // Creates Board. Places players and items on board
   createBoard() {
-    var board = new Array(100);
-    for(var i = 0; i < 99; i++)
+    this.board = new Array(100);
+    for(var i = 0; i < 100; i++)
     {
-      board.push(i);
+      var boardspace = new Boardspace(i, null, null, null, 0);
+      this.board.push(boardspace);
     }
 
     // place players on corners
-    var currPlayer - this.playerList;
-    board[0] = currPlayer;
-    currPlayer = currPlayer.next;
-    board[9] = currPlayer;
-    currPlayer = currPlayer.next;
-    board[99] = currPlayer;
-    currPlayer = currPlayer.next;
-    board[90] = currPlayer;
+    this.currPlayer = this.playerList;
+    this.board[0].setPlayer(this.currPlayer);
+    this.currPlayer = currPlayer.next;
+    this.board[9].setPlayer(this.currPlayer);
+    this.currPlayer = currPlayer.next;
+    this.board[99].setPlayer(this.currPlayer);
+    this.currPlayer = currPlayer.next;
+    this.board[90].setPlayer(this.currPlayer);
 
     // TODO: place items on board
 
+
+
   }
 
-  // Starts turn timer, calculate possible moves, set currentPlayer & currentItem, change player state to Active. Disable "end turn"
+  // Starts turn timer, calculate possible moves, set currentPlayer, change player state to Active. Disable "end turn"
   startTurnFor(player) {
+    // Start turn timer
+
+    // Calculate possible moves from player's position
+    this.possibleMovesFrom(this.board[player.position]);
+
+    // Change currentPlayer and currentItem to start of turn values
+    this.currPlayer = player;
+    // this.currItem = this.items[this.BASIC]; <= moved to moveTo()
+    this.currPlayer.status = 1; // Change status to Active "1"
 
   }
 
   // Update Linked List, change player state to Idle
   endTurnFor(player) {
+    // Reset turn timer?
 
+    player.status = 0;
   }
 
   // Update currPlayer position, apply effects of any trap or add item, set currItem to Basic Attack and call possible attacks.
   // Enable "end turn" button
   moveTo(boardspace) {
+    // Remove the player from their current boardspace
+    this.board[this.currPlayer.position].removePlayer();
+
+    // Move the player to the requested boardspace
+    boardspace.setPlayer(this.currPlayer);
+
+    // Check for traps, or items
+    if (boardspace.hasTrap()) {
+      // End player's turn
+    }
+
+    if (boardspace.hasLoot()) {
+      if (boardspace.loot.itemType == 0) {  // Offensive
+        var success = this.currPlayer.pushOffensiveItem(boardspace.loot);
+        if (success) {
+          boardspace.removeLoot();
+        } else {
+          // Inventory full
+          //TODO UI Change
+        }
+      } else if (boardspace.loot.itemType == 1) { // Defensive
+        var success = this.currPlayer.pushDefensiveItem(boardspace.loot);
+        if (success) {
+          boardspace.removeLoot();
+        } else {
+          // Inventory full
+          //TODO UI Change
+        }
+      }
+    }
+    // Set the currentItem to the basic attack
+    this.currItem = this.items[this.BASIC];
 
   }
 
