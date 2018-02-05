@@ -24,20 +24,21 @@ doubleList.prototype.addPlayer = function(player)
 
   if(this.length == 0)
   {
-    this.head = node;
-    this.tail = node;
-    this.head.next = node;
-    this.head.previous = node;
-    this.tail.next = node;
-    this.tail.previous = node;  // I think we need to set all of these to make it a double linked list and to loop around?
+    this.head = newPlayer;
+    this.tail = newPlayer;
+    this.head.next = newPlayer;
+    this.head.previous = newPlayer;
+    this.tail.next = newPlayer;
+    this.tail.previous = newPlayer;  // I think we need to set all of these to make it a double linked list and to loop around?
+
   }
   else
   {
-    this.tail.next = node;
-    node.previous = this.tail;
-    node.next = this.head;
-    this.tail = node;
-    this.head.previous = node;
+    this.tail.next = newPlayer;
+    newPlayer.previous = this.tail;
+    newPlayer.next = this.head;
+    this.tail = newPlayer;
+    this.head.previous = newPlayer;
   }
 
   this.length++;
@@ -105,7 +106,7 @@ module.exports = class Gameplay {
   // Const. Linked List (Players), Array for all Items, # Alive, Turn Timer, currPlayer, currItem, fullTurnCount
   constructor(p1, p2, p3, p4) {
     // Linked list of players
-    var sentinel = new Player(-1, 0, null, null, null, null);
+    var sentinel = new Player(-1, 0, 0, null, null, null);
     var list = new doubleList();
     list.addPlayer(p1);
     list.addPlayer(p2);
