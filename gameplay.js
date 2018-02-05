@@ -260,12 +260,28 @@ module.exports = class Gameplay {
 
   // Check attributes of boardspace
   canMoveTo(boardspace) {
-
+    return boardspace.playerCanEnter();
   }
 
   // Check boardspaces around currPlayer's boardspace. Display in UI
   possibleMovesFrom(boardspace) {
-
+    var pos = boardspace.position;
+    if(pos + 10 <= this.topBounds && canMoveTo(this.board[pos + 10]))
+    {
+      // can move up
+    }
+    if((pos % 10) != this.rightOffset && canMoveTo(this.board[pos + 1]))
+    {
+      // can move right
+    }
+    if(pos - 10 >= this.lowerBounds && canMoveTo(this.board[pos - 10]))
+    {
+      // can move down
+    }
+    if((pos % 10) != this.leftOffset && canMoveTo(this.board[pos - 1]))
+    {
+      // can move left
+    }
   }
 
   // Use currPlayer pos. and item to display possible attacks. Display in UI
