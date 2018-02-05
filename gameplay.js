@@ -248,8 +248,48 @@ module.exports = class Gameplay {
 
   // Shrink the board. For each dropped, check if player is there, kill player if they are.
   shrinkBoard() {
-    // drop the blocks that are in FALLEN state or out of bounds
+    // change outer blocks to FALLEN and kill any players found
+    for(i = lower; i < lower + 10; i++)   // lower row
+    {
+      this.board[i].fallStage = FALLEN;
+      if(this.board[i].hasPlayer())
+      {
+        this.killPlayer(this.board[i].player);
+      }
+
+      this.board[top - i].fallStage = FALLEN;
+      if(this.board[top - i].hasPlayer())
+      {
+        this.killPlayer(this.board[top - i].player);
+      }
+    }
+
+    for(i = lower; i < top; i+=10)   // left column
+    {
+      this.board[i].fallStage = FALLEN;
+      if(this.board[i].hasPlayer())
+      {
+        this.killPlayer(this.board[i].player);
+      }
+
+      this.board[top - i].fallStage = FALLEN;
+      if(this.board[top - i].hasPlayer())
+      {
+        this.killPlayer(this.board[top - i].player);
+      }
+    }
+
+
+    // change boundaries
+    this.width -= 2;
+    this.size = this.width * this.width;
+    this.lowerBounds += 10;
+    this.topBounds -= 10;
+    this.rightOffset--;
+    this.leftOffset++;
+    // call UI
     // call this in shouldShrinkBoard
+
   }
 
   // Remove player from linked list. Call any animations
@@ -295,13 +335,32 @@ module.exports = class Gameplay {
     var count = this.fullTurnCount;
     if(count == 4 || count == 11 || count == 20)
     {
+      var top = this.topBounds, lower = this.lowerBounds, right = this.rightOffset, left = this.leftOffset;
+
       // change outer blocks to UNSTABLE
+      for(i = lower; i < lower + 10; i++)   // lower row
+      {
+        this.board[i].fallStage = UNSTABLE;
+        this.board[top - i].fallStage = UNSTABLE;
+      }
+      // for(i = top; i > top - 10; i--)   // top row
+      // {
+      //   this.board[i].fallStage = UNSTABLE;
+      // }
+      for(i = lower; i < top; i+=10)   // left column
+      {
+        this.board[i].fallStage = UNSTABLE;
+        this.board[top - i].fallStage = UNSTABLE;
+      }
+      // for(i = top; i > lower; i-=10)   // right column
+      // {
+      //   this.board[i].fallStage = UNSTABLE;
+      // }
     }
     if(count == 5 || count == 12 || count == 21)    // After 5 - 7 - 9 turns
     {
-      // change outer blocks to FALLEN
-      // change outer boundaries
-      // call shrinkBoard
+      // call shrinkBoarb
+      shrinkBoard();
     }
 
   }
