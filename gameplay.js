@@ -127,8 +127,11 @@ module.exports = class Gameplay() {
     var allItems = [0, 1, 2, 3, 4, 5, 6, 7, 8];    // not sure if this is feasible lol
     this.items = allItems;
 
+    this.size = 100, this.width = 10;
+
 
     this.currPlayer = null, this.currItem = null, this.fullTurnCount = 0;
+    this.topBounds = 99, this.lowerBounds = 0, this.leftOffset = 0, this.rightOffset = 9;
   }
 
   // Creates Board. Places players and items on board
