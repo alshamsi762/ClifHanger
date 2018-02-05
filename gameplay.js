@@ -136,19 +136,20 @@ module.exports = class Gameplay {
 
     this.currPlayer = null, this.currItem = null, this.fullTurnCount = 0;
     this.topBounds = 99, this.lowerBounds = 0, this.leftOffset = 0, this.rightOffset = 9;
+    this.board = [];
   }
 
   // Creates Board. Places players and items on board
   createBoard() {
-    this.board = new Array(100);
-    for(var i = 0; i < 100; i++)
+
+    for(i = 0; i < 100; i++)
     {
-      var boardspace = new Boardspace(i, null, null, null, 0);
-      this.board.push(boardspace);
+      this.board.push(new Boardspace(i, null, null, null, 0));
     }
 
     // place players on corners
     this.currPlayer = this.playerList;
+    console.log(this.board[0]);
     this.board[0].setPlayer(this.currPlayer);
     this.currPlayer = this.playerList.next;
     this.board[9].setPlayer(this.currPlayer);
@@ -157,11 +158,13 @@ module.exports = class Gameplay {
     this.currPlayer = this.playerList.next.next.next;
     this.board[90].setPlayer(this.currPlayer);
 
+
     // TODO: place items on board
 
 
 
   }
+
 
   // Starts turn timer, calculate possible moves, set currentPlayer, change player state to Active. Disable "end turn"
   startTurnFor(player) {

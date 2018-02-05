@@ -1,5 +1,6 @@
 const Gameplay = require('./gameplay.js');
 const Player = require('./player.js');
+const Boardspace = require('./boardspace.js');
 
 
 // Function to test creating the boardspace object and the player doubleList
@@ -87,3 +88,26 @@ module.exports.testKillingPlayer = function testKillingPlayer() {
 }
 
 // TODO Test killing sentinel
+
+// Function to test creating gameboard
+module.exports.testCreateBoard = function testCreateBoard() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+
+  gameplay.createBoard();
+
+  if (gameplay.board != undefined) {
+    for (i = 0; i < 100; i++) {
+      if (!(gameplay.board[i] instanceof Boardspace)) { return false; }
+      if (i == 0 || i == 9 || i == 90 || i == 99) {
+        if (!(gameplay.board[i].player instanceof Player)) { return false; }
+      }
+    }
+  }
+
+  return true;
+}
