@@ -3,13 +3,14 @@ const Item = require('./item.js');
 module.exports = class Player {
 
   // Constructor for Player
-  constructor(id, health, position, offensive, defensive, name) {
+  constructor(id, health, position, offensive, defensive, name, status) {
     this.id = id; // 0 - (# of players - 1)
     this.health = health; // Integer
     this.position = position; // Integer, 1-(boardwidth^2)
     this.offensive = offensive; // List of item objects
     this.defensive = defensive; // List of item objects
     this.name = name;  // String name
+    this.status = status;
   }
 
   // Damage the player's health by the amount.
