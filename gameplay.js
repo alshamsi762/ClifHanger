@@ -1,4 +1,4 @@
-class Gameplay() {
+module.exports = class Gameplay() {
 
   //TODO Figure out turn timer.
   // Timer function. Check if player state is still Active after ten seconds
@@ -212,6 +212,8 @@ class Gameplay() {
     }
     // Set the currentItem to the basic attack
     this.currItem = this.items[this.BASIC];
+
+    // TODO Call possible attacks function
 
   }
 
