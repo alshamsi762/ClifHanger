@@ -101,17 +101,53 @@ class Gameplay() {
 
   // Const. Linked List (Players), Array for all Items, # Alive, Turn Timer, currPlayer, currItem, fullTurnCount
   constructor(p1, p2, p3, p4) {
+    // Linked list of players
+    var sentinel = new Player(-1, 0, null, null, null, null);
     var list = new doubleList();
     list.addPlayer(p1);
     list.addPlayer(p2);
     list.addPlayer(p3);
     list.addPlayer(p4);
+    list.addPlayer(sentinel);
 
     this.playerList = list;
+
+
+    // Array of all Items
+    this.POTION10 = 1;
+    this.POTION30 = 2;
+    this.RADIUS = 3;    // radius attack
+    this.TELEPORT = 4;
+    this.TRAP = 5;
+    this.LONG = 6;    // range attack, change name?
+    this.STRONG = 7;    // stronger attack, more damage, change name?
+
+    var allItems = [1, 2, 3, 4, 5, 6, 7];    // not sure if this is feasible lol
+    this.items = allItems;
+
+
+    var currPlayer = null, currItem = null, fullTurnCount = 0;
   }
 
   // Creates Board. Places players and items on board
   createBoard() {
+    var board = new Array(100);
+    for(var i = 0; i < 99; i++)
+    {
+      board.push(i);
+    }
+
+    // place players on corners
+    var currPlayer - this.playerList;
+    board[0] = currPlayer;
+    currPlayer = currPlayer.next;
+    board[9] = currPlayer;
+    currPlayer = currPlayer.next;
+    board[99] = currPlayer;
+    currPlayer = currPlayer.next;
+    board[90] = currPlayer;
+
+    // TODO: place items on board
 
   }
 
@@ -155,12 +191,15 @@ class Gameplay() {
 
   // Shrink the board. For each dropped, check if player is there, kill player if they are.
   shrinkBoard() {
-
+    // drop the blocks that are in FALLEN state or out of bounds
+    // call this in shouldShrinkBoard
   }
 
   // Remove player from linked list. Call any animations
   killPlayer(player) {
-
+    this.playerList.removePlayer(player.id);
+    // should we set the player to null?
+    // call any animations
   }
 
   // Check attributes of boardspace
@@ -180,12 +219,36 @@ class Gameplay() {
 
   // Check full-turn count. Change fallStage before blocks should fall.
   shouldShrinkBoard() {
+    var count = this.fullTurnCount;
+    if(count == 4 || count == 11 || count == 20)
+    {
+      // change outer blocks to UNSTABLE
+    }
+    if(count == 5 || count == 12 || count == 21)    // After 5 - 7 - 9 turns
+    {
+      // change outer blocks to FALLEN
+      // change outer boundaries
+      // call shrinkBoard
+    }
 
   }
 
   // Check if only one player alive.
   hasEnded() {
+    if(this.playerList.length == 1)
+    {
+      // return true?
+    }
+  }
 
+  // if currPlayer reached sentinel, Increment fullTurnCount and currPlayer.next
+  nextTurn() {
+    var player = this.currPlayer;
+    if(player != null && player.id == -1)
+    {
+      this.fullTurnCount++;
+      this.currPlayer = this.currPlayer.next;
+    }
   }
 
 
