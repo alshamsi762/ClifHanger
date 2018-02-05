@@ -51,8 +51,10 @@ module.exports = class Player {
       if (this.offensive == null) { this.offensive = []; }
       if (this.offensive.length < 6) {
         this.offensive.push(offensiveItem);
+        return true;
       }
     }
+    return false;
   }
 
   // Push a defensive item to player's inventory
@@ -61,8 +63,10 @@ module.exports = class Player {
       if (this.defensive == null) { this.defensive = []; }
       if (this.defensive.length < 6) {
         this.defensive.push(defensiveItem);
+        return true;
       }
     }
+    return false;
   }
 
   // Pop an offensiveItem from the player's inventory
