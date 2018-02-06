@@ -1,71 +1,19 @@
 /** Boardspace Object & Functions **/
-const Item = require('./item.js');
-const Player = require('./player.js');
 
-module.exports = class Boardspace {
-
+class Boardspace {
 
   // Constructor for Boardspace Object
-  constructor(position, player, trap, loot, fallStage) {
-    this.position = position; // integer 0-99
-    this.player = player; // player object
-    this.trap = trap; // item object
-    this.loot = loot; // item object
+  constructor(position, occupier, trap, loot, fallStage) {
+    this.position = position;
+    this.occupier = occupier;
+    this.trap = trap;
+    this.loot = loot;
     this.fallStage = fallStage; // 0,1,2 => stable, unstable, fallen
-    this.STABLE = 0;
-    this.UNSTABLE = 1;
-    this.FALLEN = 2;
-  }
-
-  // Set player to this boardspace. True or False on success or failure.
-  setPlayer(player) {
-    if (player instanceof Player && this.playerCanEnter()) {
-      this.player = player;
-      player.newPosition(this.position);
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // Set a trap to this boardspace. True or False on success or failure.
-  setTrap(trap) {
-    if (trap instanceof Item && this.trap == null) {
-      this.trap = trap;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // Set loot to this boardspace. True or False on success or failure.
-  setLoot(loot) {
-    if (loot instanceof Item && this.loot == null) {
-      this.loot = loot;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // Remove player from this boardspace
-  removePlayer() {
-    this.player = null;
-  }
-
-  // Remove a trap from this boardspace.
-  removeTrap() {
-    this.trap = null;
-  }
-
-  // Remove loot from this boardspace.
-  removeLoot() {
-    this.loot = null;
   }
 
   // Check if Boardspace is occupied
-  hasPlayer() {
-    return (this.player != null);
+  isOccupied() {
+    return (this.occupier != null);
   }
 
   // Check if Boardspace has a trap
@@ -80,14 +28,7 @@ module.exports = class Boardspace {
 
   // Increment the fallStage
   incrementFallStage() {
-    if (this.fallStage < this.FALLEN) {
-      this.fallStage += 1;
-    }
+    this.fallStage += 1;
   }
-
-  // Check if boardspace can be moved on to
-  playerCanEnter() {
-    return (this.player == null && this.fallStage < this.FALLEN);
-  }
-
+  
 }
