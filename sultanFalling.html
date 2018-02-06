@@ -1,0 +1,105 @@
+<html>
+<head>
+	<title>My first three.js app</title>
+	<style>
+	body { margin: 0; }
+	canvas { width: 100%; height: 100% }
+	</style>
+</head>
+<body>
+	<script src="js/three.js"></script>
+	<script src="js/OrbitControls.js"></script>
+	<script>
+	//variable intialization
+	var gravity = -9.81;
+	var mass = 12;
+	var moment = 0;
+	var bounceFraction = 0.8;
+
+	//set the scene where the ball will fall
+	var scene = new THREE.Scene();
+
+	//timer for the location of the ball in terms of time
+	var clock = new THREE.Clock();
+
+	//camera , adjust first variable to control distance
+	var camera = new THREE.PerspectiveCamera( 150, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
+
+	//the control of the camera using mouse
+	var controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+	//plane that could be used as board floor
+	var geometry = new THREE.PlaneGeometry( 1, 1, 32 );
+	var material = new THREE.MeshBasicMaterial( {color: 0xfAff00, side: THREE.DoubleSide} );
+	var plane = new THREE.Mesh(geometry, material);
+	scene.add( plane );
+
+	var plane2 = new THREE.Mesh( geometry, material );
+	scene.add( plane2 );
+
+	//sphere to simulate an item dropping on the floor of the board game
+	geometry = new THREE.SphereGeometry( 0.2, 32, 32 );
+	material = new THREE.MeshBasicMaterial( {color: 0xAAAAAA} );
+	var sphere = new THREE.Mesh( geometry, material );
+	scene.add( sphere );
+
+	//locations to test on the browser
+	plane2.position.x = 2;
+	camera.position.z = 5;
+	sphere.position.z = 5;
+	sphere.position.x = 2;
+
+	//function that takes an object(sphere ,box ,etc) and make it fall according to gravity variable
+	function fall(object) {
+		//has a random lower bound that is set to -99 for now
+		if (object.position.z < -99) {
+			//object becomes invisible
+			object.visible = false;
+		}
+		else if(object.position.z > -100){
+			console.log(clock.getElapsedTime());
+			//calculate the falling object z locatoin on the xyz plane
+			object.position.z = 1/2 * gravity * (clock.getElapsedTime()*clock.getElapsedTime()) + object.position.z;
+		}
+	}
+	//bounce is a function for items being dropped such as items and and it bounces using moment and could be adjusted by changing the fraction, a higher fraction causes the object to bounce more.
+	function bounce(object) {
+		if(object.position.z <(3/2)*0.2 ){
+			if(Math.abs(moment) < 0.5)
+			return;
+		}
+		moment = moment + mass * gravity * 0.01;
+		if (object.position.z < 0.2) {
+			moment = -(bounceFraction)*moment;
+			//clock.start;
+		}
+
+		//console.log(clock.getElapsedTime());
+		console.log(moment);
+		object.position.z = object.position.z + (moment/mass)*0.01;
+
+
+	}
+
+	var animate = function () {
+
+		clock.start();
+
+		requestAnimationFrame( animate );
+		//render falling
+		fall(plane);
+		//render bouncing
+		bounce(sphere);
+
+		renderer.render(scene, camera);
+	};
+
+	animate();
+	</script>
+</body>
+</html>
