@@ -111,3 +111,66 @@ module.exports.testCreateBoard = function testCreateBoard() {
 
   return true;
 }
+
+
+// Function to test moving
+module.exports.testMoving = function testMoving() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+
+  gameplay.currPlayer = p1;
+  if(gameplay.currPlayer.name != "Andrew")
+  {
+    return false;
+  }
+
+  // p1 keeps moving right until he reaches p2
+  while(gameplay.canMoveTo(gameplay.board[gameplay.currPlayer.position + 1]))
+  {
+    gameplay.moveTo(gameplay.board[gameplay.currPlayer.position + 1]);
+  }
+
+
+  if(gameplay.currPlayer.position != 8 || gameplay.board[0].hasPlayer() || !gameplay.board[8].hasPlayer())
+  {
+    return false;
+  }
+
+  if(gameplay.canMoveTo(gameplay.board[gameplay.currPlayer.position + 1]))
+  {
+    return false;
+  }
+
+  return true;
+}
+
+
+module.exports.testDropItem = function testDropItem() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+
+  var found = 0;
+
+  for(k = 0; k < 10; k++)
+  {
+    gameplay.dropItem();
+  }
+  for(i = 0; i < 100; i++)
+  {
+    if(gameplay.board[i].hasLoot())
+    {
+      found++;
+    }
+  }
+  return found;
+}

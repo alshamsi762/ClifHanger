@@ -19,33 +19,33 @@ module.exports = class Boardspace {
 
   // Set player to this boardspace. True or False on success or failure.
   setPlayer(player) {
-    if (player instanceof Player && this.playerCanEnter()) {
+    // if (player instanceof Player && this.playerCanEnter()) {
       this.player = player;
-      player.newPosition(this.position);
-      return true;
-    } else {
-      return false;
-    }
+      player.position = this.position;
+      // return true;
+    // } else {
+      // return false;
+    // }
   }
 
   // Set a trap to this boardspace. True or False on success or failure.
   setTrap(trap) {
-    if (trap instanceof Item && this.trap == null) {
+    // if (trap instanceof Item && this.trap == null) {
       this.trap = trap;
-      return true;
-    } else {
-      return false;
-    }
+      // return true;
+    // } else {
+      // return false;
+    // }
   }
 
   // Set loot to this boardspace. True or False on success or failure.
   setLoot(loot) {
-    if (loot instanceof Item && this.loot == null) {
+    // if (loot instanceof Item && this.loot == null) {
       this.loot = loot;
-      return true;
-    } else {
-      return false;
-    }
+      // return true;
+    // } else {
+      // return false;
+    // }
   }
 
   // Remove player from this boardspace
@@ -87,7 +87,7 @@ module.exports = class Boardspace {
 
   // Check if boardspace can be moved on to
   playerCanEnter() {
-    return (this.player == null && this.fallStage < this.FALLEN);
+    return (this.position >= 0 && this.position <= 99 && this.player == null && this.fallStage < this.FALLEN);
   }
 
 }

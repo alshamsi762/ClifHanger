@@ -1,5 +1,6 @@
 const Item = require('./item.js');
 const Player = require('./player.js');
+const Boardspace = require('./boardspace.js');
 
 
 // Implementation of double linked List
@@ -147,16 +148,15 @@ module.exports = class Gameplay {
       this.board.push(new Boardspace(i, null, null, null, 0));
     }
 
-    // place players on corners
-    this.currPlayer = this.playerList;
-    console.log(this.board[0]);
-    this.board[0].setPlayer(this.currPlayer);
-    this.currPlayer = this.playerList.next;
-    this.board[9].setPlayer(this.currPlayer);
-    this.currPlayer = this.playerList.next.next.next;
-    this.board[99].setPlayer(this.currPlayer);
-    this.currPlayer = this.playerList.next.next.next;
-    this.board[90].setPlayer(this.currPlayer);
+    var temp = this.playerList.head;
+
+    this.board[0].setPlayer(temp);
+    temp = temp.next;
+    this.board[9].setPlayer(temp);
+    temp = temp.next;
+    this.board[99].setPlayer(temp);
+    temp = temp.next;
+    this.board[90].setPlayer(temp);
 
 
     // TODO: place items on board
@@ -249,12 +249,13 @@ module.exports = class Gameplay {
     var itemPos = 0;
     var item = null;
     itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
-    while(this.board[itemPos].fallStage != 0 || this.board[itemPos].hasPlayer || this.board[itemPos].hasLoot)
+
+    while(this.board[itemPos].fallStage != 0 || this.board[itemPos].hasPlayer() || this.board[itemPos].hasLoot())
     {
       itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
     }
 
-    item = randomItem();
+    item = this.randomItem();
 
     // Apply changes
     this.board[itemPos].setLoot(item);
@@ -435,7 +436,7 @@ module.exports = class Gameplay {
   {
     // HARD AF! Probably going to use Andrew's instead
     var item;
-    item = this.items[Math.floor(Math.random() * 20)];
+    item = this.items[Math.floor(Math.random() * 9)];
     return item;
   }
 
