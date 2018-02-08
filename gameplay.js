@@ -355,53 +355,51 @@ module.exports = class Gameplay {
     // TRAP, can be placed at any valid boardspace
     if (item.attackType == 1 && item.range == -1) {
       for (i = 0; i < 100; i++) {
-        // Check if boardspace can accept a trap item, add it to possibleAttacks
-        if (this.board[i].fallStage != 2 && this.board[i].hasPlayer() == false
-            && this.board[i].hasTrap() == false) { attackSpaces.push(i); }
+        // Check if boardspace can accept a trap item, add it to attackSpaces
+        if (this.board[i].playerCanEnter() && this.board[i].hasTrap() == false) {
+          this.attackSpaces.push(i);
+        }
       }
+      return this.attackSpaces;
     }
 
-    // Radius attack
-    if (item.attackType == 1 && item.range > 1) {
-      upOrDown *= item.range;
-      leftOrRight *= item.range;
+    // Any other attack
+    upOrDown *= item.range;
+    leftOrRight *= item.range;
 
-      // Start is upper-left square of radius attack
-      var start = (pos - leftOrRight) - upOrDown;
-      // End is lower-right square of radius attack
-      var end = (pos + leftOrRight) + upOrDown;
-      // Calculate lower bound of starting row
-      var leftBound = ((pos - upOrDown) - ((pos - upOrDown) % 10)) + this.leftOffset;
-      // Calculate upper bound of ending row
-      var rightBound = ((pos + upOrDown) + ((pos + upOrDown) % 9)) - (9 - this.rightOffset);
+    // Start is upper-left square of attack block
+    var start = (pos - leftOrRight) - upOrDown;
+    // End is lower-right square of attack block
+    var end = (pos + leftOrRight) + upOrDown;
+    // Calculate lower bound of starting row
+    var leftBound = ((pos - upOrDown) - ((pos - upOrDown) % 10)) + this.leftOffset;
+    // Calculate upper bound of ending row
+    var rightBound = ((pos + upOrDown) + ((pos + upOrDown) % 9)) - (9 - this.rightOffset);
 
-      // These checks keep the attack on the correct side of the board
-      if (start < leftBound) { start = leftBound; }
-      if (end > rightBound) { end = rightBound; }
+    // These checks keep the attack on the correct side of the board
+    if (start < leftBound) { start = leftBound; }
+    if (end > rightBound) { end = rightBound; }
 
-      // Fill attackSpaces with correct attackable positions
-      for (i = start; i <= end; i++) {
-        if (i >= 0 && i <= 99) {
-          if ((i % start) >= 10 && (end % i) >= 10) {
-            attackSpaces.push(i);
-          }
+    // These two only used for basic attacks
+    var rowBegin = pos - (pos % 10) + this.leftOffset;
+    var rowEnd = pos + (pos % 9) - (9 - this.rightOffset);
+
+    // Fill attackSpaces with correct attackable positions
+    for (i = start; i <= end; i++) {
+      if (i >= 0 && i <= 99) {
+        // Just to make conditionals more readable
+        var boundCheck = (i % start) >= 10 && (end % i) >= 10;
+        var vertCheck = ((pos - i) % 10 == 0);
+        var horiCheck = (i >= rowBegin && i <= rowEnd && boundCheck);
+
+        if (item.attackType == 0 && vertCheck && horiCheck) { // Basic Attack
+          this.attackSpaces.push(i);
+        } else if (item.attackType == 1 && boundCheck) {  // Radius Attack
+          this.attackSpaces.push(i);
         }
       }
     }
-
-
-    if(pos + 10 <= this.topBounds) {
-      // can attack up
-    }
-    if((pos % 10) != this.rightOffset) {
-      // can attack right
-    }
-    if(pos - 10 >= this.lowerBounds) {
-      // can attack down
-    }
-    if((pos % 10) != this.leftOffset) {
-      // can attack left
-    }
+    return this.attackSpaces;
   }
 
   // Check full-turn count. Change fallStage before blocks should fall.
