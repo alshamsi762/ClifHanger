@@ -254,7 +254,7 @@ module.exports = class Gameplay {
       itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
     }
 
-    item = this.items[Math.floor(Math.random() * 8)];   // change the size of items array
+    item = randomItem();
 
     // Apply changes
     this.board[itemPos].setLoot(item);
@@ -417,7 +417,7 @@ module.exports = class Gameplay {
     while(count < 10)
     {
       // item = call amjad's algorithm
-      item = this.items[Math.floor(Math.random() * 8)];
+      item = randomItem();
       itemPos = Math.floor(Math.random() * 100);
 
       // makes sure no item is dropped less than 2 moves away from all players
