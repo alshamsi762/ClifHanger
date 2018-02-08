@@ -138,6 +138,7 @@ module.exports = class Gameplay {
     this.currPlayer = null, this.currItem = null, this.fullTurnCount = 0;
     this.topBounds = 99, this.lowerBounds = 0, this.leftOffset = 0, this.rightOffset = 9;
     this.board = [];
+    this.attackSpaces = []; // List of spaces that the current attack will hit
   }
 
   // Creates Board. Places players and items on board
@@ -221,7 +222,7 @@ module.exports = class Gameplay {
       }
     }
     // Set the currentItem to the basic attack
-    this.currItem = this.items[this.BASIC];
+    this.chooseItem(this.items[this.BASIC]);
 
     // TODO Call possible attacks function
 
@@ -235,7 +236,9 @@ module.exports = class Gameplay {
   // Sets the current players item to the currentItem (basic on first call). Waits for user input to select other item.
   // Check if Offensive or Defensive, calc possibleAttacks if applicable.
   chooseItem(item) {
-
+    this.currItem = item;
+    if (item.itemType == 0) { this.possibleAttacksBy(item); } // Offensive
+    // Display current item as selected in UI
   }
 
   // Called when user activates item. Checks if Offensive or Defensive. Attack if offens. Apply effects if defens.
@@ -343,8 +346,54 @@ module.exports = class Gameplay {
   }
 
   // Use currPlayer pos. and item to display possible attacks. Display in UI
+  // Maybe return an array of the possible boardspace positions?
   possibleAttacksBy(item) {
+    var pos = this.currPlayer.position;
+    var upOrDown = 10, leftOrRight = 1;
+    this.attackSpaces = []; // Reset attackSpaces
 
+    // TRAP, can be placed at any valid boardspace
+    if (item.attackType == 1 && item.range == -1) {
+      for (i = 0; i < 100; i++) {
+        // Check if boardspace can accept a trap item, add it to possibleAttacks
+        if (this.board[i].fallStage != 2 && this.board[i].hasPlayer() == false
+            && this.board[i].hasTrap() == false) { attackSpaces.push(i); }
+      }
+    }
+
+    // Radius attack
+    if (item.attackType == 1 && item.range > 1) {
+      upOrDown *= item.range;
+      leftOrRight *= item.range;
+      var start = (pos - leftOrRight) - upOrDown;
+      var end = (pos + leftOrRight) + upOrDown;
+      var leftBound = ((pos - upOrDown) - ((pos - upOrDown) % 10)) + this.leftOffset;
+      var rightBound = ((pos + upOrDown) + ((pos + upOrDown) % 9)) - (9 - this.rightOffset);
+      if (start < leftBound) { start = leftBound; }
+      if (end > rightBound) { end = rightBound; }
+
+      for (i = start; i <= end; i++) {
+        if (i >= 0 && i <= 99) {
+
+        }
+      }
+
+
+
+
+    }
+    if(pos + 10 <= this.topBounds) {
+      // can attack up
+    }
+    if((pos % 10) != this.rightOffset) {
+      // can attack right
+    }
+    if(pos - 10 >= this.lowerBounds) {
+      // can attack down
+    }
+    if((pos % 10) != this.leftOffset) {
+      // can attack left
+    }
   }
 
   // Check full-turn count. Change fallStage before blocks should fall.
