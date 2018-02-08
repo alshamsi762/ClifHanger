@@ -246,6 +246,19 @@ module.exports = class Gameplay {
 
   // Randomly drop an item on a random (valid) boardspace.
   dropItem() {
+    var itemPos = 0;
+    var item = null;
+    itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
+    while(this.board[itemPos].fallStage != 0 || this.board[itemPos].hasPlayer || this.board[itemPos].hasLoot)
+    {
+      itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
+    }
+
+    item = this.items[Math.floor(Math.random() * 8)];   // change the size of items array
+
+    // Apply changes
+    this.board[itemPos].setLoot(item);
+    // Call UI
 
   }
 
@@ -370,7 +383,7 @@ module.exports = class Gameplay {
 
   // Check if only one player alive.
   hasEnded() {
-    if(this.playerList.length == 1)
+    if(this.playerList.length == 2)   // one for player, one for sentinel?
     {
       // return true?
     }
@@ -421,6 +434,9 @@ module.exports = class Gameplay {
   randomItem()
   {
     // HARD AF! Probably going to use Andrew's instead
+    var item;
+    item = this.items[Math.floor(Math.random() * 20)];
+    return item;
   }
 
 
