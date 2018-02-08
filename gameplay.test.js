@@ -12,7 +12,7 @@ test('Kill players at different locations in linked list works', () => {
 //   expect(testgameplay.testCreateBoard()).toBe(true);
 // })
 
-test('Moving to valid and invalid spaces', () => {
+test('Moving to valid and invalid spaces', () => {    // Still need to do tests for picking up items once we have a list of items
   expect(testgameplay.testMoving()).toBe(true);
 })
 
