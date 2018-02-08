@@ -324,19 +324,19 @@ module.exports = class Gameplay {
   // Check boardspaces around currPlayer's boardspace. Display in UI
   possibleMovesFrom(boardspace) {
     var pos = boardspace.position;
-    if(pos + 10 <= this.topBounds && canMoveTo(this.board[pos + 10]))
+    if(pos + 10 <= this.topBounds && this.canMoveTo(this.board[pos + 10]))
     {
       // can move up
     }
-    if((pos % 10) != this.rightOffset && canMoveTo(this.board[pos + 1]))
+    if((pos % 10) != this.rightOffset && this.canMoveTo(this.board[pos + 1]))
     {
       // can move right
     }
-    if(pos - 10 >= this.lowerBounds && canMoveTo(this.board[pos - 10]))
+    if(pos - 10 >= this.lowerBounds && this.canMoveTo(this.board[pos - 10]))
     {
       // can move down
     }
-    if((pos % 10) != this.leftOffset && canMoveTo(this.board[pos - 1]))
+    if((pos % 10) != this.leftOffset && this.canMoveTo(this.board[pos - 1]))
     {
       // can move left
     }
@@ -377,7 +377,7 @@ module.exports = class Gameplay {
     if(count == 5 || count == 12 || count == 21)    // After 5 - 7 - 9 turns
     {
       // call shrinkBoarb
-      shrinkBoard();
+      this.shrinkBoard();
     }
 
   }
@@ -418,7 +418,7 @@ module.exports = class Gameplay {
     while(count < 10)
     {
       // item = call amjad's algorithm
-      item = randomItem();
+      item = this.randomItem();
       itemPos = Math.floor(Math.random() * 100);
 
       // makes sure no item is dropped less than 2 moves away from all players
