@@ -365,23 +365,31 @@ module.exports = class Gameplay {
     if (item.attackType == 1 && item.range > 1) {
       upOrDown *= item.range;
       leftOrRight *= item.range;
+
+      // Start is upper-left square of radius attack
       var start = (pos - leftOrRight) - upOrDown;
+      // End is lower-right square of radius attack
       var end = (pos + leftOrRight) + upOrDown;
+      // Calculate lower bound of starting row
       var leftBound = ((pos - upOrDown) - ((pos - upOrDown) % 10)) + this.leftOffset;
+      // Calculate upper bound of ending row
       var rightBound = ((pos + upOrDown) + ((pos + upOrDown) % 9)) - (9 - this.rightOffset);
+
+      // These checks keep the attack on the correct side of the board
       if (start < leftBound) { start = leftBound; }
       if (end > rightBound) { end = rightBound; }
 
+      // Fill attackSpaces with correct attackable positions
       for (i = start; i <= end; i++) {
         if (i >= 0 && i <= 99) {
-
+          if ((i % start) >= 10 && (end % i) >= 10) {
+            attackSpaces.push(i);
+          }
         }
       }
-
-
-
-
     }
+
+
     if(pos + 10 <= this.topBounds) {
       // can attack up
     }
