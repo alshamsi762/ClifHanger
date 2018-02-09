@@ -1,6 +1,7 @@
 const Gameplay = require('./gameplay.js');
 const Player = require('./player.js');
 const Boardspace = require('./boardspace.js');
+const Item = require('./item.js');
 
 
 // Function to test creating the boardspace object and the player doubleList
@@ -173,4 +174,82 @@ module.exports.testDropItem = function testDropItem() {
     }
   }
   return found;
+}
+
+module.exports.testPossibleAttacksBy = function testPossibleAttacksBy() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+  gameplay.startTurnFor(p1);
+  gameplay.moveTo(gameplay.board[45]);
+
+  // Trap Item
+  var trap = new Item("Trap", 0, 1, -1, 10, 0.60, "Traps a player and ends their turn");
+  // Basic Attack
+  var basic = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack");
+  // Radius Attack
+  var radius = new Item("Radius", 0, 1, 1, 10, 0,60, "Able to hit players around you");
+  // Ranged Basic Attack
+  var rangedBasic = new Item("Ranged Basic", 0, 0, 2, 10, 0.60, "A basic attack with more range");
+  // Ranged Radius Attack
+  var rangedRadius = new Item("Ranged Radius", 0, 1, 2, 10, 0.60, "A radius attack with more range");
+
+  var expectedTrapResult = [];
+  for (i = 0; i < 100; i++) { if (i != 45 && i != 9 && i != 90 && i != 99) { expectedTrapResult.push(i); } }
+
+  // Expected result from basic attack
+  var expectedBasicResult = [    35,
+                              44,   46,
+                                 55];
+  // Expected result from radius attack
+  var expectedRadiusResult = [34, 35, 36,
+                              44,     46,
+                              54, 55, 56];
+  // Expected result from ranged basic attack
+  var expectedRangedBasicResult = [   25,
+                                      35,
+                               43, 44,   46, 47,
+                                      55,
+                                      65];
+  // Expected result from ranged radius attack
+  var expectedRangedRadiusResult = [23, 24, 25, 26, 27,
+                                    33, 34, 35, 36, 37,
+                                    43, 44,     46, 47,
+                                    53, 54, 55, 56, 57,
+                                    63, 64, 65, 66, 67];
+
+  var trapResult = gameplay.possibleAttacksBy(trap);
+  var basicResult = gameplay.possibleAttacksBy(basic);
+  var radiusResult = gameplay.possibleAttacksBy(radius);
+  var rangedBasicResult = gameplay.possibleAttacksBy(rangedBasic);
+  var rangedRadiusResult = gameplay.possibleAttacksBy(rangedRadius);
+  
+  var expecteds = [expectedTrapResult, expectedBasicResult, expectedRadiusResult,
+  expectedRangedBasicResult, expectedRangedRadiusResult];
+  var results = [trapResult, basicResult, radiusResult, rangedBasicResult, rangedRadiusResult];
+  var titles = ["Trap", "Basic", "Radius", "RangedBasic", "RangedRadius"];
+
+  for (i = 0; i < expecteds.length; i++) {
+    if (expecteds[i].length != results[i].length) {
+      console.log("expected" + titles[i] + "Result: \n");
+      console.log(expecteds[i]);
+      console.log(titles[i] + "Result: \n");
+      console.log(results[i]);
+      return false;
+    }
+    for (j = 0; j < expecteds[i].length; j++) {
+      if (expecteds[i][j] != results[i][j]) {
+        console.log("expected" + titles[i] + "Result: \n");
+        console.log(expecteds[i]);
+        console.log(titles[i] + "Result: \n");
+        console.log(results[i]);
+        return false;
+      }
+    }
+  }
+  return true;
 }

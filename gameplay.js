@@ -382,19 +382,19 @@ module.exports = class Gameplay {
 
     // These two only used for basic attacks
     var rowBegin = pos - (pos % 10) + this.leftOffset;
-    var rowEnd = pos + (pos % 9) - (9 - this.rightOffset);
+    var rowEnd = pos + (pos % rowBegin) - (9 - this.rightOffset);
 
     // Fill attackSpaces with correct attackable positions
     for (i = start; i <= end; i++) {
-      if (i >= 0 && i <= 99) {
+      if (i >= 0 && i <= 99 && i != pos) {
         // Just to make conditionals more readable
-        var boundCheck = (i % start) >= 10 && (end % i) >= 10;
+        var boundCheck = ((i % start) >= 0 && ( ((end-i) % 10) >= 0 && ((end-i) % 10) <= (item.range * 2)));
         var vertCheck = ((pos - i) % 10 == 0);
         var horiCheck = (i >= rowBegin && i <= rowEnd && boundCheck);
-
-        if (item.attackType == 0 && vertCheck && horiCheck) { // Basic Attack
+        
+        if (item.attackType == 0 && (vertCheck || horiCheck)) { // Basic Attack
           this.attackSpaces.push(i);
-        } else if (item.attackType == 1 && boundCheck) {  // Radius Attack
+        } else if (item.attackType == 1 && boundCheck) { // Radius Attack
           this.attackSpaces.push(i);
         }
       }
