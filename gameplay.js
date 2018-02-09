@@ -378,7 +378,7 @@ module.exports = class Gameplay {
         }
       }
     }
-    console.log("Starting at: " + pos + "\n" + positions);
+    // console.log("Starting at: " + pos + "\n" + positions);
     return this.attackSpaces;
   }
 

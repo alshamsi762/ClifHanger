@@ -31,3 +31,15 @@ test('Calculate possibleAttacksBy Basic Attack when player is located at or near
 test('Calculate possibleAttacksBy Radius Attack when player is located at or near boundaries', () => {
   expect(testgameplay.testBoundsPossibleAttacksByRadius()).toBe(true);
 })
+
+test('Calculate possibleAttacksBy Ranged Basic Attack when player is located at or near boundaries', () => {
+  expect(testgameplay.testBoundsPossibleAttacksByRangedBasic()).toBe(true);
+})
+
+test('Calculate possibleAttacksBy Ranged Radius Attack when player is located at or near boundaries', () => {
+  expect(testgameplay.testBoundsPossibleAttacksByRangedRadius()).toBe(true);
+})
+
+// test('Visualize all possible attacks using a basic attack', () => {
+//   expect(testgameplay.testPossibleAttacksFromAllPositions()).toBe(true);
+// })
