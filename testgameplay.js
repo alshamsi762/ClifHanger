@@ -227,7 +227,7 @@ module.exports.testPossibleAttacksBy = function testPossibleAttacksBy() {
   var radiusResult = gameplay.possibleAttacksBy(radius);
   var rangedBasicResult = gameplay.possibleAttacksBy(rangedBasic);
   var rangedRadiusResult = gameplay.possibleAttacksBy(rangedRadius);
-  
+
   var expecteds = [expectedTrapResult, expectedBasicResult, expectedRadiusResult,
   expectedRangedBasicResult, expectedRangedRadiusResult];
   var results = [trapResult, basicResult, radiusResult, rangedBasicResult, rangedRadiusResult];
@@ -251,5 +251,132 @@ module.exports.testPossibleAttacksBy = function testPossibleAttacksBy() {
       }
     }
   }
+  return true;
+}
+
+module.exports.testBoundsPossibleAttacksByBasic = function testBoundsPossibleAttacksByBasic() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+  // Trap Item
+  //var trap = new Item("Trap", 0, 1, -1, 10, 0.60, "Traps a player and ends their turn");
+  // Basic Attack
+  var basic = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack");
+  // Radius Attack
+  // var radius = new Item("Radius", 0, 1, 1, 10, 0,60, "Able to hit players around you");
+  // // Ranged Basic Attack
+  // var rangedBasic = new Item("Ranged Basic", 0, 0, 2, 10, 0.60, "A basic attack with more range");
+  // // Ranged Radius Attack
+  // var rangedRadius = new Item("Ranged Radius", 0, 1, 2, 10, 0.60, "A radius attack with more range");
+  var titles = ["Basic", "Radius", "RangedBasic", "RangedRadius"];
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+  gameplay.startTurnFor(p1);
+
+  //var attacks = [basic, radius, rangedBasic, rangedRadius];
+  var expectedResults = [
+    [1, 10], [8, 19], [80, 91], [89, 98], [1, 10, 12, 21], [8, 17, 19, 28],
+    [71, 80, 82, 91], [78, 87, 89, 98], [4, 6, 15], [30, 41, 50], [39, 48, 59],
+    [85, 94, 96], [5, 14, 16, 25], [31, 40, 42, 51], [38, 47, 49, 58], [75, 84, 86, 95]];
+
+  var testPositions = [0, 9, 90, 99, 11, 18, 81, 88, 5, 40, 49, 95, 15, 41, 48, 85];
+
+  for (testNum = 0; testNum < testPositions.length; testNum++) {
+    // Move the player to the test position
+    gameplay.moveTo(gameplay.board[testPositions[testNum]]);
+    var result = gameplay.possibleAttacksBy(basic);
+    if (result.length != expectedResults[testNum].length) {
+      console.log("Position " + testPositions[testNum] + " Basic attack\n" +
+                  "Expected: " + expectedResults[testNum] + "\n" +
+                  "Actual:   " + result + "\n");
+      return false;
+    }
+
+    for (i = 0; i < result.length; i++) {
+      if (expectedResults[testNum][i] != result[i]) {
+        console.log("Position " + testPositions[testNum] + " Basic attack\n" +
+                    "Expected: " + expectedResults[testNum] + "\n" +
+                    "Actual:   " + result + "\n");
+        return false;
+      }
+    }
+    // var str = "Position " + testPositions[testNum] +" Basic attack\n";
+    // str = str + "|";
+    // for (i = 0; i < 100; i++) {
+    //   if (result.includes(i)) {
+    //     str = str + "X|";
+    //   } else if (i == testPositions[testNum]) {
+    //     str = str + "S|";
+    //   } else {
+    //     str = str + "O|";
+    //   }
+    //   if (i % 10 == 9 && i != 99) {
+    //     str = str + "\n|";
+    //   }
+    // }
+    // console.log(str);
+  }
+  return true;
+}
+
+module.exports.testBoundsPossibleAttacksByRadius = function testBoundsPossibleAttacksByRadius() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+  // Radius Attack
+  var radius = new Item("Radius", 0, 1, 1, 10, 0,60, "Able to hit players around you");
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+  gameplay.startTurnFor(p1);
+
+  var expectedResults = [
+    [1, 10, 11], [8, 18, 19], [80, 81, 91], [88, 89, 98],
+    [0, 1, 2, 10, 12, 20, 21, 22], [7, 8, 9, 17, 19, 27, 28, 29],
+    [70, 71, 72, 80, 82, 90, 91, 92], [77, 78, 79, 87, 89, 97, 98, 99],
+    [4, 6, 14, 15, 16], [30, 31, 41, 50, 51], [38, 39, 48, 58, 59],
+    [84, 85, 86, 94, 96], [4, 5, 6, 14, 16, 24, 25, 26],
+    [30, 31, 32, 40, 42, 50, 51, 52], [37, 38, 39, 47, 49, 57, 58, 59],
+    [74, 75, 76, 84, 86, 94, 95, 96]];
+
+  var testPositions = [0, 9, 90, 99, 11, 18, 81, 88, 5, 40, 49, 95, 15, 41, 48, 85];
+  for (testNum = 0; testNum < testPositions.length; testNum++) {
+    // Move the player to the test position
+    gameplay.moveTo(gameplay.board[testPositions[testNum]]);
+    var result = gameplay.possibleAttacksBy(radius);
+    if (result.length != expectedResults[testNum].length) {
+      console.log("Position " + testPositions[testNum] + " Basic attack\n" +
+                  "Expected: " + expectedResults[testNum] + "\n" +
+                  "Actual:   " + result + "\n");
+      return false;
+    }
+
+    for (i = 0; i < result.length; i++) {
+      if (expectedResults[testNum][i] != result[i]) {
+        console.log("Position " + testPositions[testNum] + " Basic attack\n" +
+                    "Expected: " + expectedResults[testNum] + "\n" +
+                    "Actual:   " + result + "\n");
+        return false;
+      }
+    }
+    var str = "Position " + testPositions[testNum] +" Basic attack\n";
+    str = str + "|";
+    for (i = 0; i < 100; i++) {
+      if (result.includes(i)) {
+        str = str + "X|";
+      } else if (i == testPositions[testNum]) {
+        str = str + "S|";
+      } else {
+        str = str + "O|";
+      }
+      if (i % 10 == 9 && i != 99) {
+        str = str + "\n|";
+      }
+    }
+    console.log(str);
+  }
+
+
   return true;
 }

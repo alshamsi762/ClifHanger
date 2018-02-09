@@ -363,42 +363,22 @@ module.exports = class Gameplay {
       return this.attackSpaces;
     }
 
-    // Any other attack
-    upOrDown *= item.range;
-    leftOrRight *= item.range;
-
-    // Start is upper-left square of attack block
-    var start = (pos - leftOrRight) - upOrDown;
-    // End is lower-right square of attack block
-    var end = (pos + leftOrRight) + upOrDown;
-    // Calculate lower bound of starting row
-    var leftBound = ((pos - upOrDown) - ((pos - upOrDown) % 10)) + this.leftOffset;
-    // Calculate upper bound of ending row
-    var rightBound = ((pos + upOrDown) + ((pos + upOrDown) % 9)) - (9 - this.rightOffset);
-
-    // These checks keep the attack on the correct side of the board
-    if (start < leftBound) { start = leftBound; }
-    if (end > rightBound) { end = rightBound; }
-
-    // These two only used for basic attacks
-    var rowBegin = pos - (pos % 10) + this.leftOffset;
-    var rowEnd = pos + (pos % rowBegin) - (9 - this.rightOffset);
-
-    // Fill attackSpaces with correct attackable positions
-    for (i = start; i <= end; i++) {
-      if (i >= 0 && i <= 99 && i != pos) {
-        // Just to make conditionals more readable
-        var boundCheck = ((i % start) >= 0 && ( ((end-i) % 10) >= 0 && ((end-i) % 10) <= (item.range * 2)));
-        var vertCheck = ((pos - i) % 10 == 0);
-        var horiCheck = (i >= rowBegin && i <= rowEnd && boundCheck);
-        
-        if (item.attackType == 0 && (vertCheck || horiCheck)) { // Basic Attack
-          this.attackSpaces.push(i);
-        } else if (item.attackType == 1 && boundCheck) { // Radius Attack
-          this.attackSpaces.push(i);
+    for (i = 0; i < 100; i++) {
+      var leftBound = (i % 10 <= pos % 10);
+      var rightBound = (i % 10 >= pos % 10);
+      var horiRange = Math.abs(i % 10 - pos % 10);
+      var vertRange = Math.abs((i-(i % 10) - (pos - (pos % 10)))) / 10;
+      if ((leftBound || rightBound) && horiRange <= item.range) {
+        if (vertRange <= item.range && i != pos) {
+          if (item.attackType == 0 && (i % 10 ==  pos % 10 || (i-(i%10) == pos-(pos%10)))) {
+            this.attackSpaces.push(i);
+          } else if (item.attackType == 1) {
+            this.attackSpaces.push(i);
+          }
         }
       }
     }
+    console.log("Starting at: " + pos + "\n" + positions);
     return this.attackSpaces;
   }
 
@@ -494,6 +474,7 @@ module.exports = class Gameplay {
     item = this.items[Math.floor(Math.random() * 9)];
     return item;
   }
+
 
 
 }
