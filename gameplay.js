@@ -148,7 +148,7 @@ module.exports = class Gameplay {
     // Musket - low damage ranged basic
     // Bolt Action - high damage ranged basic
     // Broadsword - low damage radius
-    // Grenade - high damage radius
+    // Fart - high damage radius
     // Big Fart - low damage ranged radius
     // Nuke - high damage ranged radius
     // Sawed-Off - basic (high damage)
@@ -158,19 +158,29 @@ module.exports = class Gameplay {
     // Major Potion - defensive, heals 30
     // Move Again - defensive, allows player to move again instead of attack
     // Teleport - defensive, allows player to move to any valid boardspace
-    this.items = [new Item("Musket", 0, 0, 2, 15, 0.0, "Musket Description"),
-                  new Item("Bolt Action", 0, 0, 2, 30, 0.0, "Bolt Action Description"),
-                  new Item("Broadsword", 0, 1, 1, 10, 0.0, "Broadsword Description"),
-                  new Item("Fart", 0, 1, 1, 25, 0,0, "Fart Description"),
-                  new Item("Big Fart", 0, 1, 2, 15, 0.0, "Big Fart Description"),
-                  new Item("Nuke", 0, 1, 2, 25, 0.0, "Nuke Description"),
-                  new Item("Sawed-Off", 0, 0, 1, 30, 0.0, "Sawed-Off Description"),
-                  new Item("Beartrap", 0, 2, 0, 15, 0.0, "Beartrap Description"),
-                  new Item("Landmine", 0, 2, 0, 30, 0.0, "Landmine Description"),
-                  new Item("Minor Potion", 1, 0, 0, 10, 0.0, "Minor Potion Description"),
-                  new Item("Major Potion", 1, 0, 0, 30, 0.0, "Major Potion Description"),
-                  new Item("Move Again", 1, 0, 0, 0, 0.0, "Move Again Description"),
-                  new Item("Teleport", 1, 0, 0, 0, 0.0, "Teleport Description")];
+    this.items = [];
+    this.items.push(new Item("Musket", 0, 0, 2, 15, 8, "Musket Description"));
+    this.items.push(new Item("Bolt Action", 0, 0, 2, 30, 4, "Bolt Action Description"));
+    this.items.push(new Item("Broadsword", 0, 1, 1, 10, 7, "Broadsword Description"));
+    this.items.push(new Item("Fart", 0, 1, 1, 25, 4, "Fart Description"));
+    this.items.push(new Item("Big Fart", 0, 1, 2, 15, 5, "Big Fart Description"));
+    this.items.push(new Item("Nuke", 0, 1, 2, 25, 2, "Nuke Description"));
+    this.items.push(new Item("Sawed-Off", 0, 0, 1, 30, 4, "Sawed-Off Description"));
+    this.items.push(new Item("Beartrap", 0, 2, 0, 15, 5, "Beartrap Description"));
+    this.items.push(new Item("Landmine", 0, 2, 0, 30, 3, "Landmine Description"));
+    this.items.push(new Item("Minor Potion", 1, 0, 0, 10, 8, "Minor Potion Description"));
+    this.items.push(new Item("Major Potion", 1, 0, 0, 30, 4, "Major Potion Description"));
+    this.items.push(new Item("Move Again", 1, 0, 0, 0, 4, "Move Again Description"));
+    this.items.push(new Item("Teleport", 1, 0, 0, 0, 2, "Teleport Description"));
+
+    this.drops = [];
+    for (var i = 0; i < this.items.length; i++) {
+      for(var j = 0;j < this.items[i].rarity; j++) {
+        this.drops.push(i);
+      }
+    }
+
+    console.log("Item drops: " + this.drops);
   }
 
   // Creates Board. Places players and items on board
