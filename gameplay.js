@@ -158,16 +158,15 @@ module.exports = class Gameplay {
     // Major Potion - defensive, heals 30
     // Move Again - defensive, allows player to move again instead of attack
     // Teleport - defensive, allows player to move to any valid boardspace
-    var itemNames = ["Musket", "Broadsword"];
-    this.items = [new Item("Musket", 0, 0, 2, 10, 0.0, "Musket Description"),
-                  new Item("Bolt Action", 0, 0, 2, 20, 0.0, "Bolt Action Description"),
-                  new Item("Broadsword", 0, 1, 1, 5, 0.0, "Broadsword Description"),
-                  new Item("Grenade", 0, 1, 1, 10, 0,0, "Grenade Description"),
-                  new Item("Big Fart", 0, 1, 2, 5, 0.0, "Big Fart Description"),
-                  new Item("Nuke", 0, 1, 2, 10, 0.0, "Nuke Description"),
-                  new Item("Sawed-Off", 0, 0, 1, 15, 0.0, "Sawed-Off Description"),
-                  new Item("Beartrap", 0, 2, 0, 10, 0.0, "Beartrap Description"),
-                  new Item("Landmine", 0, 2, 0, 20, 0.0, "Landmine Description"),
+    this.items = [new Item("Musket", 0, 0, 2, 15, 0.0, "Musket Description"),
+                  new Item("Bolt Action", 0, 0, 2, 30, 0.0, "Bolt Action Description"),
+                  new Item("Broadsword", 0, 1, 1, 10, 0.0, "Broadsword Description"),
+                  new Item("Fart", 0, 1, 1, 25, 0,0, "Fart Description"),
+                  new Item("Big Fart", 0, 1, 2, 15, 0.0, "Big Fart Description"),
+                  new Item("Nuke", 0, 1, 2, 25, 0.0, "Nuke Description"),
+                  new Item("Sawed-Off", 0, 0, 1, 30, 0.0, "Sawed-Off Description"),
+                  new Item("Beartrap", 0, 2, 0, 15, 0.0, "Beartrap Description"),
+                  new Item("Landmine", 0, 2, 0, 30, 0.0, "Landmine Description"),
                   new Item("Minor Potion", 1, 0, 0, 10, 0.0, "Minor Potion Description"),
                   new Item("Major Potion", 1, 0, 0, 30, 0.0, "Major Potion Description"),
                   new Item("Move Again", 1, 0, 0, 0, 0.0, "Move Again Description"),
@@ -202,7 +201,7 @@ module.exports = class Gameplay {
 
 
   // Starts turn timer, calculate possible moves, set currentPlayer, change player state to Active. Disable "end turn"
-  // TODO: Test
+  // TODO: TESTED!
   startTurnFor(player) {
     // Start turn timer
 
@@ -217,7 +216,7 @@ module.exports = class Gameplay {
   }
 
   // Update Linked List, change player state to Idle
-  // TODO: Test
+  // TODO: TESTED!
   endTurnFor(player) {
     // Reset turn timer?
 
