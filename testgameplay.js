@@ -513,39 +513,39 @@ module.exports.testBoundsPossibleAttacksByRangedRadius = function testBoundsPoss
   return true;
 }
 
-module.exports.testPossibleAttacksFromAllPositions = function testPossibleAttacksFromAllPositions() {
-  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
-  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
-  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
-  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
-  // Basic Attack
-  var basic = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack");
-  var gameplay = new Gameplay(p1, p2, p3, p4);
-  gameplay.createBoard();
-  gameplay.startTurnFor(p1);
-
-  for (testNum = 0; testNum < 100; testNum++) {
-    gameplay.moveTo(gameplay.board[testNum]);
-    var result = gameplay.possibleAttacksBy(basic);
-
-    var str = "Position " + testNum +" Ranged Radius attack\n";
-    str = str + "|";
-    for (i = 0; i < 100; i++) {
-      if (result.includes(i)) {
-        str = str + "X|";
-      } else if (i == testNum) {
-        str = str + "S|";
-      } else {
-        str = str + " |";
-      }
-      if (i % 10 == 9 && i != 99) {
-        str = str + "\n|";
-      }
-    }
-    console.log(str);
-  }
-  return true;
-}
+// module.exports.testPossibleAttacksFromAllPositions = function testPossibleAttacksFromAllPositions() {
+//   var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+//   var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+//   var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+//   var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+//   // Basic Attack
+//   var basic = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack");
+//   var gameplay = new Gameplay(p1, p2, p3, p4);
+//   gameplay.createBoard();
+//   gameplay.startTurnFor(p1);
+//
+//   for (testNum = 0; testNum < 100; testNum++) {
+//     gameplay.moveTo(gameplay.board[testNum]);
+//     var result = gameplay.possibleAttacksBy(basic);
+//
+//     // var str = "Position " + testNum +" Ranged Radius attack\n";
+//     // str = str + "|";
+//     // for (i = 0; i < 100; i++) {
+//     //   if (result.includes(i)) {
+//     //     str = str + "X|";
+//     //   } else if (i == testNum) {
+//     //     str = str + "S|";
+//     //   } else {
+//     //     str = str + " |";
+//     //   }
+//     //   if (i % 10 == 9 && i != 99) {
+//     //     str = str + "\n|";
+//     //   }
+//     // }
+//     // console.log(str);
+//   }
+//   return true;
+// }
 
 
 module.exports.testPossibleMovesFrom = function testPossibleMovesFrom() {
