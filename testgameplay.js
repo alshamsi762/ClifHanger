@@ -43,6 +43,11 @@ module.exports.testKillingPlayer = function testKillingPlayer() {
   var gameplay3 = new Gameplay(p1, p2, p3, p4);
   var gameplay4 = new Gameplay(p1, p2, p3, p4);
 
+  gameplay1.createBoard();
+  gameplay2.createBoard();
+  gameplay3.createBoard();
+  gameplay4.createBoard();
+
   var killP1List = [p2, p3, p4];
   var killP2List = [p1, p3, p4];
   var killP3List = [p1, p2, p4];
@@ -101,13 +106,44 @@ module.exports.testCreateBoard = function testCreateBoard() {
 
   gameplay.createBoard();
 
-  if (gameplay.board != undefined) {
-    for (i = 0; i < 100; i++) {
-      if (!(gameplay.board[i] instanceof Boardspace)) { return false; }
-      if (i == 0 || i == 9 || i == 90 || i == 99) {
-        if (!(gameplay.board[i].player instanceof Player)) { return false; }
-      }
+  // if (gameplay.board != undefined) {
+  //   for (i = 0; i < 100; i++) {
+  //     if (!(gameplay.board[i] instanceof Boardspace)) { return false; }
+  //     if (i == 0 || i == 9 || i == 90 || i == 99) {
+  //       if (!(gameplay.board[i].player instanceof Player)) { return false; }
+  //     }
+  //   }
+  // }
+  for(i = 0; i < 100; i++)
+  {
+    if(gameplay.board[i] == null)
+    {
+      return false;
     }
+  }
+
+  if(!gameplay.board[0].hasPlayer() || !gameplay.board[9].hasPlayer() || !gameplay.board[90].hasPlayer() || !gameplay.board[99].hasPlayer())
+  {
+    return false;
+  }
+
+  var found = 0;
+
+  for(i = 0; i < 100; i++)
+  {
+    if(gameplay.board[i].hasLoot())
+    {
+      found++;
+    }
+    if(gameplay.board[i].fallStage != 0)
+    {
+      return false;
+    }
+  }
+
+  if(found != 10)
+  {
+    return false;
   }
 
   return true;
@@ -147,6 +183,30 @@ module.exports.testMoving = function testMoving() {
     return false;
   }
 
+  // Testing for picking up loot
+  var item1 = new Item("Radius", 0, 1, 1, 20, null, null);
+  gameplay.board[18].setLoot(item1);
+  if(!gameplay.board[18].hasLoot() || gameplay.currPlayer.offensive != null)
+  {
+    return false;
+  }
+
+  // move up to block with offensive item
+  gameplay.moveTo(gameplay.board[gameplay.currPlayer.position + 10]);
+  if(gameplay.board[18].hasLoot() || gameplay.currPlayer.offensive[0].name != "Radius" || gameplay.currPlayer.offensive.length != 1)
+  {
+    return false;
+  }
+  // Pick up another offensive item
+  var item2 = new Item("Fire", 0, 1, 1, 20, null, null);
+  gameplay.board[28].setLoot(item2);
+  gameplay.moveTo(gameplay.board[gameplay.currPlayer.position + 10]);
+  if(gameplay.board[28].hasLoot() || gameplay.currPlayer.offensive[1].name != "Fire" || gameplay.currPlayer.offensive.length != 2)
+  {
+    return false;
+  }
+  // Im guessing defensive works the exact same way so I wont test it
+
   return true;
 }
 
@@ -162,7 +222,7 @@ module.exports.testDropItem = function testDropItem() {
 
   var found = 0;
 
-  for(k = 0; k < 10; k++)
+  for(k = 0; k < 50; k++)
   {
     gameplay.dropItem();
   }
@@ -173,7 +233,11 @@ module.exports.testDropItem = function testDropItem() {
       found++;
     }
   }
-  return found;
+  if(gameplay.board[0].hasLoot() || gameplay.board[9].hasLoot() || gameplay.board[90].hasLoot() || gameplay.board[99].hasLoot())
+  {
+    return false;
+  }
+  return found == 60; // 10 for initialDrop and 50 more for testing
 }
 
 module.exports.testPossibleAttacksBy = function testPossibleAttacksBy() {
@@ -480,5 +544,106 @@ module.exports.testPossibleAttacksFromAllPositions = function testPossibleAttack
     }
     console.log(str);
   }
+  return true;
+}
+
+
+module.exports.testPossibleMovesFrom = function testPossibleMovesFrom() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+
+
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+
+  // Moves from corners - 2 possible moves
+  if(gameplay.possibleMovesFrom(gameplay.board[p1.position]) != 1100 || gameplay.possibleMovesFrom(gameplay.board[p2.position]) != 1001 || gameplay.possibleMovesFrom(gameplay.board[p3.position]) != 110 || gameplay.possibleMovesFrom(gameplay.board[p4.position]) != 11)
+  {
+    return false;
+  }
+
+  // Moves from edges - 3 possible moves
+  p1.position = 5;
+  p2.position = 50;
+  p3.position = 95;
+  p4.position = 59;
+  if(gameplay.possibleMovesFrom(gameplay.board[p1.position]) != 1101 || gameplay.possibleMovesFrom(gameplay.board[p2.position]) != 1110 || gameplay.possibleMovesFrom(gameplay.board[p3.position]) != 111 || gameplay.possibleMovesFrom(gameplay.board[p4.position]) != 1011)
+  {
+    return false;
+  }
+
+  // Moves from center - 4 possible moves
+  p1.position = 55;
+  if(gameplay.possibleMovesFrom(gameplay.board[p1.position]) != 1111)
+  {
+    return false;
+  }
+
+  // Moves when another player is around
+  p1.position = 1;
+  p2.position = 8;
+  if(gameplay.possibleMovesFrom(gameplay.board[p1.position]) != 1100 || gameplay.possibleMovesFrom(gameplay.board[p2.position]) != 1001)
+  {
+    return false;
+  }
+
+
+  return true;
+}
+
+
+module.exports.testShrinking = function testShrinking() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+
+
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+
+  // 3rd full turn - nothing should happen yet
+  gameplay.fullTurnCount = 3;
+  gameplay.shouldShrinkBoard();
+  if(gameplay.board[0].fallStage != 0)
+  {
+    return false;
+  }
+
+  // 4th full turn - blocks should become UNSTABLE
+  gameplay.fullTurnCount = 4;
+  gameplay.shouldShrinkBoard();
+  if(gameplay.topBounds != 99 || gameplay.board[3].fallStage != 1 || gameplay.board[30].fallStage != 1 || gameplay.board[39].fallStage != 1 || gameplay.board[93].fallStage != 1)
+  {
+    return false;
+  }
+
+  // 5th full turn - blocks should become FALLEN. Bounds and offsets should change. Kill players
+  gameplay.currPlayer = p1;
+  gameplay.moveTo(gameplay.board[26]);
+  gameplay.currPlayer = p2;
+  gameplay.moveTo(gameplay.board[33]);
+
+
+  gameplay.fullTurnCount = 5;
+  gameplay.shouldShrinkBoard();
+
+  if(gameplay.topBounds != 89 || gameplay.lowerBounds != 10 || gameplay.rightOffset != 8 || gameplay.leftOffset != 1 || gameplay.width != 8 || gameplay.size != 64)
+  {
+    return false;
+  }
+  if(gameplay.board[3].fallStage != 2 || gameplay.board[30].fallStage != 2 || gameplay.board[39].fallStage != 2 || gameplay.board[93].fallStage != 2)
+  {
+    return false;
+  }
+  if(gameplay.playerList.length != 3) // p3 and p4 die
+  {
+    return false;
+  }
+
+
+
   return true;
 }

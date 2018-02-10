@@ -57,7 +57,7 @@ doubleList.prototype.removePlayer = function(id)  // we can search for the playe
   var currentNode = this.head;
   var count = 0;
 
-  if(this.length == 0)
+  if(this.length == 1)
   {
     throw new Error(message1.failure);
   }
@@ -79,7 +79,7 @@ doubleList.prototype.removePlayer = function(id)  // we can search for the playe
     }
     else    // if found
     {
-      if(nodeToRemove == this.head && this.length == 1)   // it is the only node
+      if(nodeToRemove == this.head && this.length == 2)   // it is the only node ( with the sentinel )
       {
         this.head = null;   // empty the list
         this.tail = null;
@@ -89,6 +89,8 @@ doubleList.prototype.removePlayer = function(id)  // we can search for the playe
       {
         nodeToRemove.previous.next = nodeToRemove.next;
         nodeToRemove.next.previous = nodeToRemove.previous;
+        this.head = this.tail.next;
+        this.head.previous = this.tail;
         this.length--;
       }
     }
@@ -107,7 +109,7 @@ module.exports = class Gameplay {
   // Const. Linked List (Players), Array for all Items, # Alive, Turn Timer, currPlayer, currItem, fullTurnCount
   constructor(p1, p2, p3, p4) {
     // Linked list of players
-    var sentinel = new Player(-1, 0, 0, null, null, null);
+    var sentinel = new Player(-1, -1, -1, null, null, null);
     var list = new doubleList();
     list.addPlayer(p1);
     list.addPlayer(p2);
@@ -142,6 +144,7 @@ module.exports = class Gameplay {
   }
 
   // Creates Board. Places players and items on board
+  // TODO: TESTED!
   createBoard() {
 
     for(i = 0; i < 100; i++)
@@ -151,23 +154,24 @@ module.exports = class Gameplay {
 
     var temp = this.playerList.head;
 
-    this.board[0].setPlayer(temp);
+    this.board[0].setPlayer(temp.data);
     temp = temp.next;
-    this.board[9].setPlayer(temp);
+    this.board[9].setPlayer(temp.data);
     temp = temp.next;
-    this.board[99].setPlayer(temp);
+    this.board[90].setPlayer(temp.data);
     temp = temp.next;
-    this.board[90].setPlayer(temp);
+    this.board[99].setPlayer(temp.data);
 
 
-    // TODO: place items on board
-
+    // place items on board
+    this.initialDrop();
 
 
   }
 
 
   // Starts turn timer, calculate possible moves, set currentPlayer, change player state to Active. Disable "end turn"
+  // TODO: Test
   startTurnFor(player) {
     // Start turn timer
 
@@ -182,6 +186,7 @@ module.exports = class Gameplay {
   }
 
   // Update Linked List, change player state to Idle
+  // TODO: Test
   endTurnFor(player) {
     // Reset turn timer?
 
@@ -190,6 +195,7 @@ module.exports = class Gameplay {
 
   // Update currPlayer position, apply effects of any trap or add item, set currItem to Basic Attack and call possible attacks.
   // Enable "end turn" button
+  // TODO: TESTED!
   moveTo(boardspace) {
     // Remove the player from their current boardspace
     this.board[this.currPlayer.position].removePlayer();
@@ -229,12 +235,14 @@ module.exports = class Gameplay {
   }
 
   // Check if player, apply effects to player. Apply effects of item to the boardspace if any. End current player's turn
+  // TODO: Test
   attack(item, boardspace) {
 
   }
 
   // Sets the current players item to the currentItem (basic on first call). Waits for user input to select other item.
   // Check if Offensive or Defensive, calc possibleAttacks if applicable.
+  // TODO: Test
   chooseItem(item) {
     this.currItem = item;
     if (item.itemType == 0) { this.possibleAttacksBy(item); } // Offensive
@@ -248,6 +256,7 @@ module.exports = class Gameplay {
   }
 
   // Randomly drop an item on a random (valid) boardspace.
+  // TODO: TESTED!
   dropItem() {
     var itemPos = 0;
     var item = null;
@@ -267,17 +276,19 @@ module.exports = class Gameplay {
   }
 
   // Shrink the board. For each dropped, check if player is there, kill player if they are.
+  // TODO: Test
   shrinkBoard() {
+    var top = this.topBounds, lower = this.lowerBounds, right = this.rightOffset, left = this.leftOffset;
     // change outer blocks to FALLEN and kill any players found
     for(i = lower; i < lower + 10; i++)   // lower row
     {
-      this.board[i].fallStage = FALLEN;
+      this.board[i].fallStage = 2;
       if(this.board[i].hasPlayer())
       {
         this.killPlayer(this.board[i].player);
       }
 
-      this.board[top - i].fallStage = FALLEN;
+      this.board[top - i].fallStage = 2;
       if(this.board[top - i].hasPlayer())
       {
         this.killPlayer(this.board[top - i].player);
@@ -286,13 +297,13 @@ module.exports = class Gameplay {
 
     for(i = lower; i < top; i+=10)   // left column
     {
-      this.board[i].fallStage = FALLEN;
+      this.board[i].fallStage = 2;
       if(this.board[i].hasPlayer())
       {
         this.killPlayer(this.board[i].player);
       }
 
-      this.board[top - i].fallStage = FALLEN;
+      this.board[top - i].fallStage = 2;
       if(this.board[top - i].hasPlayer())
       {
         this.killPlayer(this.board[top - i].player);
@@ -313,40 +324,52 @@ module.exports = class Gameplay {
   }
 
   // Remove player from linked list. Call any animations
+  // TODO: TESTED!
   killPlayer(player) {
+    this.board[player.position].removePlayer();
     this.playerList.removePlayer(player.id);
     // should we set the player to null?
     // call any animations
   }
 
   // Check attributes of boardspace
+  // TODO: TESTED! in testMoving
   canMoveTo(boardspace) {
     return boardspace.playerCanEnter();
   }
 
   // Check boardspaces around currPlayer's boardspace. Display in UI
+  // TODO: TESTED!
   possibleMovesFrom(boardspace) {
     var pos = boardspace.position;
+    var moves = 0; // moves will start as 0000. 1000 digits means up, 0100 means right, 0010 means down, 0001 means left. Just for testing.
     if(pos + 10 <= this.topBounds && this.canMoveTo(this.board[pos + 10]))
     {
-      // can move up
+      // can move up, give it
+      moves += 1000;
     }
     if((pos % 10) != this.rightOffset && this.canMoveTo(this.board[pos + 1]))
     {
       // can move right
+      moves += 100;
     }
     if(pos - 10 >= this.lowerBounds && this.canMoveTo(this.board[pos - 10]))
     {
       // can move down
+      moves += 10;
     }
     if((pos % 10) != this.leftOffset && this.canMoveTo(this.board[pos - 1]))
     {
       // can move left
+      moves += 1;
     }
+
+    return moves;
   }
 
   // Use currPlayer pos. and item to display possible attacks. Display in UI
   // Maybe return an array of the possible boardspace positions?
+  // TODO: TESTED!
   possibleAttacksBy(item) {
     var pos = this.currPlayer.position;
     var upOrDown = 10, leftOrRight = 1;
@@ -383,6 +406,7 @@ module.exports = class Gameplay {
   }
 
   // Check full-turn count. Change fallStage before blocks should fall.
+  // TODO: Test
   shouldShrinkBoard() {
     var count = this.fullTurnCount;
     if(count == 4 || count == 11 || count == 20)
@@ -392,22 +416,16 @@ module.exports = class Gameplay {
       // change outer blocks to UNSTABLE
       for(i = lower; i < lower + 10; i++)   // lower row
       {
-        this.board[i].fallStage = UNSTABLE;
-        this.board[top - i].fallStage = UNSTABLE;
+        this.board[i].fallStage = 1;
+        this.board[top - i].fallStage = 1;
       }
-      // for(i = top; i > top - 10; i--)   // top row
-      // {
-      //   this.board[i].fallStage = UNSTABLE;
-      // }
+
       for(i = lower; i < top; i+=10)   // left column
       {
-        this.board[i].fallStage = UNSTABLE;
-        this.board[top - i].fallStage = UNSTABLE;
+        this.board[i].fallStage = 1;
+        this.board[top - i].fallStage = 1;
       }
-      // for(i = top; i > lower; i-=10)   // right column
-      // {
-      //   this.board[i].fallStage = UNSTABLE;
-      // }
+
     }
     if(count == 5 || count == 12 || count == 21)    // After 5 - 7 - 9 turns
     {
@@ -418,6 +436,7 @@ module.exports = class Gameplay {
   }
 
   // Check if only one player alive.
+  // TODO: Test
   hasEnded() {
     if(this.playerList.length == 2)   // one for player, one for sentinel?
     {
@@ -426,6 +445,7 @@ module.exports = class Gameplay {
   }
 
   // if currPlayer reached sentinel, Increment fullTurnCount and currPlayer.next
+  // TODO: Test
   nextTurn() {
     var player = this.currPlayer;
     if(player != null && player.id == -1)
@@ -435,8 +455,9 @@ module.exports = class Gameplay {
     }
   }
 
-  // calculate moves required to go from a to b
+  // calculate moves required to go from a to b (only works at the beginning of the game when the players are at the initial positions - Generally faulty logic)
   // used to drop items at the beginning of the game
+  // TODO: TESTED!
   movesFrom(a, b)
   {
     var diff = Math.abs(a - b);
@@ -445,6 +466,8 @@ module.exports = class Gameplay {
     return moves;
   }
 
+  // Drops 10 random items at random positions not occupied and at least 2 moves away from every players, at the beginning of the game.
+  // TODO: TESTED!
   initialDrop()
   {
     var count = 0;
@@ -454,25 +477,26 @@ module.exports = class Gameplay {
     {
       // item = call amjad's algorithm
       item = this.randomItem();
-      itemPos = Math.floor(Math.random() * 100);
-
+      itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
       // makes sure no item is dropped less than 2 moves away from all players
-      while(movesFrom(0, itemPos) < 2 || movesFrom(9, itemPos) < 2 || movesFrom(90, itemPos) < 2 || movesFrom(99, itemPos) < 2)
+      while(this.board[itemPos].hasLoot() || this.movesFrom(0, itemPos) < 2 || this.movesFrom(9, itemPos) < 2 || this.movesFrom(90, itemPos) < 2 || this.movesFrom(99, itemPos) < 2)
       {
-        itemPos = Math.floor(Math.random() * 100);
+        itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
       }
       this.board[itemPos].setLoot(item);
       count++;
     }
   }
 
-  // Amjad's algorithm
+
+
+
+
+  // Returns a random item from the items list
+  // TODO: TESTED!
   randomItem()
   {
-    // HARD AF! Probably going to use Andrew's instead
-    var item;
-    item = this.items[Math.floor(Math.random() * 9)];
-    return item;
+    return this.items[Math.floor(Math.random() * this.items.length)];;
   }
 
 
