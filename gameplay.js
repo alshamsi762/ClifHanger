@@ -274,10 +274,17 @@ module.exports = class Gameplay {
 
   }
 
-  // Check if player, apply effects to player. Apply effects of item to the boardspace if any. End current player's turn
+  // Check if player, apply effects to player. Apply effects of item to the boardspace if any.
   // TODO: Test
   attack(item, boardspace) {
-    // If item is a trap, ignore checking boardspace
+    if (item.attackType == 2) {
+      boardspace.setTrap(item);
+    } else {
+      if (boardspace.hasPlayer() == true) {
+        // Attack the player on the boardspace
+        boardspace.player.damageHealthBy(item.damage);
+      }
+    }
   }
 
   // Sets the current players item to the currentItem (basic on first call). Waits for user input to select other item.
@@ -286,13 +293,21 @@ module.exports = class Gameplay {
   chooseItem(item) {
     this.currItem = item;
     if (item.itemType == 0) { this.possibleAttacksBy(item); } // Offensive
+    else if (item.itemType == 1) {
+      if (item.name == "Move Again" || item.name == "Teleport") {
+        this.possibleMovesFrom(this.currPlayer.position);
+      }
+    }
     // Display current item as selected in UI
   }
 
   // Called when user activates item. Checks if Offensive or Defensive. Attack if offens. Apply effects if defens.
   // remove item from player inventory.
-  useItem(item) {
-
+  useItem(item, direction) {
+    var index = 0;
+    if (direction == "UP") { index = 0 * item.range; }
+    else if (direction == "LEFT") { index = 1 * item.range; }
+    else if (direction == "")
   }
 
   // Randomly drop an item on a random (valid) boardspace.
@@ -379,6 +394,7 @@ module.exports = class Gameplay {
   }
 
   // Check boardspaces around currPlayer's boardspace. Display in UI
+  // TODO: Add case for teleport item
   // TODO: TESTED!
   possibleMovesFrom(boardspace) {
     var pos = boardspace.position;
