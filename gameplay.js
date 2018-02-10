@@ -133,6 +133,8 @@ module.exports = class Gameplay {
 
     var allItems = [0, 1, 2, 3, 4, 5, 6, 7, 8];    // not sure if this is feasible lol
     this.items = allItems;
+    this.basicAttack = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack. Can hit players above, below, or to the sides for 10 damage.");
+
 
     this.size = 100, this.width = 10;
 
@@ -141,6 +143,35 @@ module.exports = class Gameplay {
     this.topBounds = 99, this.lowerBounds = 0, this.leftOffset = 0, this.rightOffset = 9;
     this.board = [];
     this.attackSpaces = []; // List of spaces that the current attack will hit
+
+
+    // Musket - low damage ranged basic
+    // Bolt Action - high damage ranged basic
+    // Broadsword - low damage radius
+    // Grenade - high damage radius
+    // Big Fart - low damage ranged radius
+    // Nuke - high damage ranged radius
+    // Sawed-Off - basic (high damage)
+    // Beartrap - trap
+    // Landmine - trap (more damage)
+    // Minor Potion - defensive, heals 10
+    // Major Potion - defensive, heals 30
+    // Move Again - defensive, allows player to move again instead of attack
+    // Teleport - defensive, allows player to move to any valid boardspace
+    var itemNames = ["Musket", "Broadsword"];
+    this.items = [new Item("Musket", 0, 0, 2, 10, 0.0, "Musket Description"),
+                  new Item("Bolt Action", 0, 0, 2, 20, 0.0, "Bolt Action Description"),
+                  new Item("Broadsword", 0, 1, 1, 5, 0.0, "Broadsword Description"),
+                  new Item("Grenade", 0, 1, 1, 10, 0,0, "Grenade Description"),
+                  new Item("Big Fart", 0, 1, 2, 5, 0.0, "Big Fart Description"),
+                  new Item("Nuke", 0, 1, 2, 10, 0.0, "Nuke Description"),
+                  new Item("Sawed-Off", 0, 0, 1, 15, 0.0, "Sawed-Off Description"),
+                  new Item("Beartrap", 0, 2, 0, 10, 0.0, "Beartrap Description"),
+                  new Item("Landmine", 0, 2, 0, 20, 0.0, "Landmine Description"),
+                  new Item("Minor Potion", 1, 0, 0, 10, 0.0, "Minor Potion Description"),
+                  new Item("Major Potion", 1, 0, 0, 30, 0.0, "Major Potion Description"),
+                  new Item("Move Again", 1, 0, 0, 0, 0.0, "Move Again Description"),
+                  new Item("Teleport", 1, 0, 0, 0, 0.0, "Teleport Description")];
   }
 
   // Creates Board. Places players and items on board
@@ -237,7 +268,7 @@ module.exports = class Gameplay {
   // Check if player, apply effects to player. Apply effects of item to the boardspace if any. End current player's turn
   // TODO: Test
   attack(item, boardspace) {
-
+    // If item is a trap, ignore checking boardspace
   }
 
   // Sets the current players item to the currentItem (basic on first call). Waits for user input to select other item.
@@ -376,7 +407,7 @@ module.exports = class Gameplay {
     this.attackSpaces = []; // Reset attackSpaces
 
     // TRAP, can be placed at any valid boardspace
-    if (item.attackType == 1 && item.range == -1) {
+    if (item.attackType == 2) {
       for (i = 0; i < 100; i++) {
         // Check if boardspace can accept a trap item, add it to attackSpaces
         if (this.board[i].playerCanEnter() && this.board[i].hasTrap() == false) {

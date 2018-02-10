@@ -6,7 +6,7 @@ module.exports = class Item {
   constructor(name, itemType, attackType, range, damage, rarity, description) {
     this.name = name; // String
     this.itemType = itemType; // 0-offensive, 1-defensive
-    this.attackType = attackType; // 0-basic, 1-radius
+    this.attackType = attackType; // 0-basic, 1-radius, 2-trap
     this.range = range; // 1, 2
     this.damage = damage; // number
     this.rarity = rarity; //
