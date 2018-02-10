@@ -283,7 +283,7 @@ module.exports = class Gameplay {
   }
 
   // Check if player, apply effects to player. Apply effects of item to the boardspace if any.
-  // TODO: Test
+  // TODO: TESTED!
   attack(item, boardspace) {
     if (item.attackType == 2) {
       boardspace.setTrap(item);

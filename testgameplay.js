@@ -697,10 +697,22 @@ module.exports.testAttack = function testAttack() {
   var gameplay = new Gameplay(p1, p2, p3, p4);
   gameplay.createBoard();
 
-  gameplay.attack(gameplay.items[8], gameplay.board[0]);
-
-
-
+  gameplay.attack(gameplay.items[3], gameplay.board[0]);
+  if(gameplay.board[0].player.health != 75)
+  {
+    return false;
+  }
+  gameplay.attack(gameplay.items[6], gameplay.board[0]);
+  if(gameplay.board[0].player.health != 45)
+  {
+    return false;
+  }
+  gameplay.attack(gameplay.items[3], gameplay.board[0]);
+  gameplay.attack(gameplay.items[3], gameplay.board[0]);
+  if(gameplay.board[0].player.health != 0)
+  {
+    return false;
+  }
 
   return true;
 }
