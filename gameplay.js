@@ -180,7 +180,15 @@ module.exports = class Gameplay {
       }
     }
 
-    console.log("Item drops: " + this.drops);
+    var currIndex = this.drops.length, temp, randIndex;
+    while(currIndex)
+    {
+      randIndex = Math.floor(Math.random() * currIndex);
+      currIndex--;
+      temp = this.drops[currIndex];
+      this.drops[currIndex] = this.drops[randIndex];
+      this.drops[randIndex] = temp;
+    }
   }
 
   // Creates Board. Places players and items on board

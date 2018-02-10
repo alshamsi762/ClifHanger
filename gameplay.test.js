@@ -65,6 +65,11 @@ test('Test start and end turn', () => {
   expect(testgameplay.testTurn()).toBe(true);
 })
 
+// Test 14
+test('Test Attack', () => {
+  expect(testgameplay.testAttack()).toBe(true);
+})
+
 
 // test('Visualize all possible attacks using a basic attack', () => {
 //   expect(testgameplay.testPossibleAttacksFromAllPositions()).toBe(true);
