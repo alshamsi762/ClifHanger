@@ -60,6 +60,11 @@ test('Test board shrinking preconditions and shrinking process. Killing players 
   expect(testgameplay.testShrinking()).toBe(true);
 })
 
+// Test 13
+test('Test start and end turn', () => {
+  expect(testgameplay.testTurn()).toBe(true);
+})
+
 
 // test('Visualize all possible attacks using a basic attack', () => {
 //   expect(testgameplay.testPossibleAttacksFromAllPositions()).toBe(true);

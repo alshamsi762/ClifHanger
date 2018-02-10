@@ -647,3 +647,41 @@ module.exports.testShrinking = function testShrinking() {
 
   return true;
 }
+
+
+module.exports.testTurn = function testTurn() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+
+
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+
+  if(gameplay.currPlayer)
+  {
+    return false;
+  }
+
+  gameplay.startTurnFor(p1);
+  if(gameplay.currPlayer !== p1 || gameplay.currPlayer.status != 1)
+  {
+    return false;
+  }
+
+  gameplay.endTurnFor(p1);
+  if(gameplay.currPlayer.status != 0)
+  {
+    return false;
+  }
+
+  gameplay.startTurnFor(p2);
+  if(gameplay.currPlayer !== p2 || gameplay.currPlayer.status != 1)
+  {
+    return false;
+  }
+
+
+  return true;
+}
