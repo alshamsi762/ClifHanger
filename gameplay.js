@@ -313,7 +313,7 @@ module.exports = class Gameplay {
   // remove item from player inventory.
   useItem(item, direction) {
     var index = 0;
-    if (item.itemType == 0) { // Offensive
+    if (item.itemType == 0 && item.attackType != 2) { // Offensive
       if (direction == "UP") { index = 0 * item.range; }
       else if (direction == "LEFT") { index = 1 * item.range; }
       else if (direction == "RIGHT") { index = 2 * item.range; }
@@ -322,9 +322,10 @@ module.exports = class Gameplay {
       for (i = 0; i < item.range; i++) {
         this.attack(item, this.attackSpaces[index + i]);
       }
+    } else if (item.itemType == 0 && item.attackType == 2) {  // Trap
+      // TODO: Need to finish input handling before checking to see if player can put a trap at boardspace
     }
-
-    if (item.itemType == 1) { // Defensive
+    else if (item.itemType == 1) { // Defensive
         if (item.name == "Minor Potion") {
           this.currPlayer.healHealthBy(10);
         } else if (item.name == "Major Potion") {
