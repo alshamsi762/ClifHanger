@@ -143,7 +143,7 @@ module.exports = class Gameplay {
     this.topBounds = 99, this.lowerBounds = 0, this.leftOffset = 0, this.rightOffset = 9;
     this.board = [];
     this.attackSpaces = []; // List of spaces that the current attack will hit
-
+    this.moveSpaces = [];   // List of spaces the current player can move to
 
     // Musket - low damage ranged basic
     // Bolt Action - high damage ranged basic
@@ -305,9 +305,32 @@ module.exports = class Gameplay {
   // remove item from player inventory.
   useItem(item, direction) {
     var index = 0;
-    if (direction == "UP") { index = 0 * item.range; }
-    else if (direction == "LEFT") { index = 1 * item.range; }
-    else if (direction == "")
+    if (item.itemType == 0) { // Offensive
+      if (direction == "UP") { index = 0 * item.range; }
+      else if (direction == "LEFT") { index = 1 * item.range; }
+      else if (direction == "RIGHT") { index = 2 * item.range; }
+      else if (direction == "DOWN") { index = 3 * item.range; }
+
+      for (i = 0; i < item.range; i++) {
+        this.attack(item, this.attackSpaces[index + i]);
+      }
+    }
+
+    if (item.itemType == 1) { // Defensive
+        if (item.name == "Minor Potion") {
+          this.currPlayer.healHealthBy(10);
+        } else if (item.name == "Major Potion") {
+          this.currPlayer.healHealthBy(30);
+        } else if (item.name == "Move Again") {
+          if (direction == "UP") { index = 0; }
+          else if (direction == "LEFT") { index = 1; }
+          else if (direction == "RIGHT") { index = 2; }
+          else if (direction == "DOWN") { index = 3; }
+          this.moveTo(this.board[this.moveSpaces[index]]);
+        } else if (item.name == "Teleport") {
+          // TODO: Need to finish input handling before implementing
+        }
+    }
   }
 
   // Randomly drop an item on a random (valid) boardspace.
