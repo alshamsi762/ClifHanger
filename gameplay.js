@@ -276,7 +276,7 @@ module.exports = class Gameplay {
   }
 
   // Shrink the board. For each dropped, check if player is there, kill player if they are.
-  // TODO: Test
+  // TODO: TESTED!
   shrinkBoard() {
     var top = this.topBounds, lower = this.lowerBounds, right = this.rightOffset, left = this.leftOffset;
     // change outer blocks to FALLEN and kill any players found
@@ -326,7 +326,7 @@ module.exports = class Gameplay {
   // Remove player from linked list. Call any animations
   // TODO: TESTED!
   killPlayer(player) {
-    this.board[player.position].removePlayer();
+    this.board[player.position].removePlayer();   // had to add this to remove the player from the boardspace
     this.playerList.removePlayer(player.id);
     // should we set the player to null?
     // call any animations
@@ -406,7 +406,7 @@ module.exports = class Gameplay {
   }
 
   // Check full-turn count. Change fallStage before blocks should fall.
-  // TODO: Test
+  // TODO: TESTED!
   shouldShrinkBoard() {
     var count = this.fullTurnCount;
     if(count == 4 || count == 11 || count == 20)
@@ -440,7 +440,11 @@ module.exports = class Gameplay {
   hasEnded() {
     if(this.playerList.length == 2)   // one for player, one for sentinel?
     {
-      // return true?
+      // Last player has won
+    }
+    if(this.playerList.length == 1)
+    {
+      // All players fell and died? No one wins
     }
   }
 
