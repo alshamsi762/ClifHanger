@@ -252,7 +252,7 @@ module.exports.testPossibleAttacksBy = function testPossibleAttacksBy() {
   gameplay.moveTo(gameplay.board[45]);
 
   // Trap Item
-  var trap = new Item("Trap", 0, 1, -1, 10, 0.60, "Traps a player and ends their turn");
+  var trap = new Item("Trap", 0, 2, -1, 10, 0.60, "Traps a player and ends their turn");
   // Basic Attack
   var basic = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack");
   // Radius Attack
