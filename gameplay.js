@@ -364,7 +364,7 @@ class Gameplay {
   shrinkBoard() {
     var top = this.topBounds, lower = this.lowerBounds, right = this.rightOffset, left = this.leftOffset;
     // change outer blocks to FALLEN and kill any players found
-    for(var i = lower; i < lower + 10; i++)   // lower row
+    for(var i = lower + left; i <= lower + this.width; i++)   // lower row
     {
       this.board[i].fallStage = 2;
       if(this.board[i].hasPlayer())
@@ -372,14 +372,14 @@ class Gameplay {
         this.killPlayer(this.board[i].player);
       }
 
-      this.board[top - i].fallStage = 2;
-      if(this.board[top - i].hasPlayer())
+      this.board[99 - i].fallStage = 2;
+      if(this.board[99 - i].hasPlayer())
       {
-        this.killPlayer(this.board[top - i].player);
+        this.killPlayer(this.board[99 - i].player);
       }
     }
 
-    for(var i = lower; i < top; i+=10)   // left column
+    for(var i = lower + left; i <= top - right; i+=10)   // left column
     {
       this.board[i].fallStage = 2;
       if(this.board[i].hasPlayer())
@@ -387,10 +387,10 @@ class Gameplay {
         this.killPlayer(this.board[i].player);
       }
 
-      this.board[top - i].fallStage = 2;
-      if(this.board[top - i].hasPlayer())
+      this.board[99 - i].fallStage = 2;
+      if(this.board[99 - i].hasPlayer())
       {
-        this.killPlayer(this.board[top - i].player);
+        this.killPlayer(this.board[99 - i].player);
       }
     }
 
@@ -503,25 +503,25 @@ class Gameplay {
   // TODO: TESTED!
   shouldShrinkBoard() {
     var count = this.fullTurnCount;
-    if(count == 4 || count == 11 || count == 20)
+    if(count == 1 || count == 2 || count == 3)
     {
       var top = this.topBounds, lower = this.lowerBounds, right = this.rightOffset, left = this.leftOffset;
 
       // change outer blocks to UNSTABLE
-      for(var i = lower; i < lower + 10; i++)   // lower row
+      for(var i = lower + left; i <= lower + this.width; i++)   // lower row
       {
         this.board[i].fallStage = 1;
-        this.board[top - i].fallStage = 1;
+        this.board[99 - i].fallStage = 1;
       }
 
-      for(var i = lower; i < top; i+=10)   // left column
+      for(var i = lower + left; i <= top - right; i+=10)   // left column
       {
         this.board[i].fallStage = 1;
-        this.board[top - i].fallStage = 1;
+        this.board[99 - i].fallStage = 1;
       }
 
     }
-    if(count == 5 || count == 12 || count == 21)    // After 5 - 7 - 9 turns
+    if(count == 2 || count == 4 || count == 6)    // After 5 - 7 - 9 turns
     {
       // call shrinkBoarb
       this.shrinkBoard();
