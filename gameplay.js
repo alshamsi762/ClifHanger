@@ -478,6 +478,10 @@ module.exports = class Gameplay {
     }
 
     for (i = 0; i < 100; i++) {
+      if (i % 10 < this.leftOffset || i % 10 > this.rightOffset ||
+          i < this.lowerBounds || i > this.topBounds) {
+        continue;
+      }
       var leftBound = (i % 10 <= pos % 10);
       var rightBound = (i % 10 >= pos % 10);
       var horiRange = Math.abs(i % 10 - pos % 10);

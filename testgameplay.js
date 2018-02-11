@@ -723,7 +723,7 @@ module.exports.testAttack = function testAttack() {
   }
   gameplay.attack(gameplay.items[3], gameplay.board[0]);
   gameplay.attack(gameplay.items[3], gameplay.board[0]);
-  if(gameplay.board[0].player.health != 0)
+  if(gameplay.board[0].player != null)
   {
     return false;
   }
