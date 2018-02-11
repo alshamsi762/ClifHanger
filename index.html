@@ -122,7 +122,7 @@
 				if (player.data.status == 1) {
 					document.getElementById("" + player.data.position).innerHTML = "&nbsp.";
 					game.moveTo(game.board[parseInt(boardspace)]);
-					document.getElementById("" + boardspace).innerHTML =  player.data.id;
+					document.getElementById("" + boardspace).innerHTML =  tempIDs[player.data.id];
 					player.data.status = 2;
 					disableBoard();
 
