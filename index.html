@@ -82,7 +82,7 @@
 					player = player.next;
 				}
 
-				game.shouldShrinkBoard();
+
 
 				// Tell the player to start their turn
 				document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
@@ -150,9 +150,12 @@
 			function endTurn() {
 				game.endTurnFor(player.data);
 				disableBoard();
+				game.shouldShrinkBoard();
 				nextTurn();
 			}
+
 			function disableBoard() {
+				
 				for (var i = 0; i < 100; i++) {
 					document.getElementById("" + i).disabled = true;
 					if (game.board[i].fallStage == 1) {
