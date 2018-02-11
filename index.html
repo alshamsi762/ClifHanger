@@ -3,6 +3,12 @@
 
 <!-- HTML Script -->
 <html>
+<style>
+.test {
+	height: 40px;
+	width: 40px;
+}
+</style>
 	<!-- Head -->
 	<head>
 
@@ -51,41 +57,40 @@
 				game = new Gameplay(player1, player2, player3, player4);
 				game.createBoard();
 
+				// Create all the buttons (boardspaces)
 				for (var i = 0; i < 100; i++) {
 					if (i % 10 == 0) {
 						document.getElementById("game").innerHTML += "<br />";
 					}
-					var button = "<button id = \"" + i + "\" onclick = \"boardspacePressed(\'" + i;
+					var button = "<button id = \"" + i + "\" class=\"test\" onclick = \"boardspacePressed(\'" + i;
 					button += "\')\" disabled>";
 					if (game.board[i].hasPlayer()) {
 						button += tempIDs[game.board[i].player.id];
 					} else if (game.board[i].hasLoot()) {
 						button += game.items.indexOf(game.board[i].loot);
 					} else {
-						button += "&nbsp.";
+						button += "&nbsp";
 					}
 
 					button += "</button>";
 					document.getElementById("game").innerHTML += button;
 				}
-
+				// Start player 1's turn
 				nextTurn();
-
 			}
 
 			function nextTurn() {
-
+				// Get the next player
 				if (player == null) {
 					player = game.playerList.head;
 				} else if (player.next.data.id == -1){
 					game.fullTurnCount++;
 					game.shouldShrinkBoard();
 					player = game.playerList.head;
-					
 				} else {
 					player = player.next;
 				}
-
+				// Clear any active buttons
 				disableBoard();
 				if (!game.hasEnded()) {
 				// Tell the player to start their turn
@@ -98,30 +103,15 @@
 				var possibleMoves = game.possibleMovesFrom(game.board[player.data.position]);
 				for (var i = 0; i < possibleMoves.length; i++) {
 					document.getElementById(""+possibleMoves[i]).disabled = false;
+					document.getElementById(""+possibleMoves[i]).style = "background-color: green";
 				}
-
 				game.startTurnFor(player.data);
-
-				// while (player.data.status < 2) {
-				// 	// Do nothing
-				// 	// Could do turn timer here
-				// }
-
-				// Possible attacks will have been calculated for basic attack by now
-				// Display those spaces
-				// for (var i = 0; i < game.possibleAttacks.length; i++) {
-				// 		document.getElementById("" + game.possibleAttacks[i]).disabled = false;
-				// }
-        //
-				// document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
-
 			}
 
 			function boardspacePressed(boardspace) {
 				// This function will handle pressing a boardspace with different player statuses
-				// Right now it just moves a player.
 				if (player.data.status == 1) {
-					document.getElementById("" + player.data.position).innerHTML = "&nbsp.";
+					document.getElementById("" + player.data.position).innerHTML = "&nbsp";
 					game.moveTo(game.board[parseInt(boardspace)]);
 					document.getElementById("" + boardspace).innerHTML =  tempIDs[player.data.id];
 					player.data.status = 2;
@@ -129,6 +119,7 @@
 
 					for (var i = 0; i < game.attackSpaces.length; i++) {
 							document.getElementById("" + game.attackSpaces[i]).disabled = false;
+							document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
 					}
 
 					document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
@@ -149,39 +140,28 @@
 					disableBoard();
 					endTurn();
 				}
-
-
-				// disableBoard();
 			}
 
 			function endTurn() {
 				game.endTurnFor(player.data);
 				disableBoard();
-				//game.shouldShrinkBoard();
 				nextTurn();
 			}
 
 			function disableBoard() {
-
 				for (var i = 0; i < 100; i++) {
 					document.getElementById("" + i).disabled = true;
 					if (game.board[i].fallStage == 1) {
 						document.getElementById("" + i).style = "background-color: yellow";
 					} else if (game.board[i].fallStage == 2) {
-						document.getElementById("" + i).style = "background-color: red";
+						document.getElementById("" + i).style = "background-color: transparent";
+						document.getElementById("" + i).innerHTML = "&nbsp";
+					} else {
+						document.getElementById("" + i).style = "";
 					}
-					//document.getElementById("" + i).style = "background-color: red";
 				}
 			}
-			function mytest(){
-					player1.damageHealthBy(10);
-					player2.damageHealthBy(10);
-					document.getElementById("demo").innerHTML = player1.name + " damaged to: " + player1.getHealth();
-					document.getElementById("demo").innerHTML += player2.name + " damaged to: " + player2.getHealth();
-					player1.damageHealthBy(-5);
-					document.getElementById("demo").innerHTML += player1.name + " healed to: " + player1.getHealth();
 
-			}
 		</script>
 		<script src="http://threejs.org/build/three.min.js"></script>
 
