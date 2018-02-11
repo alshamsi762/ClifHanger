@@ -79,8 +79,9 @@
 					player = game.playerList.head;
 				} else if (player.next.data.id == -1){
 					game.fullTurnCount++;
-					player = game.playerList.head;
 					game.shouldShrinkBoard();
+					player = game.playerList.head;
+					
 				} else {
 					player = player.next;
 				}
