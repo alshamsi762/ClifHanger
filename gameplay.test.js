@@ -70,7 +70,7 @@ test('Test Attack', () => {
   expect(testgameplay.testAttack()).toBe(true);
 })
 
-
-// test('Visualize all possible attacks using a basic attack', () => {
-//   expect(testgameplay.testPossibleAttacksFromAllPositions()).toBe(true);
-// })
+// Test 15
+test('Test possibleAttacks after shrinking board', () => {
+  expect(testgameplay.testPossibleAttacksAfterBoardShrink()).toBe(true);
+})

@@ -513,39 +513,53 @@ module.exports.testBoundsPossibleAttacksByRangedRadius = function testBoundsPoss
   return true;
 }
 
-// module.exports.testPossibleAttacksFromAllPositions = function testPossibleAttacksFromAllPositions() {
-//   var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
-//   var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
-//   var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
-//   var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
-//   // Basic Attack
-//   var basic = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack");
-//   var gameplay = new Gameplay(p1, p2, p3, p4);
-//   gameplay.createBoard();
-//   gameplay.startTurnFor(p1);
-//
-//   for (testNum = 0; testNum < 100; testNum++) {
-//     gameplay.moveTo(gameplay.board[testNum]);
-//     var result = gameplay.possibleAttacksBy(basic);
-//
-//     // var str = "Position " + testNum +" Ranged Radius attack\n";
-//     // str = str + "|";
-//     // for (i = 0; i < 100; i++) {
-//     //   if (result.includes(i)) {
-//     //     str = str + "X|";
-//     //   } else if (i == testNum) {
-//     //     str = str + "S|";
-//     //   } else {
-//     //     str = str + " |";
-//     //   }
-//     //   if (i % 10 == 9 && i != 99) {
-//     //     str = str + "\n|";
-//     //   }
-//     // }
-//     // console.log(str);
-//   }
-//   return true;
-// }
+module.exports.testPossibleAttacksAfterBoardShrink = function testPossibleAttacksAfterBoardShrink() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+
+  var basic = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack");
+
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+
+  // 3rd full turn - nothing should happen yet
+  gameplay.fullTurnCount = 3;
+  gameplay.shouldShrinkBoard();
+  // 4th full turn - blocks should become UNSTABLE
+  gameplay.fullTurnCount = 4;
+  gameplay.shouldShrinkBoard();
+
+  gameplay.currPlayer = p1;
+  gameplay.moveTo(gameplay.board[45]);
+  gameplay.currPlayer = p2;
+  gameplay.moveTo(gameplay.board[11]);
+
+  gameplay.fullTurnCount = 5;
+  gameplay.shouldShrinkBoard();
+
+  var expectedResult = [12, 21];
+  gameplay.startTurnFor(p2);
+  var actualResult = gameplay.possibleAttacksBy(basic);
+
+  if (expectedResult.length != actualResult.length) {
+    console.log("Position " + p2.position + " basic attack\n" +
+                "Expected: " + expectedResult + "\n" +
+                "Actual:   " + actualResult + "\n");
+    return false;
+  }
+  for (i = 0; i < actualResult.length; i++) {
+    if (expectedResult[i] != actualResult[i]) {
+      console.log("Position " + p2.position + " basic attack\n" +
+                  "Expected: " + expectedResult + "\n" +
+                  "Actual:   " + actualResult + "\n");
+      return false;
+    }
+  }
+  return true;
+
+}
 
 
 module.exports.testPossibleMovesFrom = function testPossibleMovesFrom() {

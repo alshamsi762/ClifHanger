@@ -120,19 +120,19 @@ module.exports = class Gameplay {
     this.playerList = list;
 
 
-    // Array of all Items
-    this.BASIC = 0;
-    this.POTION10 = 1;
-    this.POTION30 = 2;
-    this.RADIUS = 3;    // radius attack
-    this.TELEPORT = 4;
-    this.TRAP = 5;
-    this.LONG = 6;    // range attack, change name?
-    this.STRONG = 7;    // stronger attack, more damage, change name?
-    this.MOVEX2 = 8;
+    // // Array of all Items
+    // this.BASIC = 0;
+    // this.POTION10 = 1;
+    // this.POTION30 = 2;
+    // this.RADIUS = 3;    // radius attack
+    // this.TELEPORT = 4;
+    // this.TRAP = 5;
+    // this.LONG = 6;    // range attack, change name?
+    // this.STRONG = 7;    // stronger attack, more damage, change name?
+    // this.MOVEX2 = 8;
 
-    var allItems = [0, 1, 2, 3, 4, 5, 6, 7, 8];    // not sure if this is feasible lol
-    this.items = allItems;
+    // var allItems = [0, 1, 2, 3, 4, 5, 6, 7, 8];    // not sure if this is feasible lol
+    //this.items = [];//allItems;
     this.basicAttack = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack. Can hit players above, below, or to the sides for 10 damage.");
 
 
@@ -324,7 +324,6 @@ module.exports = class Gameplay {
 
       for (i = 0; i < item.range; i++) {
         this.attack(item, this.attackSpaces[index + i]);
-
       }
     } else if (item.itemType == item.OFFENSE && item.attackType == item.TRAP) {  // Trap
       // TODO: Need to finish input handling before checking to see if player can put a trap at boardspace
