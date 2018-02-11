@@ -44,6 +44,7 @@
 			var game = null;
 			var player = null;
 
+			var tempIDs = ["A", "B", "C", "D"]
 			function startGame() {
 				document.getElementById("strtGameBttn").disabled = true;
 
@@ -57,9 +58,9 @@
 					var button = "<button id = \"" + i + "\" onclick = \"boardspacePressed(\'" + i;
 					button += "\')\" disabled>";
 					if (game.board[i].hasPlayer()) {
-						button += game.board[i].player.id;
+						button += tempIDs[game.board[i].player.id];
 					} else if (game.board[i].hasLoot()) {
-						button += "x";
+						button += game.items.indexOf(game.board[i].loot);
 					} else {
 						button += "&nbsp.";
 					}
