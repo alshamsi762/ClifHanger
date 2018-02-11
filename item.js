@@ -15,6 +15,7 @@ module.exports = class Item {
     this.DEFENSE = 1;
     this.BASIC = 0;
     this.RADIUS = 1;
+    this.TRAP = 2;
   }
 
 }
