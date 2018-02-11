@@ -29,9 +29,18 @@
     <!-- Put your JavaScript Here. -->
 		<script src="test.js" type="text/javascript"></script>
 		<script src="player.js" type="text/javascript"></script>
+		<script src="boardspace.js" type="text/javascript"></script>
+		<script src="gameplay.js" type="text/javascript"></script>
+
 		<script>
-			let player1 = new Player(0, 100, "A1", null, null, "Andrew");
-			let player2 = new Player(1, 100, "A2", null, null, "Amjad");
+			let player1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+			let player2 = new Player(1, 100, 0, null, null, "Amjad", 0);
+			let player3 = new Player(2, 100, 0, null, null, "Sultan", 0);
+			let player4 = new Player(3, 100, 0, null, null, "Anirudh", 0);
+
+			function startGame() {
+				var game = new Gameplay(player1, player2, player3, player4);
+			}
 			function mytest(){
 					player1.damageHealthBy(10);
 					player2.damageHealthBy(10);
