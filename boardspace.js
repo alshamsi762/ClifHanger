@@ -1,8 +1,9 @@
 /** Boardspace Object & Functions **/
-const Item = require('./item.js');
-const Player = require('./player.js');
-
-module.exports = class Boardspace {
+// const Item = require('./item.js');
+// const Player = require('./player.js');
+//
+// module.exports = 
+class Boardspace {
 
 
   // Constructor for Boardspace Object

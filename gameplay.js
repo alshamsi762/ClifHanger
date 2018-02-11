@@ -1,6 +1,6 @@
-const Item = require('./item.js');
-const Player = require('./player.js');
-const Boardspace = require('./boardspace.js');
+// const Item = require('./item.js');
+// const Player = require('./player.js');
+// const Boardspace = require('./boardspace.js');
 
 
 // Implementation of double linked List
@@ -100,7 +100,8 @@ doubleList.prototype.removePlayer = function(id)  // we can search for the playe
 };
 
 
-module.exports = class Gameplay {
+// module.exports =
+class Gameplay {
 
   //TODO Figure out turn timer.
   // Timer function. Check if player state is still Active after ten seconds
@@ -111,6 +112,7 @@ module.exports = class Gameplay {
     // Linked list of players
     var sentinel = new Player(-1, -1, -1, null, null, null);
     var list = new doubleList();
+    // list.addPlayer(sentinel);
     list.addPlayer(p1);
     list.addPlayer(p2);
     list.addPlayer(p3);
@@ -119,22 +121,7 @@ module.exports = class Gameplay {
 
     this.playerList = list;
 
-
-    // // Array of all Items
-    // this.BASIC = 0;
-    // this.POTION10 = 1;
-    // this.POTION30 = 2;
-    // this.RADIUS = 3;    // radius attack
-    // this.TELEPORT = 4;
-    // this.TRAP = 5;
-    // this.LONG = 6;    // range attack, change name?
-    // this.STRONG = 7;    // stronger attack, more damage, change name?
-    // this.MOVEX2 = 8;
-
-    // var allItems = [0, 1, 2, 3, 4, 5, 6, 7, 8];    // not sure if this is feasible lol
-    //this.items = [];//allItems;
     this.basicAttack = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack. Can hit players above, below, or to the sides for 10 damage.");
-
 
     this.size = 100, this.width = 10;
 
@@ -195,7 +182,7 @@ module.exports = class Gameplay {
   // TODO: TESTED!
   createBoard() {
 
-    for(i = 0; i < 100; i++)
+    for(var i = 0; i < 100; i++)
     {
       this.board.push(new Boardspace(i, null, null, null, 0));
     }
@@ -229,7 +216,7 @@ module.exports = class Gameplay {
     // Change currentPlayer and currentItem to start of turn values
     this.currPlayer = player;
     // this.currItem = this.items[this.BASIC]; <= moved to moveTo()
-    this.currPlayer.status = 1; // Change status to Active "1"
+    this.currPlayer.status = 1; // Change status to Moving "1"
 
   }
 
@@ -322,8 +309,8 @@ module.exports = class Gameplay {
       else if (direction == "RIGHT") { index = 2 * item.range; }
       else if (direction == "DOWN") { index = 3 * item.range; }
 
-      for (i = 0; i < item.range; i++) {
-        this.attack(item, this.attackSpaces[index + i]);
+      for (var i = 0; i < item.range; i++) {
+        this.attack(item, this.board[this.attackSpaces[index + i]]);
       }
     } else if (item.itemType == item.OFFENSE && item.attackType == item.TRAP) {  // Trap
       // TODO: Need to finish input handling before checking to see if player can put a trap at boardspace
@@ -370,7 +357,7 @@ module.exports = class Gameplay {
   shrinkBoard() {
     var top = this.topBounds, lower = this.lowerBounds, right = this.rightOffset, left = this.leftOffset;
     // change outer blocks to FALLEN and kill any players found
-    for(i = lower; i < lower + 10; i++)   // lower row
+    for(var i = lower; i < lower + 10; i++)   // lower row
     {
       this.board[i].fallStage = 2;
       if(this.board[i].hasPlayer())
@@ -385,7 +372,7 @@ module.exports = class Gameplay {
       }
     }
 
-    for(i = lower; i < top; i+=10)   // left column
+    for(var i = lower; i < top; i+=10)   // left column
     {
       this.board[i].fallStage = 2;
       if(this.board[i].hasPlayer())
@@ -433,29 +420,34 @@ module.exports = class Gameplay {
   // TODO: TESTED!
   possibleMovesFrom(boardspace) {
     var pos = boardspace.position;
+    this.moveSpaces = [];
     var moves = 0; // moves will start as 0000. 1000 digits means up, 0100 means right, 0010 means down, 0001 means left. Just for testing.
     if(pos + 10 <= this.topBounds && this.canMoveTo(this.board[pos + 10]))
     {
       // can move up, give it
       moves += 1000;
+      this.moveSpaces.push(pos+10);
     }
     if((pos % 10) != this.rightOffset && this.canMoveTo(this.board[pos + 1]))
     {
       // can move right
       moves += 100;
+      this.moveSpaces.push(pos + 1);
     }
     if(pos - 10 >= this.lowerBounds && this.canMoveTo(this.board[pos - 10]))
     {
       // can move down
       moves += 10;
+      this.moveSpaces.push(pos - 10);
     }
     if((pos % 10) != this.leftOffset && this.canMoveTo(this.board[pos - 1]))
     {
       // can move left
       moves += 1;
+      this.moveSpaces.push(pos - 1);
     }
 
-    return moves;
+    return this.moveSpaces; //moves;
   }
 
   // Use currPlayer pos. and item to display possible attacks. Display in UI
@@ -468,7 +460,7 @@ module.exports = class Gameplay {
 
     // TRAP, can be placed at any valid boardspace
     if (item.attackType == item.TRAP) {
-      for (i = 0; i < 100; i++) {
+      for (var i = 0; i < 100; i++) {
         // Check if boardspace can accept a trap item, add it to attackSpaces
         if (this.board[i].playerCanEnter() && this.board[i].hasTrap() == false) {
           this.attackSpaces.push(i);
@@ -477,7 +469,7 @@ module.exports = class Gameplay {
       return this.attackSpaces;
     }
 
-    for (i = 0; i < 100; i++) {
+    for (var i = 0; i < 100; i++) {
       if (i % 10 < this.leftOffset || i % 10 > this.rightOffset ||
           i < this.lowerBounds || i > this.topBounds) {
         continue;
@@ -509,13 +501,13 @@ module.exports = class Gameplay {
       var top = this.topBounds, lower = this.lowerBounds, right = this.rightOffset, left = this.leftOffset;
 
       // change outer blocks to UNSTABLE
-      for(i = lower; i < lower + 10; i++)   // lower row
+      for(var i = lower; i < lower + 10; i++)   // lower row
       {
         this.board[i].fallStage = 1;
         this.board[top - i].fallStage = 1;
       }
 
-      for(i = lower; i < top; i+=10)   // left column
+      for(var i = lower; i < top; i+=10)   // left column
       {
         this.board[i].fallStage = 1;
         this.board[top - i].fallStage = 1;

@@ -1,6 +1,7 @@
 /** Player Object & Functions **/
-const Item = require('./item.js');
-module.exports = class Player {
+// const Item = require('./item.js');
+// module.exports = 
+class Player {
 
   // Constructor for Player
   constructor(id, health, position, offensive, defensive, name, status) {

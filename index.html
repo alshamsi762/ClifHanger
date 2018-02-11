@@ -18,18 +18,21 @@
 
 	<!-- Body -->
 	<body class="container-fluid">
-		<p>
+		<p id = "game">
       		<!-- Put HTML Stuff Here. -->
-      		I promise to contribute to this effort. I also promise not to plagarise other people's work.
+
     		</p>
-		<button onclick="mytest()">Click Me</button>
-		<p id = "demo"></p>
+
+		<button id = "strtGameBttn" onclick="startGame()">Start Game</button>
+		<button id = "endTurn" onclick="endTurn()">End Turn</button>
+		<p id = "gameboard"></p>
+		<p id = "instructions"></p>
 
 		<!-- JS Scripts -->
     <!-- Put your JavaScript Here. -->
-		<!-- <script src="item.js" type="text/javascript"></script> -->
-		<!-- <script src="player.js" type="text/javascript"></script>
-		<script src="boardspace.js" type="text/javascript"></script> -->
+		<script src="item.js" type="text/javascript"></script>
+		<script src="player.js" type="text/javascript"></script>
+		<script src="boardspace.js" type="text/javascript"></script>
 		<script src="gameplay.js" type="text/javascript"></script>
 
 		<script>
@@ -38,8 +41,127 @@
 			let player3 = new Player(2, 100, 0, null, null, "Sultan", 0);
 			let player4 = new Player(3, 100, 0, null, null, "Anirudh", 0);
 
+			var game = null;
+			var player = null;
+
 			function startGame() {
-				var game = new Gameplay(player1, player2, player3, player4);
+				document.getElementById("strtGameBttn").disabled = true;
+
+				game = new Gameplay(player1, player2, player3, player4);
+				game.createBoard();
+
+				for (var i = 0; i < 100; i++) {
+					if (i % 10 == 0) {
+						document.getElementById("game").innerHTML += "<br />";
+					}
+					var button = "<button id = \"" + i + "\" onclick = \"boardspacePressed(\'" + i;
+					button += "\')\" disabled>";
+					if (game.board[i].hasPlayer()) {
+						button += game.board[i].player.id;
+					} else if (game.board[i].hasLoot()) {
+						button += "x";
+					} else {
+						button += "&nbsp.";
+					}
+
+					button += "</button>";
+					document.getElementById("game").innerHTML += button;
+				}
+
+				nextTurn();
+
+			}
+
+			function nextTurn() {
+				if (player == null) {
+					player = game.playerList.head;
+				} else if (player.next.data.id == -1){
+					game.fullTurnCount++;
+					player = game.playerList.head;
+				} else {
+					player = player.next;
+				}
+
+				game.shouldShrinkBoard();
+
+				// Tell the player to start their turn
+				document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
+
+				// Display possible moves
+				var possibleMoves = game.possibleMovesFrom(game.board[player.data.position]);
+				for (var i = 0; i < possibleMoves.length; i++) {
+					document.getElementById(""+possibleMoves[i]).disabled = false;
+				}
+
+				game.startTurnFor(player.data);
+
+				// while (player.data.status < 2) {
+				// 	// Do nothing
+				// 	// Could do turn timer here
+				// }
+
+				// Possible attacks will have been calculated for basic attack by now
+				// Display those spaces
+				// for (var i = 0; i < game.possibleAttacks.length; i++) {
+				// 		document.getElementById("" + game.possibleAttacks[i]).disabled = false;
+				// }
+        //
+				// document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
+
+			}
+
+			function boardspacePressed(boardspace) {
+				// This function will handle pressing a boardspace with different player statuses
+				// Right now it just moves a player.
+				if (player.data.status == 1) {
+					document.getElementById("" + player.data.position).innerHTML = "&nbsp.";
+					game.moveTo(game.board[boardspace]);
+					document.getElementById("" + boardspace).innerHTML =  player.data.id;
+					player.data.status = 2;
+					disableBoard();
+
+					for (var i = 0; i < game.attackSpaces.length; i++) {
+							document.getElementById("" + game.attackSpaces[i]).disabled = false;
+					}
+
+					document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
+
+				} else if (player.data.status == 2) {
+					var origin = player.data.position;
+					var dir = "NONE";
+					if (origin - boardspace >= 10) {
+						dir = "UP";
+					} else if (origin - boardspace <= -10) {
+						dir = "DOWN";
+					} else if (origin - boardspace >= 1 && origin - boardspace < 10) {
+						dir = "LEFT";
+					} else if (origin - boardspace <= -1 && origin - boardspace > -10) {
+						dir = "RIGHT";
+					}
+					game.useItem(game.currItem, dir);
+					disableBoard();
+					endTurn();
+				}
+
+
+				// disableBoard();
+			}
+
+			function endTurn() {
+				game.endTurnFor(player.data);
+				disableBoard();
+				nextTurn();
+			}
+			function disableBoard() {
+				for (var i = 0; i < 100; i++) {
+					document.getElementById("" + i).disabled = true;
+					if (game.board[i].fallStage == 1) {
+						document.getElementById("" + i).style = "background-color: yellow";
+					} else if (game.board[i].fallStage == 2) {
+						document.getElementById("" + i).style = "background-color: red";
+					}
+					//document.getElementById("" + i).style = "background-color: red";
+				}
 			}
 			function mytest(){
 					player1.damageHealthBy(10);

@@ -1,6 +1,7 @@
 /** Item Object & Functions **/
-
-module.exports = class Item {
+// 
+// module.exports =
+class Item {
 
   // Constructor for Item Object
   constructor(name, itemType, attackType, range, damage, rarity, description) {
