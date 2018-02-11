@@ -535,11 +535,14 @@ class Gameplay {
     if(this.playerList.length == 2)   // one for player, one for sentinel?
     {
       // Last player has won
+      return true;
     }
     if(this.playerList.length == 1)
     {
       // All players fell and died? No one wins
+      return true;
     }
+    return false;
   }
 
   // if currPlayer reached sentinel, Increment fullTurnCount and currPlayer.next

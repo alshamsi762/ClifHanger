@@ -85,10 +85,13 @@
 				}
 
 				disableBoard();
-
+				if (!game.hasEnded()) {}
 				// Tell the player to start their turn
-				document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
-
+					document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
+				} else {
+					document.getElementById("instructions").innerHTML = player.data.name + " has won!";
+					return;
+				}
 				// Display possible moves
 				var possibleMoves = game.possibleMovesFrom(game.board[player.data.position]);
 				for (var i = 0; i < possibleMoves.length; i++) {
