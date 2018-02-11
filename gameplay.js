@@ -224,7 +224,7 @@ class Gameplay {
   // TODO: TESTED!
   endTurnFor(player) {
     // Reset turn timer?
-
+    // this.shouldShrinkBoard();
     player.status = 0;
   }
 
@@ -304,14 +304,17 @@ class Gameplay {
   useItem(item, direction) {
     var index = 0;
     if (item.itemType == item.OFFENSE && item.attackType != item.TRAP) { // Offensive
-      if (direction == "UP") { index = 0 * item.range; }
-      else if (direction == "LEFT") { index = 1 * item.range; }
-      else if (direction == "RIGHT") { index = 2 * item.range; }
-      else if (direction == "DOWN") { index = 3 * item.range; }
+      for (var i = 1; i <= item.range; i++) {
+        if (direction == "UP") { index = this.currPlayer.position + (-10 * i); }
+        else if (direction == "LEFT") { index = this.currPlayer.position + (-1 * i); }
+        else if (direction == "RIGHT") { index = this.currPlayer.position + (1 * i); }
+        else if (direction == "DOWN") { index = this.currPlayer.position + (10 * i); }
 
-      for (var i = 0; i < item.range; i++) {
-        this.attack(item, this.board[this.attackSpaces[index + i]]);
+        if (this.attackSpaces.includes(index)) {
+          this.attack(item, this.board[index]);
+        }
       }
+
     } else if (item.itemType == item.OFFENSE && item.attackType == item.TRAP) {  // Trap
       // TODO: Need to finish input handling before checking to see if player can put a trap at boardspace
     }
@@ -321,11 +324,15 @@ class Gameplay {
         } else if (item.name == "Major Potion") {
           this.currPlayer.healHealthBy(30);
         } else if (item.name == "Move Again") {
-          if (direction == "UP") { index = 0; }
-          else if (direction == "LEFT") { index = 1; }
-          else if (direction == "RIGHT") { index = 2; }
-          else if (direction == "DOWN") { index = 3; }
-          this.moveTo(this.board[this.moveSpaces[index]]);
+
+          if (direction == "UP") { index = this.currPlayer.position + (-10 * i); }
+          else if (direction == "LEFT") { index = this.currPlayer.position + (-1 * i); }
+          else if (direction == "RIGHT") { index = this.currPlayer.position + (1 * i); }
+          else if (direction == "DOWN") { index = this.currPlayer.position + (10 * i); }
+
+          if (this.moveSpaces.includes(index)) {
+            this.moveTo(this.board[index]);
+          }
         } else if (item.name == "Teleport") {
           // TODO: Need to finish input handling before implementing
         }

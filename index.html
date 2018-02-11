@@ -73,16 +73,18 @@
 			}
 
 			function nextTurn() {
+
 				if (player == null) {
 					player = game.playerList.head;
 				} else if (player.next.data.id == -1){
 					game.fullTurnCount++;
 					player = game.playerList.head;
+					game.shouldShrinkBoard();
 				} else {
 					player = player.next;
 				}
 
-
+				disableBoard();
 
 				// Tell the player to start their turn
 				document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
@@ -115,7 +117,7 @@
 				// Right now it just moves a player.
 				if (player.data.status == 1) {
 					document.getElementById("" + player.data.position).innerHTML = "&nbsp.";
-					game.moveTo(game.board[boardspace]);
+					game.moveTo(game.board[parseInt(boardspace)]);
 					document.getElementById("" + boardspace).innerHTML =  player.data.id;
 					player.data.status = 2;
 					disableBoard();
@@ -150,12 +152,12 @@
 			function endTurn() {
 				game.endTurnFor(player.data);
 				disableBoard();
-				game.shouldShrinkBoard();
+				//game.shouldShrinkBoard();
 				nextTurn();
 			}
 
 			function disableBoard() {
-				
+
 				for (var i = 0; i < 100; i++) {
 					document.getElementById("" + i).disabled = true;
 					if (game.board[i].fallStage == 1) {
