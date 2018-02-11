@@ -146,19 +146,19 @@ class Gameplay {
     // Move Again - defensive, allows player to move again instead of attack
     // Teleport - defensive, allows player to move to any valid boardspace
     this.items = [];
-    this.items.push(new Item("Musket", 0, 0, 2, 15, 8, "Musket Description"));
-    this.items.push(new Item("Bolt Action", 0, 0, 2, 30, 4, "Bolt Action Description"));
-    this.items.push(new Item("Broadsword", 0, 1, 1, 10, 7, "Broadsword Description"));
-    this.items.push(new Item("Fart", 0, 1, 1, 25, 4, "Fart Description"));
-    this.items.push(new Item("Big Fart", 0, 1, 2, 15, 5, "Big Fart Description"));
-    this.items.push(new Item("Nuke", 0, 1, 2, 25, 2, "Nuke Description"));
-    this.items.push(new Item("Sawed-Off", 0, 0, 1, 30, 4, "Sawed-Off Description"));
-    this.items.push(new Item("Beartrap", 0, 2, 0, 15, 5, "Beartrap Description"));
-    this.items.push(new Item("Landmine", 0, 2, 0, 30, 3, "Landmine Description"));
-    this.items.push(new Item("Minor Potion", 1, 0, 0, 10, 8, "Minor Potion Description"));
-    this.items.push(new Item("Major Potion", 1, 0, 0, 30, 4, "Major Potion Description"));
-    this.items.push(new Item("Move Again", 1, 0, 0, 0, 4, "Move Again Description"));
-    this.items.push(new Item("Teleport", 1, 0, 0, 0, 2, "Teleport Description"));
+    this.items.push(new Item("Musket", 0, 0, 2, 15, 8, "Musket Description"));            // 0
+    this.items.push(new Item("Bolt Action", 0, 0, 2, 30, 4, "Bolt Action Description"));  // 1
+    this.items.push(new Item("Broadsword", 0, 1, 1, 10, 7, "Broadsword Description"));    // 2
+    this.items.push(new Item("Fart", 0, 1, 1, 25, 4, "Fart Description"));                // 3
+    this.items.push(new Item("Big Fart", 0, 1, 2, 15, 5, "Big Fart Description"));        // 4
+    this.items.push(new Item("Nuke", 0, 1, 2, 25, 2, "Nuke Description"));                // 5
+    this.items.push(new Item("Sawed-Off", 0, 0, 1, 30, 4, "Sawed-Off Description"));      // 6
+    this.items.push(new Item("Beartrap", 0, 2, 0, 15, 5, "Beartrap Description"));        // 7
+    this.items.push(new Item("Landmine", 0, 2, 0, 30, 3, "Landmine Description"));        // 8
+    this.items.push(new Item("Minor Potion", 1, 0, 0, 10, 8, "Minor Potion Description"));// 9
+    this.items.push(new Item("Major Potion", 1, 0, 0, 30, 4, "Major Potion Description"));// 10
+    this.items.push(new Item("Move Again", 1, 0, 0, 0, 4, "Move Again Description"));     // 11
+    this.items.push(new Item("Teleport", 1, 0, 0, 0, 2, "Teleport Description"));         // 12
 
     this.drops = [];
     for (var i = 0; i < this.items.length; i++) {
