@@ -276,7 +276,7 @@ module.exports = class Gameplay {
       }
     }
     // Set the currentItem to the basic attack
-    this.chooseItem(this.items[this.BASIC]);
+    this.chooseItem(this.basicAttack);
 
     // TODO Call possible attacks function
 
@@ -285,7 +285,7 @@ module.exports = class Gameplay {
   // Check if player, apply effects to player. Apply effects of item to the boardspace if any.
   // TODO: TESTED!
   attack(item, boardspace) {
-    if (item.attackType == 2) {
+    if (item.attackType == item.TRAP) {
       boardspace.setTrap(item);
     } else {
       if (boardspace.hasPlayer() == true) {
@@ -300,8 +300,8 @@ module.exports = class Gameplay {
   // TODO: Test
   chooseItem(item) {
     this.currItem = item;
-    if (item.itemType == 0) { this.possibleAttacksBy(item); } // Offensive
-    else if (item.itemType == 1) {
+    if (item.itemType == item.OFFENSE) { this.possibleAttacksBy(item); } // Offensive
+    else if (item.itemType == item.DEFENSE) {
       if (item.name == "Move Again" || item.name == "Teleport") {
         this.possibleMovesFrom(this.currPlayer.position);
       }
@@ -313,7 +313,7 @@ module.exports = class Gameplay {
   // remove item from player inventory.
   useItem(item, direction) {
     var index = 0;
-    if (item.itemType == 0 && item.attackType != 2) { // Offensive
+    if (item.itemType == item.OFFENSE && item.attackType != item.TRAP) { // Offensive
       if (direction == "UP") { index = 0 * item.range; }
       else if (direction == "LEFT") { index = 1 * item.range; }
       else if (direction == "RIGHT") { index = 2 * item.range; }
@@ -322,10 +322,10 @@ module.exports = class Gameplay {
       for (i = 0; i < item.range; i++) {
         this.attack(item, this.attackSpaces[index + i]);
       }
-    } else if (item.itemType == 0 && item.attackType == 2) {  // Trap
+    } else if (item.itemType == item.OFFENSE && item.attackType == item.TRAP) {  // Trap
       // TODO: Need to finish input handling before checking to see if player can put a trap at boardspace
     }
-    else if (item.itemType == 1) { // Defensive
+    else if (item.itemType == item.DEFENSE) { // Defensive
         if (item.name == "Minor Potion") {
           this.currPlayer.healHealthBy(10);
         } else if (item.name == "Major Potion") {
@@ -464,7 +464,7 @@ module.exports = class Gameplay {
     this.attackSpaces = []; // Reset attackSpaces
 
     // TRAP, can be placed at any valid boardspace
-    if (item.attackType == 2) {
+    if (item.attackType == item.TRAP) {
       for (i = 0; i < 100; i++) {
         // Check if boardspace can accept a trap item, add it to attackSpaces
         if (this.board[i].playerCanEnter() && this.board[i].hasTrap() == false) {
@@ -481,9 +481,9 @@ module.exports = class Gameplay {
       var vertRange = Math.abs((i-(i % 10) - (pos - (pos % 10)))) / 10;
       if ((leftBound || rightBound) && horiRange <= item.range) {
         if (vertRange <= item.range && i != pos) {
-          if (item.attackType == 0 && (i % 10 ==  pos % 10 || (i-(i%10) == pos-(pos%10)))) {
+          if (item.attackType == item.BASIC && (i % 10 ==  pos % 10 || (i-(i%10) == pos-(pos%10)))) {
             this.attackSpaces.push(i);
-          } else if (item.attackType == 1) {
+          } else if (item.attackType == item.RADIUS) {
             this.attackSpaces.push(i);
           }
         }
