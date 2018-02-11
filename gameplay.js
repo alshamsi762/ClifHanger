@@ -291,6 +291,9 @@ module.exports = class Gameplay {
       if (boardspace.hasPlayer() == true) {
         // Attack the player on the boardspace
         boardspace.player.damageHealthBy(item.damage);
+        if (boardspace.player.getHealth() == 0) {
+          this.killPlayer(boardspace.player);
+        }
       }
     }
   }
@@ -321,6 +324,7 @@ module.exports = class Gameplay {
 
       for (i = 0; i < item.range; i++) {
         this.attack(item, this.attackSpaces[index + i]);
+
       }
     } else if (item.itemType == item.OFFENSE && item.attackType == item.TRAP) {  // Trap
       // TODO: Need to finish input handling before checking to see if player can put a trap at boardspace
