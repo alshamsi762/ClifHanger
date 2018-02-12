@@ -321,6 +321,8 @@ class Gameplay {
           }
         }
       }
+      // Remove item from offensive inventory
+      this.currPlayer.popOffensiveItem();
     } else if (item.itemType == item.OFFENSE && item.attackType == item.TRAP) {  // Trap
       // TODO: Need to finish input handling before checking to see if player can put a trap at boardspace
     }
@@ -342,6 +344,8 @@ class Gameplay {
         } else if (item.name == "Teleport") {
           // TODO: Need to finish input handling before implementing
         }
+        // Remove item from defensive inventory
+        this.currPlayer.popDefensiveItem();
     }
   }
 
@@ -509,7 +513,7 @@ class Gameplay {
   // TODO: TESTED!
   shouldShrinkBoard() {
     var count = this.fullTurnCount;
-    if(count == 1 || count == 2 || count == 3)
+    if(count == 1 || count == 3 || count == 5)
     {
       var top = this.topBounds, lower = this.lowerBounds, right = this.rightOffset, left = this.leftOffset;
 
