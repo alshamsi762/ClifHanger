@@ -33,6 +33,9 @@
 		<button id = "endTurn" onclick="endTurn()">End Turn</button>
 		<p id = "gameboard"></p>
 		<p id = "instructions"></p>
+		<p id = "status"></p>
+		<p id = "offensiveItems"></p>
+		<p id = "defensiveItems"></p>
 
 		<!-- JS Scripts -->
     <!-- Put your JavaScript Here. -->
@@ -42,10 +45,10 @@
 		<script src="gameplay.js" type="text/javascript"></script>
 
 		<script>
-			let player1 = new Player(0, 100, 0, null, null, "Andrew", 0);
-			let player2 = new Player(1, 100, 0, null, null, "Amjad", 0);
-			let player3 = new Player(2, 100, 0, null, null, "Sultan", 0);
-			let player4 = new Player(3, 100, 0, null, null, "Anirudh", 0);
+			let player1 = new Player(0, 100, 0, [], [], "Andrew", 0);
+			let player2 = new Player(1, 100, 0, [], [], "Amjad", 0);
+			let player3 = new Player(2, 100, 0, [], [], "Sultan", 0);
+			let player4 = new Player(3, 100, 0, [], [], "Anirudh", 0);
 
 			var game = null;
 			var player = null;
@@ -92,6 +95,9 @@
 				}
 				// Clear any active buttons
 				disableBoard();
+				document.getElementById("offensiveItems").innerHTML = "&nbsp";
+				document.getElementById("defensiveItems").innerHTML = "&nbsp";
+
 				if (!game.hasEnded()) {
 				// Tell the player to start their turn
 					document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
@@ -106,6 +112,7 @@
 					document.getElementById(""+possibleMoves[i]).style = "background-color: green";
 				}
 				game.startTurnFor(player.data);
+				displayPlayerInfo();
 			}
 
 			function boardspacePressed(boardspace) {
@@ -121,8 +128,10 @@
 							document.getElementById("" + game.attackSpaces[i]).disabled = false;
 							document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
 					}
-
+					displayItems();
 					document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
+
+
 
 				} else if (player.data.status == 2) {
 					var origin = player.data.position;
@@ -160,6 +169,59 @@
 						document.getElementById("" + i).style = "";
 					}
 				}
+			}
+
+			function displayItems() {
+				var offense = "";
+				var defense = "";
+
+				for (var i = 0; i < game.currPlayer.offensive.length; i++) {
+					offense += "<button onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.offensive[i]) + "\')\">";
+					offense += game.currPlayer.offensive[i].name + "</button>";
+				}
+				for (var i = 0; i < game.currPlayer.defensive.length; i++) {
+					defense += "<button onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.defensive[i]) + "\')\">";
+					defense += game.currPlayer.defensive[i].name + "</button>";
+				}
+				document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense;
+				document.getElementById("defensiveItems").innerHTML = "Defensive Items:  " + defense;
+			}
+
+			function itemSelected(index) {
+				var item = game.items[parseInt(index)]
+				game.chooseItem(item);
+				// Need to redisplay possible attacks or movement
+				if (item.itemType == item.OFFENSE && item.attackType != item.TRAP) {
+					// Display attackSpaces
+					for (var i = 0; i < game.attackSpaces.length; i++) {
+						document.getElementById("" + game.attackSpaces[i]).disabled = false;
+						document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+					}
+				} else if (item.itemType == item.DEFENSE) {
+					if (item.name == "Minor Potion") {
+						// heal 10
+						useItem(item);
+					} else if (item.name == "Major Potion") {
+						// heal 30
+						useItem(item);
+					}	else if (item.name == "Move Again") {
+						// Move again.
+					}
+				}
+			}
+
+			function displayPlayerInfo() {
+				var pInfo = "";
+				pInfo += "Health:&nbsp\t&nbsp[";
+				for (var i = 0; i < 10; i++) {
+					if (game.currPlayer.getHealth() / 10 >= i) {
+						pInfo += "=";
+					} else {
+						pInfo += "&nbsp";
+					}
+				}
+				pInfo += "]";
+				document.getElementById("status").innerHTML = pInfo;
 			}
 
 		</script>

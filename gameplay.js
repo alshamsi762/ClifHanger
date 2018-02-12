@@ -225,6 +225,7 @@ class Gameplay {
   endTurnFor(player) {
     // Reset turn timer?
     // this.shouldShrinkBoard();
+    this.currPlayer = null;
     player.status = 0;
   }
 
@@ -304,17 +305,22 @@ class Gameplay {
   useItem(item, direction) {
     var index = 0;
     if (item.itemType == item.OFFENSE && item.attackType != item.TRAP) { // Offensive
-      for (var i = 1; i <= item.range; i++) {
-        if (direction == "UP") { index = this.currPlayer.position + (-10 * i); }
-        else if (direction == "LEFT") { index = this.currPlayer.position + (-1 * i); }
-        else if (direction == "RIGHT") { index = this.currPlayer.position + (1 * i); }
-        else if (direction == "DOWN") { index = this.currPlayer.position + (10 * i); }
+      if (item.attackType == item.RADIUS) {
+        for (var i = 0; i < this.attackSpaces.length; i++) {
+          this.attack(item, this.board[this.attackSpaces[i]]);
+        }
+      } else {
+        for (var i = 1; i <= item.range; i++) {
+          if (direction == "UP") { index = this.currPlayer.position + (-10 * i); }
+          else if (direction == "LEFT") { index = this.currPlayer.position + (-1 * i); }
+          else if (direction == "RIGHT") { index = this.currPlayer.position + (1 * i); }
+          else if (direction == "DOWN") { index = this.currPlayer.position + (10 * i); }
 
-        if (this.attackSpaces.includes(index)) {
-          this.attack(item, this.board[index]);
+          if (this.attackSpaces.includes(index)) {
+            this.attack(item, this.board[index]);
+          }
         }
       }
-
     } else if (item.itemType == item.OFFENSE && item.attackType == item.TRAP) {  // Trap
       // TODO: Need to finish input handling before checking to see if player can put a trap at boardspace
     }
@@ -588,10 +594,6 @@ class Gameplay {
       count++;
     }
   }
-
-
-
-
 
   // Returns a random item from the items list
   // TODO: TESTED!
