@@ -158,7 +158,7 @@ class Gameplay {
     this.items.push(new Item("Minor Potion", 1, 0, 0, 10, 8, "Minor Potion Description"));// 9
     this.items.push(new Item("Major Potion", 1, 0, 0, 30, 4, "Major Potion Description"));// 10
     this.items.push(new Item("Move Again", 1, 0, 0, 0, 4, "Move Again Description"));     // 11
-    this.items.push(new Item("Teleport", 1, 0, 0, 0, 2, "Teleport Description"));         // 12
+    this.items.push(new Item("Teleport", 1, 0, 0, 0, 20, "Teleport Description"));         // 12
 
     this.drops = [];
     for (var i = 0; i < this.items.length; i++) {
@@ -343,6 +343,8 @@ class Gameplay {
           }
         } else if (item.name == "Teleport") {
           // TODO: Need to finish input handling before implementing
+          // this.possibleMovesFrom(null);
+          // this.currPlayer.status = 1;
         }
         // Remove item from defensive inventory
         this.currPlayer.popDefensiveItem();
@@ -366,7 +368,7 @@ class Gameplay {
     // Apply changes
     this.board[itemPos].setLoot(item);
     // Call UI
-
+    return itemPos;
   }
 
   // Shrink the board. For each dropped, check if player is there, kill player if they are.
@@ -439,6 +441,17 @@ class Gameplay {
     var pos = boardspace.position;
     this.moveSpaces = [];
     var moves = 0; // moves will start as 0000. 1000 digits means up, 0100 means right, 0010 means down, 0001 means left. Just for testing.
+    if(boardspace == null)  // Teleport
+    {
+      for(i = 0; i < 100; i++)
+      {
+        if(this.board[i].fallStage != 2 && !this.board[i].hasPlayer())
+        {
+          this.moveSpaces.push(i);
+        }
+      }
+      return this.moveSpaces; //moves;
+    }
     if(pos + 10 <= this.topBounds && this.canMoveTo(this.board[pos + 10]))
     {
       // can move up, give it

@@ -89,6 +89,10 @@
 				} else if (player.next.data.id == -1){
 					game.fullTurnCount++;
 					game.shouldShrinkBoard();
+					{
+						var i = game.dropItem();
+						document.getElementById("" + i).innerHTML = game.items.indexOf(game.board[i].loot);
+					}
 					player = game.playerList.head;
 				} else {
 					player = player.next;
@@ -204,7 +208,15 @@
 					} else if (item.name == "Major Potion") {
 						// heal 30
 						useItem(item);
-					}	else if (item.name == "Move Again") {
+					}	else if (item.name == "Teleport") {
+						// teleport
+						// var possibleMoves = game.possibleMovesFrom(game.board[game.currPlayer.data.position]);
+						// for (var i = 0; i < possibleMoves.length; i++) {
+						// 	document.getElementById(""+possibleMoves[i]).disabled = false;
+						// 	document.getElementById(""+possibleMoves[i]).style = "background-color: green";
+						// }
+						// useItem(item);
+					} else if (item.name == "Move Again") {
 						// Move again.
 					}
 				}
