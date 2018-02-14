@@ -685,7 +685,7 @@ module.exports.testTurn = function testTurn() {
   }
 
   gameplay.endTurnFor(p1);
-  if(gameplay.currPlayer.status != 0)
+  if(p1.status != 0)
   {
     return false;
   }

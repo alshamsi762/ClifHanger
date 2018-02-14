@@ -111,24 +111,24 @@ class Gameplay {
   constructor(p1, p2, p3, p4) {
     // Linked list of players
     var sentinel = new Player(-1, -1, -1, null, null, null);
-    var list = new doubleList();
-    // list.addPlayer(sentinel);
-    list.addPlayer(p1);
-    list.addPlayer(p2);
-    list.addPlayer(p3);
-    list.addPlayer(p4);
-    list.addPlayer(sentinel);
+    this.playerList = new doubleList();
 
-    this.playerList = list;
+    this.playerList.addPlayer(p1);
+    this.playerList.addPlayer(p2);
+    this.playerList.addPlayer(p3);
+    this.playerList.addPlayer(p4);
+    this.playerList.addPlayer(sentinel);
+    // this.playerList = list;
 
     this.basicAttack = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack. Can hit players above, below, or to the sides for 10 damage.");
 
-    this.size = 100, this.width = 10;
-
-
+    // Trackers and counters for various properties of the current game
     this.currPlayer = null, this.currItem = null, this.fullTurnCount = 0;
     this.topBounds = 99, this.lowerBounds = 0, this.leftOffset = 0, this.rightOffset = 9;
-    this.board = [];
+    this.size = 100, this.width = 10;
+
+    // Array of boardspaces and positions
+    this.board = [];        // Array of Boardspaces representing the game board
     this.attackSpaces = []; // List of spaces that the current attack will hit
     this.moveSpaces = [];   // List of spaces the current player can move to
 
@@ -160,13 +160,15 @@ class Gameplay {
     this.items.push(new Item("Move Again", 1, 0, 0, 0, 4, "Move Again Description"));     // 11
     this.items.push(new Item("Teleport", 1, 0, 0, 0, 20, "Teleport Description"));         // 12
 
+    // Array of item drops based on the rarity of each item
     this.drops = [];
-    for (var i = 0; i < this.items.length; i++) {
-      for(var j = 0;j < this.items[i].rarity; j++) {
+    for (var i = 0; i < this.items.length; i++) { // Index of item in items array
+      for(var j = 0; j < this.items[i].rarity; j++) { // How many of [i] item to add to drops array
         this.drops.push(i);
       }
     }
 
+    // Shuffle the drops array
     var currIndex = this.drops.length, temp, randIndex;
     while(currIndex)
     {
@@ -181,12 +183,13 @@ class Gameplay {
   // Creates Board. Places players and items on board
   // TODO: TESTED!
   createBoard() {
-
+    // Push the boardspaces onto the the board array
     for(var i = 0; i < 100; i++)
     {
       this.board.push(new Boardspace(i, null, null, null, 0));
     }
 
+    // Put players in starting corners
     var temp = this.playerList.head;
 
     this.board[0].setPlayer(temp.data);
@@ -197,36 +200,25 @@ class Gameplay {
     temp = temp.next;
     this.board[99].setPlayer(temp.data);
 
-
     // place items on board
     this.initialDrop();
-
-
   }
-
 
   // Starts turn timer, calculate possible moves, set currentPlayer, change player state to Active. Disable "end turn"
   // TODO: TESTED!
   startTurnFor(player) {
-    // Start turn timer
-
-    // Calculate possible moves from player's position
-    this.possibleMovesFrom(this.board[player.position]);
-
-    // Change currentPlayer and currentItem to start of turn values
+    // TODO Start turn timer
+    player.status = 1;  // Change player status to moving
     this.currPlayer = player;
-    // this.currItem = this.items[this.BASIC]; <= moved to moveTo()
-    this.currPlayer.status = 1; // Change status to Moving "1"
-
+    this.possibleMovesFrom(this.board[player.position]); // Calculate possible moves
   }
 
   // Update Linked List, change player state to Idle
   // TODO: TESTED!
   endTurnFor(player) {
-    // Reset turn timer?
-    // this.shouldShrinkBoard();
+    // TODO Reset turn timer?
+    player.status = 0;  // Change player status to idle
     this.currPlayer = null;
-    player.status = 0;
   }
 
   // Update currPlayer position, apply effects of any trap or add item, set currItem to Basic Attack and call possible attacks.
