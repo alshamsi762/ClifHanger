@@ -225,41 +225,38 @@ class Gameplay {
   // Enable "end turn" button
   // TODO: TESTED!
   moveTo(boardspace) {
-    // Remove the player from their current boardspace
-    this.board[this.currPlayer.position].removePlayer();
+    // Move the player
+    this.board[this.currPlayer.position].removePlayer(); // Remove player from current boardspace
+    boardspace.setPlayer(this.currPlayer);  // Move the player to the requested boardspace
 
-    // Move the player to the requested boardspace
-    boardspace.setPlayer(this.currPlayer);
-
-    // Check for traps, or items
+    // Check for Traps
     if (boardspace.hasTrap()) {
-      // End player's turn
+      this.currPlayer.status = 0; // Player cannot attack or defend
+      this.useItem(boardspace.trap, boardspace);  // Apply effects of the trap to the player
+      boardspace.removeTrap();
     }
 
+    // Check for Items
     if (boardspace.hasLoot()) {
       if (boardspace.loot.itemType == 0) {  // Offensive
-        var success = this.currPlayer.pushOffensiveItem(boardspace.loot);
-        if (success) {
+        // var success = this.currPlayer.pushOffensiveItem(boardspace.loot);
+        if (this.currPlayer.pushOffensiveItem(boardspace.loot)) { // Player has room in inventory
           boardspace.removeLoot();
-        } else {
-          // Inventory full
+        } else {  // Inventory full
           //TODO UI Change
         }
       } else if (boardspace.loot.itemType == 1) { // Defensive
-        var success = this.currPlayer.pushDefensiveItem(boardspace.loot);
-        if (success) {
+        // var success = this.currPlayer.pushDefensiveItem(boardspace.loot);
+        if (this.currPlayer.pushDefensiveItem(boardspace.loot)) { // Player has room in inventory
           boardspace.removeLoot();
-        } else {
-          // Inventory full
+        } else {  // Inventory full
           //TODO UI Change
         }
       }
     }
-    // Set the currentItem to the basic attack
+
+    // Set the currItem to basicAttack
     this.chooseItem(this.basicAttack);
-
-    // TODO Call possible attacks function
-
   }
 
   // Check if player, apply effects to player. Apply effects of item to the boardspace if any.
