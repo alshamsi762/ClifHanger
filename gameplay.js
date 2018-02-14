@@ -159,7 +159,7 @@ class Gameplay {
     this.items.push(new Item("Minor Potion", 1, 0, 0, 10, 8, "Minor Potion Description"));// 9
     this.items.push(new Item("Major Potion", 1, 0, 0, 30, 4, "Major Potion Description"));// 10
     this.items.push(new Item("Move Again", 1, 0, 0, 0, 4, "Move Again Description"));     // 11
-    this.items.push(new Item("Teleport", 1, 1, 0, 0, 20, "Teleport Description"));         // 12
+    this.items.push(new Item("Teleport", 1, 1, 0, 0, 20, "Teleport Description"));        // 12
 
     // Array of item drops based on the rarity of each item
     this.drops = [];
@@ -209,7 +209,7 @@ class Gameplay {
   // NOTE: TESTED!
   startTurnFor(player) {
     // TODO Start turn timer
-    player.status = 1;  // Change player status to moving
+    player.status = Player.MOVING;  // Change player status to moving
     this.currPlayer = player;
     this.possibleMovesFrom(this.board[player.position]); // Calculate possible moves
   }
@@ -218,7 +218,7 @@ class Gameplay {
   // NOTE: TESTED!
   endTurnFor(player) {
     // TODO Reset turn timer?
-    player.status = 0;  // Change player status to idle
+    player.status = Player.IDLE;  // Change player status to idle
     this.currPlayer = null;
   }
 
@@ -229,27 +229,25 @@ class Gameplay {
     // Move the player
     this.board[this.currPlayer.position].removePlayer(); // Remove player from current boardspace
     boardspace.setPlayer(this.currPlayer);  // Move the player to the requested boardspace
-    this.currPlayer.status = 2;             // Set the player ready to attack or defend
+    this.currPlayer.status = Player.READY;             // Set the player ready to attack or defend
 
     // Check for Traps
     if (boardspace.hasTrap()) {
-      boardspace.player.status = 0;               // "Stun" the trapped player
+      boardspace.player.status = Player.IDLE;               // "Stun" the trapped player
       this.attack(boardspace.trap, boardspace);  // Apply effects of the trap to the player
       boardspace.removeTrap();
     }
 
     // Check for Items
     if (boardspace.hasLoot()) {
-      if (boardspace.loot.itemType == 0) {  // Offensive
-        // var success = this.currPlayer.pushOffensiveItem(boardspace.loot);
-        if (this.currPlayer.pushOffensiveItem(boardspace.loot)) { // Player has room in inventory
+      if (boardspace.loot.itemType == Item.OFFENSE) {  // Offensive
+        if (this.currPlayer.pushOffensiveItem(boardspace.loot) == true) { // Player has room in inventory
           boardspace.removeLoot();
         } else {  // Inventory full
           //TODO UI Change
         }
-      } else if (boardspace.loot.itemType == 1) { // Defensive
-        // var success = this.currPlayer.pushDefensiveItem(boardspace.loot);
-        if (this.currPlayer.pushDefensiveItem(boardspace.loot)) { // Player has room in inventory
+      } else if (boardspace.loot.itemType == Item.DEFENSE) { // Defensive
+        if (this.currPlayer.pushDefensiveItem(boardspace.loot) == true) { // Player has room in inventory
           boardspace.removeLoot();
         } else {  // Inventory full
           //TODO UI Change
@@ -277,9 +275,9 @@ class Gameplay {
   // TODO: Test
   chooseItem(item) {
     this.currItem = item;
-    if (item.itemType == item.OFFENSE) { // Offensive
+    if (item.itemType == Item.OFFENSE) { // Offensive
       this.possibleAttacksBy(item);
-    } else if (item.itemType == item.DEFENSE) { // Defensive
+    } else if (item.itemType == Item.DEFENSE) { // Defensive
       if (item.name == "Move Again") {
         this.possibleMovesFrom(this.board[this.currPlayer.position]);
       } else if (item.name == "Teleport") {
@@ -295,9 +293,9 @@ class Gameplay {
   // remove item from player inventory.
   useItem(item, dir) {
     var index = 0;
-    var isRadius = (item.attackType == item.RADIUS);
-    var isTrap = (item.attackType == item.TRAP);
-    var isAttack = (item.itemType == item.OFFENSE);
+    var isRadius = (item.attackType == Item.RADIUS);
+    var isTrap = (item.attackType == Item.TRAP);
+    var isAttack = (item.itemType == Item.OFFENSE);
 
     if (isAttack) {
       if (isRadius) { // Radius attack
@@ -339,7 +337,7 @@ class Gameplay {
     var item = null;
     itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
 
-    while(this.board[itemPos].fallStage != 0 || this.board[itemPos].hasPlayer() || this.board[itemPos].hasLoot())
+    while(this.board[itemPos].fallStage != Boardspace.STABLE || this.board[itemPos].hasPlayer() || this.board[itemPos].hasLoot())
     {
       itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
     }
@@ -359,13 +357,13 @@ class Gameplay {
     // change outer blocks to FALLEN and kill any players found
     for(var i = lower + left; i <= lower + this.width; i++)   // lower row
     {
-      this.board[i].fallStage = 2;
+      this.board[i].fallStage = Boardspace.FALLEN;
       if(this.board[i].hasPlayer())
       {
         this.killPlayer(this.board[i].player);
       }
 
-      this.board[99 - i].fallStage = 2;
+      this.board[99 - i].fallStage = Boardspace.FALLEN;
       if(this.board[99 - i].hasPlayer())
       {
         this.killPlayer(this.board[99 - i].player);
@@ -374,13 +372,13 @@ class Gameplay {
 
     for(var i = lower + left; i <= top - right; i+=10)   // left column
     {
-      this.board[i].fallStage = 2;
+      this.board[i].fallStage = Boardspace.FALLEN;
       if(this.board[i].hasPlayer())
       {
         this.killPlayer(this.board[i].player);
       }
 
-      this.board[99 - i].fallStage = 2;
+      this.board[99 - i].fallStage = Boardspace.FALLEN;
       if(this.board[99 - i].hasPlayer())
       {
         this.killPlayer(this.board[99 - i].player);
@@ -422,7 +420,7 @@ class Gameplay {
     {
       for(var i = 0; i < 100; i++)
       {
-        if(this.board[i].fallStage < 2 && !this.board[i].hasPlayer())
+        if(this.board[i].fallStage < Boardspace.FALLEN && !this.board[i].hasPlayer())
         {
           this.moveSpaces.push(i);
         }
@@ -465,7 +463,7 @@ class Gameplay {
     this.attackSpaces = []; // Reset attackSpaces
 
 
-    if (item.attackType == item.TRAP) { // Traps can be placed at any valid boardspace
+    if (item.attackType == Item.TRAP) { // Traps can be placed at any valid boardspace
       for (var i = 0; i < 100; i++) {
         if (this.board[i].playerCanEnter() && this.board[i].hasTrap() == false) {
           this.attackSpaces.push(i);
@@ -488,9 +486,9 @@ class Gameplay {
       var vertRange = Math.abs((i-(i % 10) - (pos - (pos % 10)))) / 10;
       if ((leftBound || rightBound) && horiRange <= item.range) {
         if (vertRange <= item.range && i != pos) {
-          if (item.attackType == item.BASIC && (i % 10 ==  pos % 10 || (i-(i%10) == pos-(pos%10)))) {
+          if (item.attackType == Item.BASIC && (i % 10 ==  pos % 10 || (i-(i%10) == pos-(pos%10)))) {
             this.attackSpaces.push(i);
-          } else if (item.attackType == item.RADIUS) {
+          } else if (item.attackType == Item.RADIUS) {
             this.attackSpaces.push(i);
           }
         }
@@ -511,14 +509,14 @@ class Gameplay {
       // change outer blocks to UNSTABLE
       for(var i = lower + left; i <= lower + this.width; i++)   // lower row
       {
-        this.board[i].fallStage = 1;
-        this.board[99 - i].fallStage = 1;
+        this.board[i].fallStage = Boardspace.UNSTABLE;
+        this.board[99 - i].fallStage = Boardspace.UNSTABLE;
       }
 
       for(var i = lower + left; i <= top - right; i+=10)   // left column
       {
-        this.board[i].fallStage = 1;
-        this.board[99 - i].fallStage = 1;
+        this.board[i].fallStage = Boardspace.UNSTABLE;
+        this.board[99 - i].fallStage = Boardspace.UNSTABLE;
       }
 
     }
@@ -594,9 +592,6 @@ class Gameplay {
   // NOTE: TESTED!
   randomItem()
   {
-    return this.items[Math.floor(Math.random() * this.items.length)];;
+    return this.items[Math.floor(Math.random() * this.items.length)];
   }
-
-
-
 }

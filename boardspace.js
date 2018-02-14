@@ -2,7 +2,12 @@
 // const Item = require('./item.js');
 // const Player = require('./player.js');
 //
-// module.exports = 
+// module.exports =
+
+const STABLE = 0;
+const UNSTABLE = 1;
+const FALLEN = 2;
+
 class Boardspace {
 
 
@@ -13,9 +18,6 @@ class Boardspace {
     this.trap = trap; // item object
     this.loot = loot; // item object
     this.fallStage = fallStage; // 0,1,2 => stable, unstable, fallen
-    this.STABLE = 0;
-    this.UNSTABLE = 1;
-    this.FALLEN = 2;
   }
 
   // Set player to this boardspace. True or False on success or failure.
@@ -81,14 +83,18 @@ class Boardspace {
 
   // Increment the fallStage
   incrementFallStage() {
-    if (this.fallStage < this.FALLEN) {
+    if (this.fallStage < FALLEN) {
       this.fallStage += 1;
     }
   }
 
   // Check if boardspace can be moved on to
   playerCanEnter() {
-    return (this.position >= 0 && this.position <= 99 && this.player == null && this.fallStage < this.FALLEN);
+    return (this.position >= 0 && this.position <= 99 && this.player == null && this.fallStage < FALLEN);
   }
+
+  static get STABLE() { return STABLE; }
+  static get UNSTABLE() { return UNSTABLE; }
+  static get FALLEN() { return FALLEN; }
 
 }

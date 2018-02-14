@@ -1,5 +1,9 @@
 /** Item Object & Functions **/
-
+const OFFENSE = 0;
+const DEFENSE = 1;
+const BASIC = 0;
+const RADIUS = 1;
+const TRAP = 2;
 module.exports = class Item {
 
   // Constructor for Item Object
@@ -11,11 +15,12 @@ module.exports = class Item {
     this.damage = damage; // number
     this.rarity = rarity; //
     this.description = description  // String
-    this.OFFENSE = 0;
-    this.DEFENSE = 1;
-    this.BASIC = 0;
-    this.RADIUS = 1;
-    this.TRAP = 2;
   }
+
+  static get OFFENSE() { return OFFENSE; }
+  static get DEFENSE() { return DEFENSE; }
+  static get BASIC()   { return BASIC;   }
+  static get RADIUS()  { return RADIUS;  }
+  static get TRAP()    { return TRAP;    }
 
 }

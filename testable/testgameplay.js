@@ -135,7 +135,7 @@ module.exports.testCreateBoard = function testCreateBoard() {
     {
       found++;
     }
-    if(gameplay.board[i].fallStage != 0)
+    if(gameplay.board[i].fallStage != Boardspace.STABLE)
     {
       return false;
     }
@@ -659,7 +659,7 @@ module.exports.testShrinking = function testShrinking() {
   // 3rd full turn - nothing should happen yet
   gameplay.fullTurnCount = 3;
   gameplay.shouldShrinkBoard();
-  if(gameplay.board[0].fallStage != 0)
+  if(gameplay.board[0].fallStage != Boardspace.STABLE)
   {
     return false;
   }
@@ -667,7 +667,7 @@ module.exports.testShrinking = function testShrinking() {
   // 4th full turn - blocks should become UNSTABLE
   gameplay.fullTurnCount = 4;
   gameplay.shouldShrinkBoard();
-  if(gameplay.topBounds != 99 || gameplay.board[3].fallStage != 1 || gameplay.board[30].fallStage != 1 || gameplay.board[39].fallStage != 1 || gameplay.board[93].fallStage != 1)
+  if(gameplay.topBounds != 99 || gameplay.board[3].fallStage != Boardspace.UNSTABLE || gameplay.board[30].fallStage != Boardspace.UNSTABLE || gameplay.board[39].fallStage != Boardspace.UNSTABLE || gameplay.board[93].fallStage != Boardspace.UNSTABLE)
   {
     return false;
   }
@@ -686,7 +686,7 @@ module.exports.testShrinking = function testShrinking() {
   {
     return false;
   }
-  if(gameplay.board[3].fallStage != 2 || gameplay.board[30].fallStage != 2 || gameplay.board[39].fallStage != 2 || gameplay.board[93].fallStage != 2)
+  if(gameplay.board[3].fallStage != Boardspace.FALLEN || gameplay.board[30].fallStage != Boardspace.FALLEN || gameplay.board[39].fallStage != Boardspace.FALLEN || gameplay.board[93].fallStage != Boardspace.FALLEN)
   {
     return false;
   }
@@ -717,23 +717,22 @@ module.exports.testTurn = function testTurn() {
   }
 
   gameplay.startTurnFor(p1);
-  if(gameplay.currPlayer !== p1 || gameplay.currPlayer.status != 1)
+  if(gameplay.currPlayer !== p1 || gameplay.currPlayer.status != Player.MOVING)
   {
     return false;
   }
 
   gameplay.endTurnFor(p1);
-  if(p1.status != 0)
+  if(p1.status != Player.IDLE)
   {
     return false;
   }
 
   gameplay.startTurnFor(p2);
-  if(gameplay.currPlayer !== p2 || gameplay.currPlayer.status != 1)
+  if(gameplay.currPlayer !== p2 || gameplay.currPlayer.status != Player.MOVING)
   {
     return false;
   }
-
 
   return true;
 }
@@ -794,11 +793,9 @@ module.exports.testTrapping = function testTrapping() {
   }
   gameplay.moveTo(gameplay.board[1]);
 
-  if (player.status != 0 || gameplay.currPlayer.status != 0) {
+  if (player.status != Player.IDLE || gameplay.currPlayer.status != Player.IDLE) {
     return false;
   }
-  
-
 
   return true;
 }

@@ -1,6 +1,10 @@
 /** Player Object & Functions **/
 // const Item = require('./item.js');
-// module.exports = 
+// module.exports =
+const IDLE = 0;
+const MOVING = 1;
+const READY = 2;
+
 class Player {
 
   // Constructor for Player
@@ -89,5 +93,17 @@ class Player {
   // Get player health
   getHealth() {
     return this.health;
+  }
+
+  static get IDLE() {
+    return IDLE;
+  }
+
+  static get MOVING() {
+    return MOVING;
+  }
+
+  static get READY() {
+    return READY;
   }
 }

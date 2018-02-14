@@ -206,7 +206,7 @@ module.exports = class Gameplay {
   // TODO: TESTED!
   startTurnFor(player) {
     // TODO Start turn timer
-    player.status = 1;  // Change player status to moving
+    player.status = Player.MOVING;
     this.currPlayer = player;
     this.possibleMovesFrom(this.board[player.position]); // Calculate possible moves
   }
@@ -215,7 +215,7 @@ module.exports = class Gameplay {
   // TODO: TESTED!
   endTurnFor(player) {
     // TODO Reset turn timer?
-    player.status = 0;  // Change player status to idle
+    player.status = Player.IDLE;  // Change player status to idle
     this.currPlayer = null;
   }
 
@@ -226,24 +226,25 @@ module.exports = class Gameplay {
     // Move the player
     this.board[this.currPlayer.position].removePlayer(); // Remove player from current boardspace
     boardspace.setPlayer(this.currPlayer);  // Move the player to the requested boardspace
-    this.currPlayer.status = 2;             // Set the player ready to attack or defend
+    this.currPlayer.status = Player.READY;
+
     // Check for Traps
     if (boardspace.hasTrap()) {
-      boardspace.player.status = 0;               // "Stun" the trapped player
+      boardspace.player.status = Player.IDLE;               // "Stun" the trapped player
       this.attack(boardspace.trap, boardspace);  // Apply effects of the trap to the player
       boardspace.removeTrap();
     }
 
     // Check for Items
     if (boardspace.hasLoot()) {
-      if (boardspace.loot.itemType == 0) {  // Offensive
+      if (boardspace.loot.itemType == Item.OFFENSE) {  // Offensive
         // var success = this.currPlayer.pushOffensiveItem(boardspace.loot);
         if (this.currPlayer.pushOffensiveItem(boardspace.loot)) { // Player has room in inventory
           boardspace.removeLoot();
         } else {  // Inventory full
           //TODO UI Change
         }
-      } else if (boardspace.loot.itemType == 1) { // Defensive
+      } else if (boardspace.loot.itemType == Item.DEFENSE) { // Defensive
         // var success = this.currPlayer.pushDefensiveItem(boardspace.loot);
         if (this.currPlayer.pushDefensiveItem(boardspace.loot)) { // Player has room in inventory
           boardspace.removeLoot();
@@ -273,9 +274,9 @@ module.exports = class Gameplay {
   // TODO: Test
   chooseItem(item) {
     this.currItem = item;
-    if (item.itemType == item.OFFENSE) { // Offensive
+    if (item.itemType == Item.OFFENSE) { // Offensive
       this.possibleAttacksBy(item);
-    } else if (item.itemType == item.DEFENSE) { // Defensive
+    } else if (item.itemType == Item.DEFENSE) { // Defensive
       if (item.name == "Move Again") {
         this.possibleMovesFrom(this.board[this.currPlayer.position]);
       } else if (item.name == "Teleport") {
@@ -289,11 +290,12 @@ module.exports = class Gameplay {
 
   // Called when user activates item. Checks if Offensive or Defensive. Attack if offens. Apply effects if defens.
   // remove item from player inventory.
+  // TODO: Test
   useItem(item, dir) {
     var index = 0;
-    var isRadius = (item.attackType == item.RADIUS);
-    var isTrap = (item.attackType == item.TRAP);
-    var isAttack = (item.itemType == item.OFFENSE);
+    var isRadius = (item.attackType == Item.RADIUS);
+    var isTrap = (item.attackType == Item.TRAP);
+    var isAttack = (item.itemType == Item.OFFENSE);
 
     if (isAttack) {
       if (isRadius) { // Radius attack
@@ -335,7 +337,7 @@ module.exports = class Gameplay {
     var item = null;
     itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
 
-    while(this.board[itemPos].fallStage != 0 || this.board[itemPos].hasPlayer() || this.board[itemPos].hasLoot())
+    while(this.board[itemPos].fallStage != Boardspace.STABLE || this.board[itemPos].hasPlayer() || this.board[itemPos].hasLoot())
     {
       itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
     }
@@ -355,13 +357,13 @@ module.exports = class Gameplay {
     // change outer blocks to FALLEN and kill any players found
     for(var i = lower + left; i <= lower + this.width; i++)   // lower row
     {
-      this.board[i].fallStage = 2;
+      this.board[i].fallStage = Boardspace.FALLEN;
       if(this.board[i].hasPlayer())
       {
         this.killPlayer(this.board[i].player);
       }
 
-      this.board[99 - i].fallStage = 2;
+      this.board[99 - i].fallStage = Boardspace.FALLEN;
       if(this.board[99 - i].hasPlayer())
       {
         this.killPlayer(this.board[99 - i].player);
@@ -370,13 +372,13 @@ module.exports = class Gameplay {
 
     for(var i = lower + left; i <= top - right; i+=10)   // left column
     {
-      this.board[i].fallStage = 2;
+      this.board[i].fallStage = Boardspace.FALLEN;
       if(this.board[i].hasPlayer())
       {
         this.killPlayer(this.board[i].player);
       }
 
-      this.board[99 - i].fallStage = 2;
+      this.board[99 - i].fallStage = Boardspace.FALLEN;
       if(this.board[99 - i].hasPlayer())
       {
         this.killPlayer(this.board[99 - i].player);
@@ -421,7 +423,7 @@ module.exports = class Gameplay {
     {
       for(var i = 0; i < 100; i++)
       {
-        if(this.board[i].fallStage < 2 && !this.board[i].hasPlayer())
+        if(this.board[i].fallStage < Boardspace.FALLEN && !this.board[i].hasPlayer())
         {
           this.moveSpaces.push(i);
         }
@@ -468,7 +470,7 @@ module.exports = class Gameplay {
     this.attackSpaces = []; // Reset attackSpaces
 
 
-    if (item.attackType == item.TRAP) { // Traps can be placed at any valid boardspace
+    if (item.attackType == Item.TRAP) { // Traps can be placed at any valid boardspace
       for (var i = 0; i < 100; i++) {
         if (this.board[i].playerCanEnter() && this.board[i].hasTrap() == false) {
           this.attackSpaces.push(i);
@@ -491,9 +493,9 @@ module.exports = class Gameplay {
       var vertRange = Math.abs((i-(i % 10) - (pos - (pos % 10)))) / 10;
       if ((leftBound || rightBound) && horiRange <= item.range) {
         if (vertRange <= item.range && i != pos) {
-          if (item.attackType == item.BASIC && (i % 10 ==  pos % 10 || (i-(i%10) == pos-(pos%10)))) {
+          if (item.attackType == Item.BASIC && (i % 10 ==  pos % 10 || (i-(i%10) == pos-(pos%10)))) {
             this.attackSpaces.push(i);
-          } else if (item.attackType == item.RADIUS) {
+          } else if (item.attackType == Item.RADIUS) {
             this.attackSpaces.push(i);
           }
         }
@@ -514,14 +516,14 @@ module.exports = class Gameplay {
       // change outer blocks to UNSTABLE
       for(var i = lower + left; i <= lower + this.width; i++)   // lower row
       {
-        this.board[i].fallStage = 1;
-        this.board[99 - i].fallStage = 1;
+        this.board[i].fallStage = Boardspace.UNSTABLE;
+        this.board[99 - i].fallStage = Boardspace.UNSTABLE;
       }
 
       for(var i = lower + left; i <= top - right; i+=10)   // left column
       {
-        this.board[i].fallStage = 1;
-        this.board[99 - i].fallStage = 1;
+        this.board[i].fallStage = Boardspace.UNSTABLE;
+        this.board[99 - i].fallStage = Boardspace.UNSTABLE;
       }
 
     }
