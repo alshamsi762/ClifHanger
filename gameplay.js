@@ -293,8 +293,10 @@ class Gameplay {
     this.currItem = item;
     if (item.itemType == item.OFFENSE) { this.possibleAttacksBy(item); } // Offensive
     else if (item.itemType == item.DEFENSE) {
-      if (item.name == "Move Again" || item.name == "Teleport") {
+      if (item.name == "Move Again") {
         this.possibleMovesFrom(this.currPlayer.position);
+      } else if (item.name == "Teleport") {
+        this.possibleMovesFrom(null);
       }
     }
     // Display current item as selected in UI
@@ -341,10 +343,13 @@ class Gameplay {
           if (this.moveSpaces.includes(index)) {
             this.moveTo(this.board[index]);
           }
-        } else if (item.name == "Teleport") {
+        } else if (item.name == "Teleport" && direction instanceof Boardspace) {
           // TODO: Need to finish input handling before implementing
           // this.possibleMovesFrom(null);
           // this.currPlayer.status = 1;
+          if (this.moveSpaces.includes(direction.position)) {
+            this.moveTo(this.board[direction.position]);
+          }
         }
         // Remove item from defensive inventory
         this.currPlayer.popDefensiveItem();
@@ -438,12 +443,11 @@ class Gameplay {
   // TODO: Add case for teleport item
   // TODO: TESTED!
   possibleMovesFrom(boardspace) {
-    var pos = boardspace.position;
     this.moveSpaces = [];
     var moves = 0; // moves will start as 0000. 1000 digits means up, 0100 means right, 0010 means down, 0001 means left. Just for testing.
     if(boardspace == null)  // Teleport
     {
-      for(i = 0; i < 100; i++)
+      for(var i = 0; i < 100; i++)
       {
         if(this.board[i].fallStage != 2 && !this.board[i].hasPlayer())
         {
@@ -452,6 +456,9 @@ class Gameplay {
       }
       return this.moveSpaces; //moves;
     }
+
+    var pos = boardspace.position;
+
     if(pos + 10 <= this.topBounds && this.canMoveTo(this.board[pos + 10]))
     {
       // can move up, give it
