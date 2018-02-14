@@ -294,6 +294,7 @@ class Gameplay {
     var isAttack = (item.itemType == Item.OFFENSE);
 
     if (isAttack) {
+      this.currPlayer.popOffensiveItem();
       if (isRadius) { // Radius attack
         for (var i = 0; i < this.attackSpaces.length; i++) {
           this.attack(item, this.board[this.attackSpaces[i]]);
@@ -307,8 +308,8 @@ class Gameplay {
           }
         }
       }
-      this.currPlayer.popOffensiveItem();
     } else if (!isAttack) {
+      this.currPlayer.popDefensiveItem();
       if (item.name == "Minor Potion") {  // Minor Potion
         this.currPlayer.healHealthBy(10);
       } else if (item.name == "Major Potion") { // Major Potion
@@ -322,7 +323,6 @@ class Gameplay {
           this.moveTo(this.board[dir]);
         }
       }
-      this.currPlayer.popDefensiveItem();
     }
   }
 
