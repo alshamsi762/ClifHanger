@@ -220,6 +220,7 @@ class Gameplay {
   // Update currPlayer position, apply effects of any trap or add item, set currItem to Basic Attack and call possible attacks.
   // Enable "end turn" button
   // NOTE: TESTED!
+  // NOTE: WHEN WE PUSH AN ITEM, IF THE PLAYER USED AN ITEM TO GET TO THIS SPACE, THE ITEM WE PUSHED IS REMOVED, NOT THE ORIGINAL
   moveTo(boardspace) {
     // Move the player
     this.board[this.currPlayer.position].removePlayer(); // Remove player from current boardspace
@@ -316,9 +317,9 @@ class Gameplay {
         if (this.moveSpaces.includes(dir)) {
           this.moveTo(this.board[dir]);
         }
-      } else if (item.name == "Move Again" && dir == -10 || dir == -1 || dir == 1 || dir == 10) { // Move Again
-        if (this.moveSpaces.includes(this.currPlayer.position + dir)) {
-          this.moveTo(this.board[this.currPlayer.position + dir]);
+      } else if (item.name == "Move Again") { // Move Again
+        if (this.moveSpaces.includes(dir)) {
+          this.moveTo(this.board[dir]);
         }
       }
       this.currPlayer.popDefensiveItem();
@@ -395,9 +396,9 @@ class Gameplay {
   // Remove player from linked list. Call any animations
   // NOTE: TESTED!
   killPlayer(player) {
-    this.board[player.position].removePlayer();   // had to add this to remove the player from the boardspace
-    this.playerList.removePlayer(player.id);
-    // should we set the player to null?
+    this.board[player.position].removePlayer();  // Remove player from Board
+    this.playerList.removePlayer(player.id);    // Remove player from List
+    //IDEA should we set the player to null?
     // call any animations
   }
 
@@ -427,7 +428,7 @@ class Gameplay {
 
     if(pos + 10 <= this.topBounds && this.canMoveTo(this.board[pos + 10]))
     {
-      // can move up, give it
+      // can move up
       this.moveSpaces.push(pos+10);
     }
     if((pos % 10) != this.rightOffset && this.canMoveTo(this.board[pos + 1]))
