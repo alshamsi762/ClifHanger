@@ -160,6 +160,11 @@ module.exports.testMoving = function testMoving() {
   var gameplay = new Gameplay(p1, p2, p3, p4);
   gameplay.createBoard();
 
+  // Clear board of all loot for testing
+  for (var i = 0; i < 100; i++) {
+    gameplay.board[i].removeLoot();
+  }
+
   gameplay.currPlayer = p1;
   if(gameplay.currPlayer.name != "Andrew")
   {
@@ -185,8 +190,11 @@ module.exports.testMoving = function testMoving() {
 
   // Testing for picking up loot
   var item1 = new Item("Radius", 0, 1, 1, 20, null, null);
-  gameplay.board[18].setLoot(item1);
-  if(!gameplay.board[18].hasLoot() || gameplay.currPlayer.offensive != null)
+
+  // Find first block without loot for testing
+
+  gameplay.board[18].setLoot(item1); // Place loot at 0 since random drops could interfere with test
+  if(!gameplay.board[18].hasLoot() || gameplay.currPlayer.offensive !== null)
   {
     return false;
   }
@@ -199,6 +207,8 @@ module.exports.testMoving = function testMoving() {
   }
   // Pick up another offensive item
   var item2 = new Item("Fire", 0, 1, 1, 20, null, null);
+  // Find second block without loot for testing
+
   gameplay.board[28].setLoot(item2);
   gameplay.moveTo(gameplay.board[gameplay.currPlayer.position + 10]);
   if(gameplay.board[28].hasLoot() || gameplay.currPlayer.offensive[1].name != "Fire" || gameplay.currPlayer.offensive.length != 2)
@@ -327,6 +337,12 @@ module.exports.testBoundsPossibleAttacksByBasic = function testBoundsPossibleAtt
   var basic = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack");
   var gameplay = new Gameplay(p1, p2, p3, p4);
   gameplay.createBoard();
+
+  // Remove all players except for p1
+  gameplay.killPlayer(p2);
+  gameplay.killPlayer(p3);
+  gameplay.killPlayer(p4);
+
   gameplay.startTurnFor(p1);
 
   var expectedResults = [
@@ -336,10 +352,12 @@ module.exports.testBoundsPossibleAttacksByBasic = function testBoundsPossibleAtt
 
   var testPositions = [0, 9, 90, 99, 11, 18, 81, 88, 5, 40, 49, 95, 15, 41, 48, 85];
 
-  for (testNum = 0; testNum < testPositions.length; testNum++) {
+  for (var testNum = 0; testNum < testPositions.length; testNum++) {
     // Move the player to the test position
     gameplay.moveTo(gameplay.board[testPositions[testNum]]);
-    var result = gameplay.possibleAttacksBy(basic);
+    gameplay.chooseItem(basic);
+
+    var result = gameplay.attackSpaces;
     if (result.length != expectedResults[testNum].length) {
       console.log("Position " + testPositions[testNum] + " Basic attack\n" +
                   "Expected: " + expectedResults[testNum] + "\n" +
@@ -347,7 +365,7 @@ module.exports.testBoundsPossibleAttacksByBasic = function testBoundsPossibleAtt
       return false;
     }
 
-    for (i = 0; i < result.length; i++) {
+    for (var i = 0; i < result.length; i++) {
       if (expectedResults[testNum][i] != result[i]) {
         console.log("Position " + testPositions[testNum] + " Basic attack\n" +
                     "Expected: " + expectedResults[testNum] + "\n" +
@@ -355,6 +373,8 @@ module.exports.testBoundsPossibleAttacksByBasic = function testBoundsPossibleAtt
         return false;
       }
     }
+    gameplay.endTurnFor(p1);
+    gameplay.startTurnFor(p1);
   }
   return true;
 }
@@ -368,6 +388,12 @@ module.exports.testBoundsPossibleAttacksByRadius = function testBoundsPossibleAt
   var radius = new Item("Radius", 0, 1, 1, 10, 0,60, "Able to hit players around you");
   var gameplay = new Gameplay(p1, p2, p3, p4);
   gameplay.createBoard();
+
+  // Remove all players except for p1
+  gameplay.killPlayer(p2);
+  gameplay.killPlayer(p3);
+  gameplay.killPlayer(p4);
+
   gameplay.startTurnFor(p1);
 
   var expectedResults = [
@@ -412,6 +438,12 @@ module.exports.testBoundsPossibleAttacksByRangedBasic = function testBoundsPossi
   var rangedBasic = new Item("Ranged Basic", 0, 0, 2, 10, 0.60, "A basic attack with more range");
   var gameplay = new Gameplay(p1, p2, p3, p4);
   gameplay.createBoard();
+
+  // Remove all players except for p1
+  gameplay.killPlayer(p2);
+  gameplay.killPlayer(p3);
+  gameplay.killPlayer(p4);
+
   gameplay.startTurnFor(p1);
 
   var expectedResults = [
@@ -456,6 +488,12 @@ module.exports.testBoundsPossibleAttacksByRangedRadius = function testBoundsPoss
   var rangedRadius = new Item("Ranged Radius", 0, 1, 2, 10, 0.60, "A radius attack with more range");
   var gameplay = new Gameplay(p1, p2, p3, p4);
   gameplay.createBoard();
+
+  // Remove all players except for p1
+  gameplay.killPlayer(p2);
+  gameplay.killPlayer(p3);
+  gameplay.killPlayer(p4);
+
   gameplay.startTurnFor(p1);
 
   var expectedResults = [
