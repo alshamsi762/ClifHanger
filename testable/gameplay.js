@@ -156,7 +156,7 @@ module.exports = class Gameplay {
     this.items.push(new Item("Minor Potion", 1, 0, 0, 10, 8, "Minor Potion Description"));// 9
     this.items.push(new Item("Major Potion", 1, 0, 0, 30, 4, "Major Potion Description"));// 10
     this.items.push(new Item("Move Again", 1, 0, 0, 0, 4, "Move Again Description"));     // 11
-    this.items.push(new Item("Teleport", 1, 0, 0, 0, 20, "Teleport Description"));         // 12
+    this.items.push(new Item("Teleport", 1, 1, 0, 0, 20, "Teleport Description"));         // 12
 
     // Array of item drops based on the rarity of each item
     this.drops = [];
@@ -255,6 +255,7 @@ module.exports = class Gameplay {
 
     // Set the currItem to basicAttack
     this.chooseItem(this.basicAttack);
+    this.currPlayer.status = 2;
   }
 
   // Check if player, apply effects to player. Apply effects of item to the boardspace if any.
@@ -278,12 +279,15 @@ module.exports = class Gameplay {
   // TODO: Test
   chooseItem(item) {
     this.currItem = item;
-    if (item.itemType == item.OFFENSE) { this.possibleAttacksBy(item); } // Offensive
-    else if (item.itemType == item.DEFENSE) {
+    if (item.itemType == item.OFFENSE) { // Offensive
+      this.possibleAttacksBy(item);
+    } else if (item.itemType == item.DEFENSE) { // Defensive
       if (item.name == "Move Again") {
-        this.possibleMovesFrom(this.currPlayer.position);
+        this.possibleMovesFrom(this.board[this.currPlayer.position]);
       } else if (item.name == "Teleport") {
         this.possibleMovesFrom(null);
+      } else if (item.name == "Minor Potion" || item.name == "Major Potion") {
+        this.possibleAttacksBy(item);
       }
     }
     // Display current item as selected in UI
@@ -291,55 +295,42 @@ module.exports = class Gameplay {
 
   // Called when user activates item. Checks if Offensive or Defensive. Attack if offens. Apply effects if defens.
   // remove item from player inventory.
-  useItem(item, direction) {
+  useItem(item, dir) {
     var index = 0;
-    if (item.itemType == item.OFFENSE && item.attackType != item.TRAP) { // Offensive
-      if (item.attackType == item.RADIUS) {
+    var isRadius = (item.attackType == item.RADIUS);
+    var isTrap = (item.attackType == item.TRAP);
+    var isAttack = (item.itemType == item.OFFENSE);
+
+    if (isAttack) {
+      if (isRadius) { // Radius attack
         for (var i = 0; i < this.attackSpaces.length; i++) {
           this.attack(item, this.board[this.attackSpaces[i]]);
         }
-      } else {
+      } else if (isTrap && this.attackSpaces.includes(dir)) {  // Setting a trap
+          this.board[dir].setTrap(item);
+      } else if (dir == -10 || dir == -1 || dir == 1 || dir == 10) {
         for (var i = 1; i <= item.range; i++) {
-          if (direction == "UP") { index = this.currPlayer.position + (-10 * i); }
-          else if (direction == "LEFT") { index = this.currPlayer.position + (-1 * i); }
-          else if (direction == "RIGHT") { index = this.currPlayer.position + (1 * i); }
-          else if (direction == "DOWN") { index = this.currPlayer.position + (10 * i); }
-
-          if (this.attackSpaces.includes(index)) {
-            this.attack(item, this.board[index]);
+          if (this.attackSpaces.includes(this.currPlayer.position + (dir * i))) {
+            this.attack(item, this.board[this.currPlayer.position + (dir * i)]);
           }
         }
       }
-      // Remove item from offensive inventory
       this.currPlayer.popOffensiveItem();
-    } else if (item.itemType == item.OFFENSE && item.attackType == item.TRAP) {  // Trap
-      // TODO: Need to finish input handling before checking to see if player can put a trap at boardspace
-    }
-    else if (item.itemType == item.DEFENSE) { // Defensive
-        if (item.name == "Minor Potion") {
-          this.currPlayer.healHealthBy(10);
-        } else if (item.name == "Major Potion") {
-          this.currPlayer.healHealthBy(30);
-        } else if (item.name == "Move Again") {
-
-          if (direction == "UP") { index = this.currPlayer.position + (-10 * i); }
-          else if (direction == "LEFT") { index = this.currPlayer.position + (-1 * i); }
-          else if (direction == "RIGHT") { index = this.currPlayer.position + (1 * i); }
-          else if (direction == "DOWN") { index = this.currPlayer.position + (10 * i); }
-
-          if (this.moveSpaces.includes(index)) {
-            this.moveTo(this.board[index]);
-          }
-        } else if (item.name == "Teleport" && direction instanceof Boardspace) {
-          // TODO: Need to finish input handling before implementing
-          // this.possibleMovesFrom(null);
-          // this.currPlayer.status = 1;
-          if (this.moveSpaces.includes(direction.position)) {
-            this.moveTo(this.board[direction.position]);
-          }
+    } else if (!isAttack) {
+      if (item.name == "Minor Potion") {  // Minor Potion
+        this.currPlayer.healHealthBy(10);
+      } else if (item.name == "Major Potion") { // Major Potion
+        this.currPlayer.healHealthBy(30);
+      } else if (item.name == "Teleport") { // Teleport
+        if (this.moveSpaces.includes(dir)) {
+          this.moveTo(this.board[dir]);
         }
-        // Remove item from defensive inventory
-        this.currPlayer.popDefensiveItem();
+      } else if (item.name == "Move Again" && dir == -10 || dir == -1 || dir == 1 || dir == 10) { // Move Again
+        if (this.moveSpaces.includes(this.currPlayer.position + dir)) {
+          this.moveTo(this.board[this.currPlayer.position + dir]);
+        }
+      }
+      this.currPlayer.popDefensiveItem();
     }
   }
 
@@ -436,7 +427,7 @@ module.exports = class Gameplay {
     {
       for(var i = 0; i < 100; i++)
       {
-        if(this.board[i].fallStage != 2 && !this.board[i].hasPlayer())
+        if(this.board[i].fallStage < 2 && !this.board[i].hasPlayer())
         {
           this.moveSpaces.push(i);
         }
@@ -482,15 +473,17 @@ module.exports = class Gameplay {
     var upOrDown = 10, leftOrRight = 1;
     this.attackSpaces = []; // Reset attackSpaces
 
-    // TRAP, can be placed at any valid boardspace
-    if (item.attackType == item.TRAP) {
+
+    if (item.attackType == item.TRAP) { // Traps can be placed at any valid boardspace
       for (var i = 0; i < 100; i++) {
-        // Check if boardspace can accept a trap item, add it to attackSpaces
         if (this.board[i].playerCanEnter() && this.board[i].hasTrap() == false) {
           this.attackSpaces.push(i);
         }
       }
       return this.attackSpaces;
+    } else if (item.name == "Minor Potion" || item.name == "Major Potion") { // Potions will be used on the player using it
+        this.attackSpaces.push(pos);
+        return this.attackSpaces;
     }
 
     for (var i = 0; i < 100; i++) {
