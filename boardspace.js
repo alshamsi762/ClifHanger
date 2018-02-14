@@ -1,9 +1,4 @@
 /** Boardspace Object & Functions **/
-// const Item = require('./item.js');
-// const Player = require('./player.js');
-//
-// module.exports =
-
 const STABLE = 0;
 const UNSTABLE = 1;
 const FALLEN = 2;
@@ -22,33 +17,33 @@ class Boardspace {
 
   // Set player to this boardspace. True or False on success or failure.
   setPlayer(player) {
-    // if (player instanceof Player && this.playerCanEnter()) {
+    if (player instanceof Player && this.playerCanEnter()) {
       this.player = player;
       player.position = this.position;
-      // return true;
-    // } else {
-      // return false;
-    // }
+      return true;
+    } else {
+      return false;
+    }
   }
 
   // Set a trap to this boardspace. True or False on success or failure.
   setTrap(trap) {
-    // if (trap instanceof Item && this.trap == null) {
+    if (trap instanceof Item && this.trap == null) {
       this.trap = trap;
-      // return true;
-    // } else {
-      // return false;
-    // }
+      return true;
+    } else {
+      return false;
+    }
   }
 
   // Set loot to this boardspace. True or False on success or failure.
   setLoot(loot) {
-    // if (loot instanceof Item && this.loot == null) {
+    if (loot instanceof Item && this.loot == null) {
       this.loot = loot;
-      // return true;
-    // } else {
-      // return false;
-    // }
+      return true;
+    } else {
+      return false;
+    }
   }
 
   // Remove player from this boardspace

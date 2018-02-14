@@ -1,8 +1,3 @@
-// const Item = require('./item.js');
-// const Player = require('./player.js');
-// const Boardspace = require('./boardspace.js');
-
-
 // Implementation of double linked List
 function node(player)
 {

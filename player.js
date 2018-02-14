@@ -1,6 +1,3 @@
-/** Player Object & Functions **/
-// const Item = require('./item.js');
-// module.exports =
 const IDLE = 0;
 const MOVING = 1;
 const READY = 2;
