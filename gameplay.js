@@ -319,8 +319,8 @@ class Gameplay {
           this.moveTo(this.board[dir]);
         }
       } else if (item.name == "Move Again") { // Move Again
-        if (this.moveSpaces.includes(dir)) {
-          this.moveTo(this.board[dir]);
+        if (this.moveSpaces.includes(this.currPlayer.position + dir)) {
+          this.moveTo(this.board[this.currPlayer.position + dir]);
         }
       }
     }
