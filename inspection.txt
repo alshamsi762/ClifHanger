@@ -1,4 +1,5 @@
 1.  In startTurnFor(player), set player.status = 1 instead of this.currPlayer.status = 1 since setting
     this.currPlayer.status = 1 wasn't clear if it was changing the actual player's status.
 
-2.  
+2.  useItem(item, direction) can accept either a string or a boardspace for direction.
+    This could lead to confusing behavior if not documented and used correctly.

@@ -137,25 +137,25 @@
 						endTurn();
 					}
 				} else if (player.data.status == 2) {	// Attacking or Defending
-					if (game.currItem == game.items[12]) { // Teleport item
-						document.getElementById("" + player.data.position).innerHTML = "&nbsp";
-						game.useItem(game.currItem, game.board[boardspace]);
-						document.getElementById("" + player.data.position).innerHTML =  tempIDs[player.data.id];
+					var dir = 0;
 
+					var diff = player.data.position - parseInt(boardspace);
+					if (diff >= 10) {	dir = -10; }
+					else if (diff <= -10) { dir = 10;	}
+					else if (diff >= 1 && diff < 10) { dir = -1; }
+					else if (diff <= -1 && diff > -10) { dir = 1; }
+
+					if (game.currItem.attackType != game.currItem.BASIC || game.currItem.name == "Teleport") {
+						dir = parseInt(boardspace);
+					}
+					if (game.currItem.name == "Teleport" || game.currItem.name == "Move Again") {
+						document.getElementById("" + player.data.position).innerHTML = "&nbsp";
+						game.useItem(game.currItem, dir);
+						document.getElementById("" + player.data.position).innerHTML =  tempIDs[player.data.id];
 					} else {
-						var origin = player.data.position;
-						var dir = "NONE";
-						if (origin - boardspace >= 10) {
-							dir = "UP";
-						} else if (origin - boardspace <= -10) {
-							dir = "DOWN";
-						} else if (origin - boardspace >= 1 && origin - boardspace < 10) {
-							dir = "LEFT";
-						} else if (origin - boardspace <= -1 && origin - boardspace > -10) {
-							dir = "RIGHT";
-						}
 						game.useItem(game.currItem, dir);
 					}
+
 					disableBoard();
 					endTurn();
 				}
