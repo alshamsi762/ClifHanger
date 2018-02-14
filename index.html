@@ -121,25 +121,26 @@
 
 			function boardspacePressed(boardspace) {
 				// This function will handle pressing a boardspace with different player statuses
-				if (player.data.status == 1) {	// Moving
+				if (game.currPlayer.status == 1) {	// Moving
 					document.getElementById("" + player.data.position).innerHTML = "&nbsp";
 					game.moveTo(game.board[parseInt(boardspace)]);
 					document.getElementById("" + boardspace).innerHTML =  tempIDs[player.data.id];
 					disableBoard();
-					if (player.data.status == 2) {	// Player was not trapped
+					if (game.currPlayer.status == 2) {	// Player was not trapped
 						for (var i = 0; i < game.attackSpaces.length; i++) {
 								document.getElementById("" + game.attackSpaces[i]).disabled = false;
 								document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
 						}
 						displayItems();
 						document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
-					} else if (player.data.status == 0) {
+					} else if (game.currPlayer.status == 0) {
+						disableBoard();
 						endTurn();
 					}
-				} else if (player.data.status == 2) {	// Attacking or Defending
+				} else if (game.currPlayer.status == 2) {	// Attacking or Defending
 					var dir = 0;
 
-					var diff = player.data.position - parseInt(boardspace);
+					var diff = game.currPlayer.position - parseInt(boardspace);
 					if (diff >= 10) {	dir = -10; }
 					else if (diff <= -10) { dir = 10;	}
 					else if (diff >= 1 && diff < 10) { dir = -1; }

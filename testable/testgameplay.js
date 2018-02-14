@@ -768,3 +768,37 @@ module.exports.testAttack = function testAttack() {
 
   return true;
 }
+
+module.exports.testTrapping = function testTrapping() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+
+  // Clear board of all loot for testing
+  for (var i = 0; i < 100; i++) {
+    gameplay.board[i].removeLoot();
+  }
+  var trap = new Item("Beartrap", 0, 2, 0, 15, 5, "Beartrap Description");
+  gameplay.board[1].setTrap(trap);
+
+  gameplay.startTurnFor(p1);
+
+  var player = gameplay.currPlayer;
+  if (gameplay.board[1].hasTrap() == false) {
+    console.log("No trap");
+    return false;
+  }
+  gameplay.moveTo(gameplay.board[1]);
+
+  if (player.status != 0 || gameplay.currPlayer.status != 0) {
+    return false;
+  }
+  
+
+
+  return true;
+}

@@ -74,3 +74,8 @@ test('Test Attack', () => {
 test('Test possibleAttacks after shrinking board', () => {
   expect(testgameplay.testPossibleAttacksAfterBoardShrink()).toBe(true);
 })
+
+// Test 16
+test('Test stopping a player\'s turn if they step on a trap', () => {
+  expect(testgameplay.testTrapping()).toBe(true);
+})

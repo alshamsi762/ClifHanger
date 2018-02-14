@@ -229,11 +229,12 @@ class Gameplay {
     // Move the player
     this.board[this.currPlayer.position].removePlayer(); // Remove player from current boardspace
     boardspace.setPlayer(this.currPlayer);  // Move the player to the requested boardspace
+    this.currPlayer.status = 2;             // Set the player ready to attack or defend
 
     // Check for Traps
     if (boardspace.hasTrap()) {
-      this.currPlayer.status = 0; // Player cannot attack or defend
-      this.useItem(boardspace.trap, boardspace);  // Apply effects of the trap to the player
+      boardspace.player.status = 0;               // "Stun" the trapped player
+      this.attack(boardspace.trap, boardspace);  // Apply effects of the trap to the player
       boardspace.removeTrap();
     }
 
@@ -258,21 +259,15 @@ class Gameplay {
 
     // Set the currItem to basicAttack
     this.chooseItem(this.basicAttack);
-    this.currPlayer.status = 2;
   }
 
-  // Check if player, apply effects to player. Apply effects of item to the boardspace if any.
+  // Check if player, apply effects to player.
   // NOTE: TESTED!
   attack(item, boardspace) {
-    if (item.attackType == item.TRAP) {
-      boardspace.setTrap(item);
-    } else {
-      if (boardspace.hasPlayer() == true) {
-        // Attack the player on the boardspace
-        boardspace.player.damageHealthBy(item.damage);
-        if (boardspace.player.getHealth() == 0) {
-          this.killPlayer(boardspace.player);
-        }
+    if (boardspace.hasPlayer()) {
+      boardspace.player.damageHealthBy(item.damage);
+      if (boardspace.player.getHealth() == 0) {
+        this.killPlayer(boardspace.player);
       }
     }
   }
