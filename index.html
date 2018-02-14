@@ -200,31 +200,43 @@
 			function itemSelected(index) {
 				var item = game.items[parseInt(index)]
 				game.chooseItem(item);
-				// Need to redisplay possible attacks or movement
-				if (item.itemType == item.OFFENSE && item.attackType != item.TRAP) {
-					// Display attackSpaces
+				disableBoard();
+				if (item.name == "Teleport" || item.name == "Move Again") {	// Teleport and Move Again show moves
+					for (var i = 0; i < game.moveSpaces.length; i++) {
+						document.getElementById(""+game.moveSpaces[i]).disabled = false;
+						document.getElementById(""+game.moveSpaces[i]).style = "background-color: green";
+					}
+				} else {	// Other items show attack spaces
 					for (var i = 0; i < game.attackSpaces.length; i++) {
 						document.getElementById("" + game.attackSpaces[i]).disabled = false;
 						document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
 					}
-				} else if (item.itemType == item.DEFENSE) {
-					if (item.name == "Minor Potion") {
-						// Heal 10
-						game.useItem(item);
-					} else if (item.name == "Major Potion") {
-						// Heal 30
-						game.useItem(item);
-					}	else if (item.name == "Teleport") {
-						// Teleport
-					  // var possibleMoves = game.possibleMovesFrom(game.board[game.currPlayer.position]);
-						for (var i = 0; i < game.moveSpaces.length; i++) {
-							document.getElementById(""+game.moveSpaces[i]).disabled = false;
-							document.getElementById(""+game.moveSpaces[i]).style = "background-color: green";
-						}
-					} else if (item.name == "Move Again") {
-						// Move again.
-					}
 				}
+				// Need to redisplay possible attacks or movement
+				// if (item.itemType == item.OFFENSE && item.attackType != item.TRAP) {
+				// 	// Display attackSpaces
+				// 	for (var i = 0; i < game.attackSpaces.length; i++) {
+				// 		document.getElementById("" + game.attackSpaces[i]).disabled = false;
+				// 		document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+				// 	}
+				// } else if (item.itemType == item.DEFENSE) {
+				// 	if (item.name == "Minor Potion") {
+				// 		// Heal 10
+				// 		game.useItem(item);
+				// 	} else if (item.name == "Major Potion") {
+				// 		// Heal 30
+				// 		game.useItem(item);
+				// 	}	else if (item.name == "Teleport") {
+				// 		// Teleport
+				// 	  // var possibleMoves = game.possibleMovesFrom(game.board[game.currPlayer.position]);
+				// 		for (var i = 0; i < game.moveSpaces.length; i++) {
+				// 			document.getElementById(""+game.moveSpaces[i]).disabled = false;
+				// 			document.getElementById(""+game.moveSpaces[i]).style = "background-color: green";
+				// 		}
+				// 	} else if (item.name == "Move Again") {
+				// 		// Move again.
+				// 	}
+				// }
 			}
 
 			function displayPlayerInfo() {

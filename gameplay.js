@@ -181,7 +181,7 @@ class Gameplay {
   }
 
   // Creates Board. Places players and items on board
-  // TODO: TESTED!
+  // NOTE: TESTED!
   createBoard() {
     // Push the boardspaces onto the the board array
     for(var i = 0; i < 100; i++)
@@ -205,7 +205,7 @@ class Gameplay {
   }
 
   // Starts turn timer, calculate possible moves, set currentPlayer, change player state to Active. Disable "end turn"
-  // TODO: TESTED!
+  // NOTE: TESTED!
   startTurnFor(player) {
     // TODO Start turn timer
     player.status = 1;  // Change player status to moving
@@ -214,7 +214,7 @@ class Gameplay {
   }
 
   // Update Linked List, change player state to Idle
-  // TODO: TESTED!
+  // NOTE: TESTED!
   endTurnFor(player) {
     // TODO Reset turn timer?
     player.status = 0;  // Change player status to idle
@@ -223,7 +223,7 @@ class Gameplay {
 
   // Update currPlayer position, apply effects of any trap or add item, set currItem to Basic Attack and call possible attacks.
   // Enable "end turn" button
-  // TODO: TESTED!
+  // NOTE: TESTED!
   moveTo(boardspace) {
     // Move the player
     this.board[this.currPlayer.position].removePlayer(); // Remove player from current boardspace
@@ -257,10 +257,11 @@ class Gameplay {
 
     // Set the currItem to basicAttack
     this.chooseItem(this.basicAttack);
+    this.currPlayer.status = 2;
   }
 
   // Check if player, apply effects to player. Apply effects of item to the boardspace if any.
-  // TODO: TESTED!
+  // NOTE: TESTED!
   attack(item, boardspace) {
     if (item.attackType == item.TRAP) {
       boardspace.setTrap(item);
@@ -280,12 +281,15 @@ class Gameplay {
   // TODO: Test
   chooseItem(item) {
     this.currItem = item;
-    if (item.itemType == item.OFFENSE) { this.possibleAttacksBy(item); } // Offensive
-    else if (item.itemType == item.DEFENSE) {
+    if (item.itemType == item.OFFENSE) { // Offensive
+      this.possibleAttacksBy(item);
+    } else if (item.itemType == item.DEFENSE) { // Defensive
       if (item.name == "Move Again") {
         this.possibleMovesFrom(this.currPlayer.position);
       } else if (item.name == "Teleport") {
         this.possibleMovesFrom(null);
+      } else if (item.name == "Minor Potion" || item.name == "Major Potion") {
+        this.possibleAttacksBy(item);
       }
     }
     // Display current item as selected in UI
@@ -323,7 +327,6 @@ class Gameplay {
         } else if (item.name == "Major Potion") {
           this.currPlayer.healHealthBy(30);
         } else if (item.name == "Move Again") {
-
           if (direction == "UP") { index = this.currPlayer.position + (-10 * i); }
           else if (direction == "LEFT") { index = this.currPlayer.position + (-1 * i); }
           else if (direction == "RIGHT") { index = this.currPlayer.position + (1 * i); }
@@ -346,7 +349,7 @@ class Gameplay {
   }
 
   // Randomly drop an item on a random (valid) boardspace.
-  // TODO: TESTED!
+  // NOTE: TESTED!
   dropItem() {
     var itemPos = 0;
     var item = null;
@@ -366,7 +369,7 @@ class Gameplay {
   }
 
   // Shrink the board. For each dropped, check if player is there, kill player if they are.
-  // TODO: TESTED!
+  // NOTE: TESTED!
   shrinkBoard() {
     var top = this.topBounds, lower = this.lowerBounds, right = this.rightOffset, left = this.leftOffset;
     // change outer blocks to FALLEN and kill any players found
@@ -414,7 +417,7 @@ class Gameplay {
   }
 
   // Remove player from linked list. Call any animations
-  // TODO: TESTED!
+  // NOTE: TESTED!
   killPlayer(player) {
     this.board[player.position].removePlayer();   // had to add this to remove the player from the boardspace
     this.playerList.removePlayer(player.id);
@@ -423,22 +426,20 @@ class Gameplay {
   }
 
   // Check attributes of boardspace
-  // TODO: TESTED! in testMoving
+  // NOTE: TESTED!
   canMoveTo(boardspace) {
     return boardspace.playerCanEnter();
   }
 
   // Check boardspaces around currPlayer's boardspace. Display in UI
-  // TODO: Add case for teleport item
-  // TODO: TESTED!
+  // NOTE: TESTED!
   possibleMovesFrom(boardspace) {
     this.moveSpaces = [];
-    var moves = 0; // moves will start as 0000. 1000 digits means up, 0100 means right, 0010 means down, 0001 means left. Just for testing.
     if(boardspace == null)  // Teleport
     {
       for(var i = 0; i < 100; i++)
       {
-        if(this.board[i].fallStage != 2 && !this.board[i].hasPlayer())
+        if(this.board[i].fallStage < 2 && !this.board[i].hasPlayer())
         {
           this.moveSpaces.push(i);
         }
@@ -451,25 +452,21 @@ class Gameplay {
     if(pos + 10 <= this.topBounds && this.canMoveTo(this.board[pos + 10]))
     {
       // can move up, give it
-      moves += 1000;
       this.moveSpaces.push(pos+10);
     }
     if((pos % 10) != this.rightOffset && this.canMoveTo(this.board[pos + 1]))
     {
       // can move right
-      moves += 100;
       this.moveSpaces.push(pos + 1);
     }
     if(pos - 10 >= this.lowerBounds && this.canMoveTo(this.board[pos - 10]))
     {
       // can move down
-      moves += 10;
       this.moveSpaces.push(pos - 10);
     }
     if((pos % 10) != this.leftOffset && this.canMoveTo(this.board[pos - 1]))
     {
       // can move left
-      moves += 1;
       this.moveSpaces.push(pos - 1);
     }
 
@@ -478,21 +475,23 @@ class Gameplay {
 
   // Use currPlayer pos. and item to display possible attacks. Display in UI
   // Maybe return an array of the possible boardspace positions?
-  // TODO: TESTED!
+  // NOTE: TESTED!
   possibleAttacksBy(item) {
     var pos = this.currPlayer.position;
     var upOrDown = 10, leftOrRight = 1;
     this.attackSpaces = []; // Reset attackSpaces
 
-    // TRAP, can be placed at any valid boardspace
-    if (item.attackType == item.TRAP) {
+
+    if (item.attackType == item.TRAP) { // Traps can be placed at any valid boardspace
       for (var i = 0; i < 100; i++) {
-        // Check if boardspace can accept a trap item, add it to attackSpaces
         if (this.board[i].playerCanEnter() && this.board[i].hasTrap() == false) {
           this.attackSpaces.push(i);
         }
       }
       return this.attackSpaces;
+    } else if (item.name == "Minor Potion" || item.name == "Major Potion") { // Potions will be used on the player using it
+        this.attackSpaces.push(pos);
+        return this.attackSpaces;
     }
 
     for (var i = 0; i < 100; i++) {
@@ -519,7 +518,7 @@ class Gameplay {
   }
 
   // Check full-turn count. Change fallStage before blocks should fall.
-  // TODO: TESTED!
+  // NOTE: TESTED!
   shouldShrinkBoard() {
     var count = this.fullTurnCount;
     if(count == 1 || count == 3 || count == 5)
@@ -577,7 +576,7 @@ class Gameplay {
 
   // calculate moves required to go from a to b (only works at the beginning of the game when the players are at the initial positions - Generally faulty logic)
   // used to drop items at the beginning of the game
-  // TODO: TESTED!
+  // NOTE: TESTED!
   movesFrom(a, b)
   {
     var diff = Math.abs(a - b);
@@ -587,7 +586,7 @@ class Gameplay {
   }
 
   // Drops 10 random items at random positions not occupied and at least 2 moves away from every players, at the beginning of the game.
-  // TODO: TESTED!
+  // NOTE: TESTED!
   initialDrop()
   {
     var count = 0;
@@ -609,7 +608,7 @@ class Gameplay {
   }
 
   // Returns a random item from the items list
-  // TODO: TESTED!
+  // NOTE: TESTED!
   randomItem()
   {
     return this.items[Math.floor(Math.random() * this.items.length)];;
