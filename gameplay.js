@@ -294,7 +294,9 @@ class Gameplay {
     var isAttack = (item.itemType == Item.OFFENSE);
 
     if (isAttack) {
-      this.currPlayer.popOffensiveItem();
+      if (item !== this.basicAttack) {
+        this.currPlayer.popOffensiveItem();
+      }
       if (isRadius) { // Radius attack
         for (var i = 0; i < this.attackSpaces.length; i++) {
           this.attack(item, this.board[this.attackSpaces[i]]);
