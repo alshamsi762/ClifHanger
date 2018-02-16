@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <title></title>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body> 
+    <canvas id="canvas"></canvas>
+    <script src="http://threejs.org/build/three.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    
+
+    <script type="x-shader/x-vertex" id="vertexShader">
+        attribute float vertexDisplacement; 
+        uniform float delta; 
+        varying float vOpacity; 
+        varying vec3 vUv; 
+        
+        void main() { 
+            vUv = position;
+            vOpacity = vertexDisplacement; 
+            vec3 p = position; 
+            p.x += sin(vertexDisplacement) * 50.0; 
+            p.y += cos(vertexDisplacement) * 50.0; 
+            p.z += cos(vertexDisplacement) * 50.0; 
+            vec4 modelViewPosition = modelViewMatrix * vec4(p, 1.0); 
+            gl_Position = projectionMatrix * modelViewPosition;
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="fragmentShader">
+        uniform float delta; 
+        varying float vOpacity; 
+        varying vec3 vUv; 
+        
+        void main() {
+            float r = 0.5 + sin(vUv.x * delta); 
+            float g = 0.5 + cos(vUv.z * delta); 
+            float b = 0.0 - 0.5 - tan(vUv.z * delta); 
+            vec3 rgb = vec3(r, g, b); 
+            gl_FragColor = vec4(rgb, vOpacity); 
+        }
+    </script>
+
+    <script src="js/shapes-shaders.js"></script>
+</body>
+
+</html>
