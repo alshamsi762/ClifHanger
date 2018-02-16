@@ -9,7 +9,7 @@ var port = 2200;
 
 /** Main Thread **/
 app.set('port', 2200);
-
+app.use('/public', express.static(__dirname + '/static'));
 // Send Index.html
 app.get('/', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );;
