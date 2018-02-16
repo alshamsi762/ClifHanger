@@ -36,6 +36,8 @@
 		<p id = "status"></p>
 		<p id = "offensiveItems"></p>
 		<p id = "defensiveItems"></p>
+		<p id = "itemUsed"></p>
+		<p id = "damageGiven"></p>
 
 		<!-- JS Scripts -->
     <!-- Put your JavaScript Here. -->
@@ -152,9 +154,11 @@
 					if (game.currItem.name == "Teleport" || game.currItem.name == "Move Again") {
 						document.getElementById("" + player.data.position).innerHTML = "&nbsp";
 						game.useItem(game.currItem, dir);
+						document.getElementById("itemUsed").innerHTML = player.data.name + " used " + game.currItem.name + ".<br />";
 						document.getElementById("" + player.data.position).innerHTML =  tempIDs[player.data.id];
 					} else {
 						game.useItem(game.currItem, dir);
+						document.getElementById("itemUsed").innerHTML = player.data.name + " used " + game.currItem.name + ".<br />";
 					}
 
 					disableBoard();
@@ -194,8 +198,8 @@
 					defense += "<button onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.defensive[i]) + "\')\">";
 					defense += game.currPlayer.defensive[i].name + "</button>";
 				}
-				document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense;
-				document.getElementById("defensiveItems").innerHTML = "Defensive Items:  " + defense;
+				document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense + " * Can only use right most.";
+				document.getElementById("defensiveItems").innerHTML = "Defensive Items:  " + defense + " * Can only use right most.";
 			}
 
 			function itemSelected(index) {
