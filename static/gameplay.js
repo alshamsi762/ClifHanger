@@ -592,4 +592,30 @@ class Gameplay {
   {
     return this.items[Math.floor(Math.random() * this.items.length)];
   }
+
+
 }
+
+var movement = {
+  up: false,
+  down: false,
+  left: false,
+  right: false
+}
+
+document.addEventListener('direction', function(event) {
+switch (event.keyCode) {
+  case 65: // A
+    movement.left = true;
+    break;
+  case 87: // W
+    movement.up = true;
+    break;
+  case 68: // D
+    movement.right = true;
+    break;
+  case 83: // S
+    movement.down = true;
+    break;
+}
+});
