@@ -135,9 +135,9 @@ def parseHTTP(client):
     if path:
         # Get Filename
         if path == '/':
-            path = "ServerStage/index.html"
+            path = "index.html"
         else:
-            path = "ServerStage/" + path[1:]
+            path =  path[1:]
         if VERBOSE:
             print("Filename: " + path + '\n')
 

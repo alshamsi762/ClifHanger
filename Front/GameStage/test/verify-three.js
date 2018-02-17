@@ -18,6 +18,6 @@ describe('Global', function() {
   it('should be able to construct a Vector3 with default of x=0', function() {
     a = new THREE.MeshNormalMaterial();
     //a.uuid = Global.cubeMaterial.uuid;
-  assert(Global.cubeMaterial.isMeshNormalMaterial);
+  assert(Global.cubeMaterial.isMeshNormalMaterial)e;
 })
 })
