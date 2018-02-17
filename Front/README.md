@@ -25,3 +25,43 @@ python server.py [port]
 data.cs.purdue.edu:[port]
 ```
 ---
+
+## Testing with Jest
+
+1. go into package.json
+2. add the following piece of code.
+```javascript
+"scripts": {
+  "test": "jest"
+},
+```
+3. export the function or variables you want to test. (e.g)
+```javascript
+function sum(a, b) {
+  return a + b;
+}
+var z = 12;
+function mul(a,b){
+	return a * b;
+}
+module.exports = {
+	sum,
+	mul,
+	z
+};
+```
+4. now create a file you want to use to write the testing script **filename.test.js**
+```javascript
+const VarName = require('path/to/file.js');
+test('adds 1 + 2 to equal 3', () => {
+  expect(VarName.sum(1, 2)).toBe(3);
+});
+test('multiplies 3 * 5 to equal 15',() =>{
+	expect(VarName.mul(3,5)).toBe(15);
+});
+test('variable test to equal 12',() =>{
+	expect(VarName.z).toBe(12);
+});
+```
+5. $Terminal **npm test**
+---
