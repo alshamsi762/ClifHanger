@@ -55,7 +55,7 @@ var camLight = new THREE.PointLight(0xFFFFFF, 0.25);
 scene.add(camLight);
 
 // Set Material
-var cubeMaterial = new THREE.MeshNormalMaterial();
+var cubeMaterial = new THREE.MeshLambertMaterial();
 var plateMaterial = new THREE.MeshLambertMaterial({color: 0xD7DFE5});
 
 // Set Geometry
@@ -240,7 +240,7 @@ function keyCatcher(key) {
   // when c is pressed
   else if (key.keyCode == "67") {
     console.log("keyCatcher(): Registered \'C\' Key");
-    changeColor(objects.findIndex(model), 0xff0000);
+    changeColor(0, 0xff0000);
   }
   // Invalid
   else {
