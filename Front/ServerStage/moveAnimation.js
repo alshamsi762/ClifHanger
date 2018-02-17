@@ -76,8 +76,16 @@ function loadHandler(geometry) {
   model.scale.set( 0.09, 0.09, 0.09 );
   scene.add(model);
   //push to array
+  console.log(model);
   objects.push(model);
 }
+
+// method to update the viewport
+window.addEventListener('resize', function(){
+  renderer.setSize(window.innerWidth, window.innerHeight); // re-size
+  camera.aspect = window.innerWidth / window.innerHeight; // update aspect ratio
+  camera.updateProjectionMatrix();
+});
 
 // Add Cube & Plate to Scene
 //scene.add(cube);
@@ -240,7 +248,7 @@ function keyCatcher(key) {
   // when c is pressed
   else if (key.keyCode == "67") {
     console.log("keyCatcher(): Registered \'C\' Key");
-    changeColor(0, 0xff0000);
+    changeColor(objects.findIndex(model), 0xff0000);
   }
   // Invalid
   else {
