@@ -1,4 +1,9 @@
 /** Setup HTML Element **/
+// array
+var objects = [];
+
+
+
 // Get Element Reference
 var gameArea = document.getElementById('gameScreen');
 
@@ -70,6 +75,8 @@ function loadHandler(geometry) {
   model.position.set(-9.0, -8.4, -2.0);
   model.scale.set( 0.09, 0.09, 0.09 );
   scene.add(model);
+  //push to array
+  objects.push(model);
 }
 
 // Add Cube & Plate to Scene
@@ -140,7 +147,7 @@ function moveAnimate() {
     // Exit Call
     if(gpTarget < gpObj.position.x) {
       gpObj.position.x = gpTarget;
-
+      cancelAnimationFrame(childID);
       animate();
     }
 
@@ -161,11 +168,11 @@ function moveAnimate() {
   }
 
   // Update based on Orbital Controls
-  //controls.update();
-  //camLight.position.copy(camera.position);
+  controls.update();
+  camLight.position.copy(camera.position);
 
   // Render Scene
-  //renderer.render(scene, camera);
+  renderer.render(scene, camera);
 }
 
 /** Animation Handler **/
@@ -177,7 +184,7 @@ function moveHandler(str, obj) {
   }
 
   // Cancel Main & Child
-  //cancelAnimationFrame(mainID);
+  cancelAnimationFrame(mainID);
   cancelAnimationFrame(childID);
 
   // Parse Target
@@ -230,7 +237,11 @@ function keyCatcher(key) {
     console.log("keyCatcher(): Registered \'A\' Key");
     moveHandler("Left", model);
   }
-
+  // when c is pressed
+  else if (key.keyCode == "67") {
+    console.log("keyCatcher(): Registered \'C\' Key");
+    changeColor(objects.findIndex(model), 0xff0000);
+  }
   // Invalid
   else {
     console.log("keyCatcher(): Registered Invalid Key");
