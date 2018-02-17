@@ -1,13 +1,17 @@
+var THREE = require('three');
 /** Setup HTML Element **/
 // Get Element Reference
+/**
 var gameArea = document.getElementById('gameScreen');
 
 // Change Based on Available setSize
 gameArea.width = window.innerWidth;
 gameArea.height = window.innerHeight;
+**/
 
 /** Setup Render Engine **/
 // Set WebGL
+/**
 var renderer = new THREE.WebGLRenderer();
 
 // Set Background Color
@@ -18,11 +22,13 @@ renderer.setSize(gameArea.width, gameArea.width);
 
 // Attach Render to HTML Element
 document.body.appendChild(renderer.domElement);
+**/
 
 
 /** Setup Camera & Orbital Controls **/
 // Set Camera
-var camera = new THREE.PerspectiveCamera(45, gameArea.width / gameArea.width, 1, 500);
+/**
+//var camera = new THREE.PerspectiveCamera(45, gameArea.width / gameArea.width, 1, 500);
 
 // Set Camera Postion
 camera.position.set(0, 0, 100);
@@ -32,6 +38,7 @@ camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 // Set Controls
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
+**/
 
 
 /** Setup Geometries **/
@@ -86,11 +93,7 @@ for (i = 0; i < 5; i++) {
 
 }**/
 module.exports = {
-   gameArea
-  , renderer
-  , camera
-  , controls
-  , scene
+  scene
   , axesHelper
   , ambLight
   , camLight
