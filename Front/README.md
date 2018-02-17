@@ -1,9 +1,9 @@
-already# Front End Report
+# Front End Report
 ---
 ## Members:
 ### Anirudh Pal
-### S S
-### A M
+### Sultan Shamsi
+### Anjali Malik
 ---
 ## Code Block in Markdown
 Brief description
@@ -28,14 +28,14 @@ data.cs.purdue.edu:[port]
 
 ## Testing with Jest
 
-1. go into package.json
-2. add the following piece of code.
+1. Go into package.json.
+2. Add the following piece of code.
 ```javascript
 "scripts": {
   "test": "jest"
 },
 ```
-3. export the function or variables you want to test. (e.g)
+3. Export the function or variables you want to test. (e.g)
 ```javascript
 function sum(a, b) {
   return a + b;
@@ -50,7 +50,7 @@ module.exports = {
 	z
 };
 ```
-4. now create a file you want to use to write the testing script **filename.test.js**
+4. Now create a file you want to use to write the testing script **filename.test.js**
 ```javascript
 const VarName = require('path/to/file.js');
 test('adds 1 + 2 to equal 3', () => {
@@ -63,5 +63,8 @@ test('variable test to equal 12',() =>{
 	expect(VarName.z).toBe(12);
 });
 ```
-5. $Terminal **npm test**
+5. Terminal:
+```
+npm test
+```
 ---
