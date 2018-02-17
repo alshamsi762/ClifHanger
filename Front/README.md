@@ -68,3 +68,9 @@ test('variable test to equal 12',() =>{
 npm test
 ```
 ---
+---
+## Errors found during regression testing
+
+1. We found that size of renderer was set incorrectly. Instead of width, second argument should be width.
+
+---

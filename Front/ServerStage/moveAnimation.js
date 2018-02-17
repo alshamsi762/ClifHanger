@@ -76,6 +76,7 @@ function loadHandler(geometry) {
   model.scale.set( 0.09, 0.09, 0.09 );
   scene.add(model);
   //push to array
+  console.log(model);
   objects.push(model);
 }
 
