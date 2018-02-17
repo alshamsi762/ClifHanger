@@ -85,3 +85,20 @@ for (i = 0; i < 5; i++) {
   }
 
 }**/
+module.exports = {
+   gameArea
+  , renderer
+  , camera
+  , controls
+  , scene
+  , axesHelper
+  , ambLight
+  , camLight
+  , cubeMaterial
+  , plateMaterial
+  , cubeGeometry
+  , plateGeometry
+  , cube
+  , plate
+
+};
