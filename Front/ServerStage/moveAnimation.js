@@ -55,7 +55,7 @@ var camLight = new THREE.PointLight(0xFFFFFF, 0.25);
 scene.add(camLight);
 
 // Set Material
-var cubeMaterial = new THREE.MeshNormalMaterial();
+var cubeMaterial = new THREE.MeshLambertMaterial();
 var plateMaterial = new THREE.MeshLambertMaterial({color: 0xD7DFE5});
 
 // Set Geometry
