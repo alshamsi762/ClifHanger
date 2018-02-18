@@ -43,13 +43,8 @@ describe('Global', function() {
 // this is important because one of the animations changes colors of objects
 describe('Global', function() {
   it('cube and plate should be of the expected color', function() {
-    assert.equal(Global.cube.material.color.r, 0.6392156862745098);
-    assert.equal(Global.cube.material.color.b, 0.6392156862745098);
-    assert.equal(Global.cube.material.color.g, 0.6392156862745098);
-
-    assert.equal(Global.plate.material.color.r, 0.8431372549019608);
-    assert.equal(Global.plate.material.color.b, 0.8980392156862745);
-    assert.equal(Global.plate.material.color.g, 0.8745098039215686);
+    assert.equal(Global.cube.material.color.getHex(), 0xa3a3a3);
+    assert.equal(Global.plate.material.color.getHex(), 0xD7DFE5);
   })
 })
 
@@ -57,13 +52,9 @@ describe('Global', function() {
 // this is important because one of the animations changes colors of lights
 describe('Global', function() {
   it('lights should be of the expected color', function() {
-    assert.equal(Global.camLight.color.r, 1);
-    assert.equal(Global.camLight.color.b, 1);
-    assert.equal(Global.camLight.color.g, 1);
+    assert.equal(Global.camLight.color.getHex(), 0xFFFFFF);
 
-    assert.equal(Global.ambLight.color.r, 1);
-    assert.equal(Global.ambLight.color.b, 1);
-    assert.equal(Global.ambLight.color.g, 1);
+    assert.equal(Global.ambLight.color.getHex(), 0xFFFFFF);
   })
 })
 
@@ -107,6 +98,5 @@ describe('Global', function() {
     assert.equal(Global.cube.position.x, 0);
     assert.equal(Global.cube.position.y, 0);
     assert.equal(Global.cube.position.z, 0);
-
   })
 })
