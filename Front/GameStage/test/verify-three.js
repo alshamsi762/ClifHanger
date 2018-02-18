@@ -67,7 +67,19 @@ describe('Global', function() {
   })
 })
 
-// initial plate state
+// cube dimensions and geometry
+describe('Global', function() {
+  it('cube should have a cube geometry with sizes as expected', function() {
+    var geo = new THREE.CubeGeometry(4, 4, 4);
+    assert.equal(Global.cube.geometry.type, geo.type);
+    assert.equal(Global.cube.geometry.vertices.x, geo.vertices.x);
+    assert.equal(Global.cube.geometry.vertices.y, geo.vertices.y);
+    assert.equal(Global.cube.geometry.vertices.z, geo.vertices.z);
+
+  })
+})
+
+// each plate dimensions and geometry
 describe('Global', function() {
   it('each plate should have a cube geometry with sizes as expected', function() {
     var geo = new THREE.CubeGeometry(7, 7, 1);
@@ -75,6 +87,15 @@ describe('Global', function() {
     assert.equal(Global.plate.geometry.vertices.x, geo.vertices.x);
     assert.equal(Global.plate.geometry.vertices.y, geo.vertices.y);
     assert.equal(Global.plate.geometry.vertices.z, geo.vertices.z);
+
+  })
+})
+
+// plate array should initially have 25 components
+// this is important because we will be shrinking the plate array
+describe('Global', function() {
+  it('plate array should initially have 25 components (5x5)', function() {
+    assert.equal(Global.plateArray.length, 5);
 
   })
 })
