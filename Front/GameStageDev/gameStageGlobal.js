@@ -1,3 +1,4 @@
+var THREE = require('three');
 /**
 * Description: The Stage Global is where all gloablly
 * used variables are inititialized. The variables that
@@ -18,20 +19,20 @@ var PLATE_THICKNESS = 1
 
 /** Setup HTML Element **/
 // Get Element Reference
-var screen = document.getElementById('gameScreen');
+//var screen = document.getElementById('gameScreen');
 // Change Based on Available setSize
-screen.width = window.innerWidth;
-screen.height = window.innerHeight;
+//screen.width = window.innerWidth;
+//screen.height = window.innerHeight;
 
 /** Setup Render Engine **/
 // Set WebGL
-var draw = new THREE.WebGLRenderer();
+//var draw = new THREE.WebGLRenderer();
 
 /** Setup cam & Orbital Controls **/
 // Set cam
-var cam = new THREE.PerspectiveCamera(45, screen.width / screen.width, 1, 500);
+var cam = new THREE.PerspectiveCamera(45, 20, 1, 500);  //screen.width / screen.width instead of 20
 // Set Controls
-var controls = new THREE.OrbitControls(cam, draw.domElement);
+//var controls = new THREE.OrbitControls(cam, draw.domElement);
 
 /** Setup Geometries **/
 // Set Scene
@@ -48,7 +49,7 @@ var plateGeom = new THREE.CubeGeometry(PLATE_SIZE, PLATE_SIZE, PLATE_THICKNESS);
 // Set Plate with Geometry & Material
 var plate = new THREE.Mesh(plateGeom, lambert);
 
-/** Load Custom Object **/
+/** Load Custom Object
 var STL = new THREE.STLLoader();
 function loadHandler(geometry) {
   model = new THREE.Mesh( geometry, lambert );
@@ -56,3 +57,15 @@ function loadHandler(geometry) {
   model.scale.set( 0.09, 0.09, 0.09 );
   scene.add(model);
 }
+*/
+module.exports = {
+   cam
+  , scene
+  , axes
+  , ambLight
+  , pointLight
+  , plateGeom
+  , plate
+  , lambert
+  
+};
