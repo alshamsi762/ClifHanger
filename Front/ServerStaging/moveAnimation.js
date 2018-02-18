@@ -248,7 +248,8 @@ function keyCatcher(key) {
   // when c is pressed
   else if (key.keyCode == "67") {
     console.log("keyCatcher(): Registered \'C\' Key");
-    changeColor(objects.findIndex(model), 0xff0000);
+    //changeColor(objects.findIndex(model), 0xff0000);
+    changeColor(0, 0xff0000);
   }
   // Invalid
   else {
