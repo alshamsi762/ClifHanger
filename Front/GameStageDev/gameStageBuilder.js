@@ -26,4 +26,4 @@ function initScreen() {
   scene.add(pointLight);
 }
 
-STL.load('yodabust.stl', loadHandler);
+STL.load('./ServerStaging/yodabust.stl', loadHandler);
