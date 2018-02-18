@@ -1,17 +1,14 @@
 var THREE = require('three');
 /** Setup HTML Element **/
 // Get Element Reference
-/**
 var gameArea = document.getElementById('gameScreen');
 
 // Change Based on Available setSize
 gameArea.width = window.innerWidth;
 gameArea.height = window.innerHeight;
-**/
 
 /** Setup Render Engine **/
 // Set WebGL
-/**
 var renderer = new THREE.WebGLRenderer();
 
 // Set Background Color
@@ -22,13 +19,12 @@ renderer.setSize(gameArea.width, gameArea.width);
 
 // Attach Render to HTML Element
 document.body.appendChild(renderer.domElement);
-**/
+
 
 
 /** Setup Camera & Orbital Controls **/
 // Set Camera
-/**
-//var camera = new THREE.PerspectiveCamera(45, gameArea.width / gameArea.width, 1, 500);
+var camera = new THREE.PerspectiveCamera(45, gameArea.width / gameArea.width, 1, 500);
 
 // Set Camera Postion
 camera.position.set(0, 0, 100);
@@ -38,7 +34,6 @@ camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 // Set Controls
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
-**/
 
 
 /** Setup Geometries **/
@@ -56,7 +51,7 @@ var camLight = new THREE.PointLight(0xFFFFFF, 0.25);
 scene.add(camLight);
 
 // Set Material
-var cubeMaterial = new THREE.MeshNormalMaterial();
+var cubeMaterial = new THREE.MeshLambertMaterial();
 var plateMaterial = new THREE.MeshLambertMaterial({color: 0xD7DFE5});
 
 // Set Geometry
@@ -68,7 +63,6 @@ var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 var plate = new THREE.Mesh(plateGeometry, plateMaterial);
 
 /** Load Custom Object **/
-/**
 var model;
 var loader = new THREE.STLLoader();
 loader.load('yodabust.stl', loadHandler);
@@ -91,9 +85,12 @@ for (i = 0; i < 5; i++) {
     scene.add(plateArray[i]) ;
   }
 
-}**/
+}
+
 module.exports = {
   scene
+  , camera
+  , controls
   , axesHelper
   , ambLight
   , camLight
@@ -103,5 +100,6 @@ module.exports = {
   , plateGeometry
   , cube
   , plate
+  , model
 
 };
