@@ -100,3 +100,13 @@ describe('Global', function() {
   })
 })
 
+// initial position of cube (or each player)
+// this is important to check because we will be changing the position of each player throughout the game
+describe('Global', function() {
+  it('initial position of cube before keypresses', function() {
+    assert.equal(Global.cube.position.x, 0);
+    assert.equal(Global.cube.position.y, 0);
+    assert.equal(Global.cube.position.z, 0);
+
+  })
+})
