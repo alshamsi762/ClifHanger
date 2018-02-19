@@ -12,7 +12,7 @@ var BACKGROUND_COLOR = 0x87CEEB;
 var LAMBERT_COLOR = 0xD7DFE5;
 var AXES = true;
 var AXES_SIZE = 5;
-var LIGHT_COLOR = 0xFFFFFF;
+var LIGHT_COLOR = 0xFFFFF0;
 var LIGHT_INTENSITY = 0.5;
 var PLATE_SIZE = 7;
 var PLATE_THICKNESS = 1;
@@ -54,7 +54,7 @@ if (!TESTING) {
 
 /** Setup cam & Orbital Controls **/
 // Set cam
-var cam = new THREE.PerspectiveCamera(CAM_FOV, screen.width / screen.width, CAM_NEAR_PLANE, CAM_FAR_PLANE);
+var cam = new THREE.PerspectiveCamera(CAM_FOV, screen.width / screen.height, CAM_NEAR_PLANE, CAM_FAR_PLANE);
 // Set Controls
 
 // NOT TESTABLE

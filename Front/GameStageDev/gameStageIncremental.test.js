@@ -1,12 +1,14 @@
 var THREE = require('three');
 const gSG = require('./gameStageGlobal.js');
 
+/** Global **/
+
 test('Test if Camera is Perspective', () =>{
   expect(gSG.cam.isPerspectiveCamera).toBeTruthy();
 });
 
 test('Test if Camera has right Aspect Ratio', () =>{
-  expect(gSG.cam.aspect).toBe(gSG.screen.width / gSG.screen.width);
+  expect(gSG.cam.aspect).toBe(gSG.screen.width / gSG.screen.height);
 });
 
 test('Test if Camera has right FOV', () =>{
@@ -75,3 +77,5 @@ test('Test if Mesh has Material', () => {
 test('Test if Mesh has Geometry', () => {
   expect(gSG.plate.geometry).toEqual(gSG.plateGeom);
 });
+
+/** Builder **/
