@@ -1,4 +1,3 @@
-var THREE = require('three');
 /**
 * Description: The Stage Global is where all gloablly
 * used variables are inititialized. The variables that
@@ -8,6 +7,7 @@ var THREE = require('three');
 **/
 
 /** Config Vars **/
+var TESTING = true;
 var BACKGROUND_COLOR = 0x87CEEB;
 var LAMBERT_COLOR = 0xD7DFE5;
 var AXES = true;
@@ -20,28 +20,37 @@ var CAM_FOV = 45;
 var CAM_FAR_PLANE = 500;
 var CAM_NEAR_PLANE = 1;
 
+// Import Node Lib
+if (TESTING) {
+  var THREE = require('three');
+}
+
 /** Setup HTML Element **/
 // Get Element Reference
 
 // NOT TESTABLE
-/**
-var screen = document.getElementById('gameScreen');
-// Change Based on Available setSize
-screen.width = window.innerWidth;
-screen.height = window.innerHeight;
-**/
+if (!TESTING) {
+  var screen = document.getElementById('gameScreen');
+  // Change Based on Available setSize
+  screen.width = window.innerWidth;
+  screen.height = window.innerHeight;
+}
 
 // TESTABLE ALTERNATIVE
-var screen = {
-  width: 100,
-  height: 50
-};
+if (TESTING) {
+  var screen = {
+    width: 100,
+    height: 50
+  };
+}
 
-/** Setup Render Engine
+/** Setup Render Engine **/
 // Set WebGL
 
 // NOT TESTABLE
-//var draw = new THREE.WebGLRenderer();
+if (!TESTING) {
+  var draw = new THREE.WebGLRenderer();
+}
 
 /** Setup cam & Orbital Controls **/
 // Set cam
@@ -49,13 +58,17 @@ var cam = new THREE.PerspectiveCamera(CAM_FOV, screen.width / screen.width, CAM_
 // Set Controls
 
 // NOT TESTABLE
-//var controls = new THREE.OrbitControls(cam, draw.domElement);
+if (!TESTING) {
+  var controls = new THREE.OrbitControls(cam, draw.domElement);
+}
 
 /** Setup Geometries **/
 // Set Scene
 var scene = new THREE.Scene();
 // Add Axis
-var axes = new THREE.AxesHelper(AXES_SIZE);
+if (AXES) {
+  var axes = new THREE.AxesHelper(AXES_SIZE);
+}
 // Set Lighting
 var ambLight = new THREE.AmbientLight(LIGHT_COLOR, LIGHT_INTENSITY);
 var pointLight = new THREE.PointLight(LIGHT_COLOR, LIGHT_INTENSITY / 2);
@@ -69,7 +82,9 @@ var plate = new THREE.Mesh(plateGeom, lambert);
 /** Load Custom Object **/
 
 // NOT TESTABLE
-//var STL = new THREE.STLLoader();
+if (!TESTING) {
+  var STL = new THREE.STLLoader();
+}
 
 function loadHandler(geometry) {
   model = new THREE.Mesh( geometry, lambert );
@@ -79,11 +94,25 @@ function loadHandler(geometry) {
 }
 
 // EXPORT to TEST
-module.exports = {
-  CAM_FOV,
-  CAM_FAR_PLANE,
-  CAM_NEAR_PLANE,
-  screen,
-  scene,
-  cam
-};
+if (TESTING) {
+  module.exports = {
+    CAM_FOV,
+    CAM_FAR_PLANE,
+    CAM_NEAR_PLANE,
+    AXES_SIZE,
+    LIGHT_COLOR,
+    LIGHT_INTENSITY,
+    LAMBERT_COLOR,
+    PLATE_SIZE,
+    PLATE_THICKNESS,
+    plate,
+    plateGeom,
+    lambert,
+    ambLight,
+    pointLight,
+    axes,
+    screen,
+    scene,
+    cam
+  };
+}
