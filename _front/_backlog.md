@@ -6,11 +6,11 @@
 
 ## Items:
 
-1. Setup \_gameStage folder.
+1. Setup \_gameStage folder.        DONE
   a. Setup \_frontGlobal.js file.   DONE
   b. Setup \_frontMain.js file.     DONE
-  c. Setup \_frontBuilder.js file.
-  d. Test using Server.
+  c. Setup \_frontBuilder.js file.  DONE
+  d. Test using Server.             DONE
 
 2.
 3.

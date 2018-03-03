@@ -10,7 +10,7 @@ function initScreen() {
   // Set Background Color
   draw.setClearColor(BACKGROUND_COLOR);
   // Set Size
-  draw.setSize(screen.width, screen.width);
+  draw.setSize(screen.width, screen.height);
   // Attach Render to HTML Element
   document.body.appendChild(draw.domElement);
   // Set cam Postion
