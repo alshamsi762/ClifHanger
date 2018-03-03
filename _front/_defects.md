@@ -13,3 +13,4 @@
 5. Axes size too long.
 6. Plate generations was constant, which has been changed to parametric.
 7. Grid size higher than 100 freeze the Program. Solved by limiting Size to 100.
+8. Material is shared so a color change applies to all objects using that color.

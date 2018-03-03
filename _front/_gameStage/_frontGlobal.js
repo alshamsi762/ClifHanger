@@ -17,14 +17,14 @@ var AXES = true;
 var AXES_SIZE = 100;
 var LIGHT_COLOR = 0xFFFFF0;
 var LIGHT_INTENSITY = 0.5;
-var PLATE_SIZE = 7;
+var PLATE_SIZE = 20;
 var PLATE_THICKNESS = 1;
 var CAM_FOV = 45;
-var CAM_FAR_PLANE = 500;
+var CAM_FAR_PLANE = 5000;
 var CAM_NEAR_PLANE = 1;
 var CAM_POS = {X:0, Y:0, Z:100};
 var CAM_LOOK = {X:0, Y:0, Z:0};
-var PLATE_GAP = 1;
+var PLATE_GAP = 2;
 var PLATE_DEPTH = -3;
 var SP = 0;
 
@@ -141,8 +141,6 @@ var pointLight = new THREE.PointLight(LIGHT_COLOR, LIGHT_INTENSITY / 2);
 var lambert = new THREE.MeshLambertMaterial({color: LAMBERT_COLOR});
 // Set Geometry
 var plateGeom = new THREE.CubeGeometry(PLATE_SIZE, PLATE_SIZE, PLATE_THICKNESS);
-// Set Plate with Geometry & Material
-var plate = new THREE.Mesh(plateGeom, lambert);
 
 // Console Print
 if(VERBOSE && !TESTING) {
