@@ -78,7 +78,7 @@ doubleList.prototype.removePlayer = function(id)  // we can search for the playe
       {
         this.head = null;   // empty the list
         this.tail = null;
-        this.length = 0;
+        this.length = 1;
       }
       else    // this should work for any other case since I made it a double linked list that loops.
       {
@@ -529,17 +529,18 @@ class Gameplay {
   // Check if only one player alive.
   // TODO: Test
   hasEnded() {
-    if(this.playerList.length == 2)   // one for player, one for sentinel?
-    {
-      // Last player has won
-      return true;
-    }
-    if(this.playerList.length == 1)
-    {
-      // All players fell and died? No one wins
-      return true;
-    }
-    return false;
+    // if(this.playerList.length == 2)   // one for player, one for sentinel?
+    // {
+    //   // Last player has won
+    //   return true;
+    // }
+    // if(this.playerList.length == 1)
+    // {
+    //   // All players fell and died? No one wins
+    //   return true;
+    // }
+    // return false;
+    return this.playerList.length;
   }
 
   // if currPlayer reached sentinel, Increment fullTurnCount and currPlayer.next

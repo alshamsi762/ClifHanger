@@ -107,22 +107,47 @@
 				document.getElementById("offensiveItems").innerHTML = "&nbsp";
 				document.getElementById("defensiveItems").innerHTML = "&nbsp";
 
-				if (!game.hasEnded()) {
+				// if (!game.hasEnded()) {
+				// // Tell the player to start their turn
+				// 	document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
+				// } else {
+				// 	document.getElementById("instructions").innerHTML = player.data.name + " has won!";
+				// 	return;
+				// }
+				if (game.hasEnded() == 1) {
 				// Tell the player to start their turn
-					document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
-				} else {
-					document.getElementById("instructions").innerHTML = player.data.name + " has won!";
+					document.getElementById("instructions").innerHTML = "Not every game has a winner!<br />";
+					document.getElementById("endTurn").disabled = true;
 					return;
+				} else if (game.hasEnded() == 2) {
+					document.getElementById("instructions").innerHTML = player.data.name + " has won!";
+					document.getElementById("endTurn").disabled = true;
+					return;
+				}
+				else {
+					document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
 				}
 				// Display possible moves
 				var possibleMoves = game.possibleMovesFrom(game.board[player.data.position]);
-				for (var i = 0; i < possibleMoves.length; i++) {
-					document.getElementById(""+possibleMoves[i]).disabled = false;
-					document.getElementById(""+possibleMoves[i]).style = "background-color: green";
+				if(possibleMoves.length > 0) {
+					for (var i = 0; i < possibleMoves.length; i++) {
+						document.getElementById(""+possibleMoves[i]).disabled = false;
+						document.getElementById(""+possibleMoves[i]).style = "background-color: green";
+						document.getElementById("endTurn").disabled = true;
+					}
+					game.startTurnFor(player.data);
+					turnTimer(10, player.data.name, "timer");
+					displayPlayerInfo();
 				}
-				game.startTurnFor(player.data);
-				turnTimer(10, player.data.name, "timer");
-				displayPlayerInfo();
+				else {
+					game.startTurnFor(player.data);
+					turnTimer(10, player.data.name, "timer");
+					displayPlayerInfo();
+					document.getElementById("global").innerHTML = game.currPlayer.name+" has no possible moves!";
+					disableBoard();
+					endTurn();
+				}
+
 			}
 
 			function boardspacePressed(boardspace) {
@@ -130,6 +155,7 @@
 				if (game.currPlayer.status == 1) {	// Moving
 					document.getElementById("" + player.data.position).innerHTML = "&nbsp";
 					game.moveTo(game.board[parseInt(boardspace)]);
+					document.getElementById("endTurn").disabled = false;
 					document.getElementById("" + boardspace).innerHTML =  tempIDs[player.data.id];
 					disableBoard();
 					if (game.currPlayer.status == 2) {	// Player was not trapped
@@ -264,9 +290,9 @@
 			}
 
 			// More issues to fix:
-			// 1) disable endTurn() button if hadnt moved yet
-			// 2) if everyone dies, print something
-			// 3) if someone cant move, game hangs!
+			// 1) disable endTurn() button if hadnt moved yet		- Done!
+			// 2) if everyone dies, print something		- Done!
+			// 3) if someone cant move, game hangs!		- Done! Except if they have a teleport, it still skips their turn!
 
 
 
