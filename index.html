@@ -263,14 +263,21 @@
 
 			}
 
-			function sleep(milliseconds) {
-				var startTime = new Date().getTime();
-				var endTime = new Date().getTime();
-				while(endTime - startTime < 1000)
-				{
-					endTime = new Date().getTime();
-				}
-			}
+			// More issues to fix:
+			// 1) disable endTurn() button if hadnt moved yet
+			// 2) if everyone dies, print something
+			// 3) if someone cant move, game hangs!
+
+
+
+			// function sleep(milliseconds) {
+			// 	var startTime = new Date().getTime();
+			// 	var endTime = new Date().getTime();
+			// 	while(endTime - startTime < 1000)
+			// 	{
+			// 		endTime = new Date().getTime();
+			// 	}
+			// }
 
 		</script>
 		<script src="http://threejs.org/build/three.min.js"></script>
