@@ -35,6 +35,8 @@
 		<p id = "instructions"></p>
 		<p id = "timer"></p>
 		<p id = "status"></p>
+		<button id = "basicAttacks" onclick = "selectBasicAttack()" hidden = true></button>
+		<p id = "basics"></p>
 		<p id = "offensiveItems"></p>
 		<p id = "defensiveItems"></p>
 		<p id = "itemUsed"></p>
@@ -64,6 +66,9 @@
 
 				game = new Gameplay(player1, player2, player3, player4);
 				game.createBoard();
+
+				// Create button for basic/push attacks
+				document.getElementById("basicAttacks").innerHTML = "Push";
 
 				// Create all the buttons (boardspaces)
 				for (var i = 0; i < 100; i++) {
@@ -197,6 +202,7 @@
 			}
 
 			function endTurn() {
+				document.getElementById("basicAttacks").hidden = true;
 				game.endTurnFor(player.data);
 				disableBoard();
 				nextTurn();
@@ -213,13 +219,19 @@
 					} else {
 						document.getElementById("" + i).style = "";
 					}
+					if (game.board[i].hasPlayer()) {
+						document.getElementById("" + i).innerHTML = tempIDs[game.board[i].player.id];
+					} else if (game.board[i].hasLoot() == false) {
+						document.getElementById("" + i).innerHTML = "&nbsp";
+					}
 				}
 			}
 
 			function displayItems() {
 				var offense = "";
 				var defense = "";
-
+				document.getElementById("basicAttacks").hidden = false;
+				document.getElementById("basicAttacks").innerHTML = "Push";
 				for (var i = 0; i < game.currPlayer.offensive.length; i++) {
 					offense += "<button onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.offensive[i]) + "\')\">";
 					offense += game.currPlayer.offensive[i].name + "</button>";
@@ -247,6 +259,28 @@
 						document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
 					}
 				}
+			}
+
+			function selectBasicAttack() {
+				// Switch the button to the other basic attack
+				if (document.getElementById("basicAttacks").innerHTML == "Push") {
+					document.getElementById("basicAttacks").innerHTML = "Slash";
+					game.chooseItem(game.pushAttack);
+					disableBoard();
+					for (var i = 0; i < game.attackSpaces.length; i++) {
+						document.getElementById("" + game.attackSpaces[i]).disabled = false;
+						document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+					}
+				} else {
+					document.getElementById("basicAttacks").innerHTML = "Push";
+					game.chooseItem(game.basicAttack);
+					for (var i = 0; i < game.attackSpaces.length; i++) {
+						document.getElementById("" + game.attackSpaces[i]).disabled = false;
+						document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+					}
+				}
+
+
 			}
 
 			function displayPlayerInfo() {

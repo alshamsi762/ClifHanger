@@ -116,7 +116,7 @@ class Gameplay {
     // this.playerList = list;
 
     this.basicAttack = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack. Can hit players above, below, or to the sides for 10 damage.");
-
+    this.pushAttack = new Item("Push", 0, 0, 1, 0, 1.00, "Push your opponents away from you. You can even push them off the edge!")
     // Trackers and counters for various properties of the current game
     this.currPlayer = null, this.currItem = null, this.fullTurnCount = 0;
     this.topBounds = 99, this.lowerBounds = 0, this.leftOffset = 0, this.rightOffset = 9;
@@ -255,6 +255,18 @@ class Gameplay {
     this.chooseItem(this.basicAttack);
   }
 
+  pushPlayer(boardspace, direction) {
+   var newBoardspace = this.board[boardspace.position + direction];
+   if (boardspace.hasPlayer() && newBoardspace.hasPlayer() == false) {
+     var playerToPush = boardspace.player;
+     boardspace.removePlayer();
+     newBoardspace.setPlayer(playerToPush);
+     if (newBoardspace.fallStage == Boardspace.FALLEN) {
+       this.killPlayer(playerToPush);
+     }
+   }
+ }
+
   // Check if player, apply effects to player.
   // NOTE: TESTED!
   attack(item, boardspace) {
@@ -294,7 +306,7 @@ class Gameplay {
     var isAttack = (item.itemType == Item.OFFENSE);
 
     if (isAttack) {
-      if (item !== this.basicAttack) {
+      if (item !== this.basicAttack || item !== this.pushAttack) {
         this.currPlayer.popOffensiveItem();
       }
       if (isRadius) { // Radius attack
@@ -306,10 +318,14 @@ class Gameplay {
       } else if (dir == -10 || dir == -1 || dir == 1 || dir == 10) {
         for (var i = 1; i <= item.range; i++) {
           if (this.attackSpaces.includes(this.currPlayer.position + (dir * i))) {
-            this.attack(item, this.board[this.currPlayer.position + (dir * i)]);
-          }
-        }
-      }
+           if (item === this.pushAttack) {
+             this.pushPlayer(this.board[this.currPlayer.position + (dir * i)], dir);
+           } else {
+             this.attack(item, this.board[this.currPlayer.position + (dir * i)]);
+           }
+         }
+       }
+     }
     } else if (!isAttack) {
       this.currPlayer.popDefensiveItem();
       if (item.name == "Minor Potion") {  // Minor Potion
