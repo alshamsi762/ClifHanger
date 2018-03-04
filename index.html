@@ -33,11 +33,13 @@
 		<button id = "endTurn" onclick="endTurn()">End Turn</button>
 		<p id = "gameboard"></p>
 		<p id = "instructions"></p>
+		<p id = "timer"></p>
 		<p id = "status"></p>
 		<p id = "offensiveItems"></p>
 		<p id = "defensiveItems"></p>
 		<p id = "itemUsed"></p>
 		<p id = "damageGiven"></p>
+		<p id = "global"></p>
 
 		<!-- JS Scripts -->
     <!-- Put your JavaScript Here. -->
@@ -45,8 +47,9 @@
 		<script src="player.js" type="text/javascript"></script>
 		<script src="boardspace.js" type="text/javascript"></script>
 		<script src="gameplay.js" type="text/javascript"></script>
+		<script type="text/javascript">
 
-		<script>
+		// <!-- <script> -->
 			let player1 = new Player(0, 100, 0, [], [], "Andrew", 0);
 			let player2 = new Player(1, 100, 0, [], [], "Amjad", 0);
 			let player3 = new Player(2, 100, 0, [], [], "Sultan", 0);
@@ -118,6 +121,7 @@
 					document.getElementById(""+possibleMoves[i]).style = "background-color: green";
 				}
 				game.startTurnFor(player.data);
+				turnTimer(10, player.data.name, "timer");
 				displayPlayerInfo();
 			}
 
@@ -232,6 +236,40 @@
 				pInfo += "]";
 				pInfo += game.currPlayer.getHealth();
 				document.getElementById("status").innerHTML = pInfo;
+			}
+
+			function turnTimer(secs, name, x) {		// Issue: When player's turn ends, old print statement was still printing once before terminating. Had to add else statements
+				var element = document.getElementById(x);
+				if(game.currPlayer.name != name)			// Issue: needed to end timer when player ends turn
+				{
+					clearTimeout(timer);
+					// element.innerHTML = "<h2>You ended your turn!</h2>";
+					return;
+				}
+				else if(secs < 1)			// Issue: Player's status is undefined after 1 second
+				{
+					clearTimeout(timer);
+					// element.innerHTML = "<h2>You ran out of time! You shall lose 10 HP!</h2>";
+					document.getElementById("global").innerHTML = game.currPlayer.name+" ran out of time! They shall lose 10 HP!";
+					game.currPlayer.damageHealthBy(10);
+					endTurn();
+					return;
+				}
+				else {
+					element.innerHTML = "You have "+secs+" seconds to finish your turn!";// Name= "+name+" currPlayer= "+game.currPlayer.name;
+					secs--;
+					var timer = setTimeout('turnTimer('+secs+',"'+name+'","'+x+'")',1000);		// Issue: double quotes around string parameter were missing causing issues
+				}
+
+			}
+
+			function sleep(milliseconds) {
+				var startTime = new Date().getTime();
+				var endTime = new Date().getTime();
+				while(endTime - startTime < 1000)
+				{
+					endTime = new Date().getTime();
+				}
 			}
 
 		</script>
