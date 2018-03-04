@@ -35,11 +35,12 @@
 		<p id = "instructions"></p>
 		<p id = "timer"></p>
 		<p id = "status"></p>
+		<p id = "itemUsed"></p>
 		<button id = "basicAttacks" onclick = "selectBasicAttack()" hidden = true></button>
 		<p id = "basics"></p>
 		<p id = "offensiveItems"></p>
 		<p id = "defensiveItems"></p>
-		<p id = "itemUsed"></p>
+		<p id = "currentItem"></p>
 		<p id = "damageGiven"></p>
 		<p id = "global"></p>
 
@@ -94,6 +95,7 @@
 
 			function nextTurn() {
 				// Get the next player
+				document.getElementById("currentItem").innerHTML = "";
 				if (player == null) {
 					player = game.playerList.head;
 				} else if (player.next.data.id == -1){
@@ -189,11 +191,11 @@
 					if (game.currItem.name == "Teleport" || game.currItem.name == "Move Again") {
 						document.getElementById("" + player.data.position).innerHTML = "&nbsp";
 						game.useItem(game.currItem, dir);
-						document.getElementById("itemUsed").innerHTML = player.data.name + " used " + game.currItem.name + ".<br />";
+						document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
 						document.getElementById("" + player.data.position).innerHTML =  tempIDs[player.data.id];
 					} else {
 						game.useItem(game.currItem, dir);
-						document.getElementById("itemUsed").innerHTML = player.data.name + " used " + game.currItem.name + ".<br />";
+						document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
 					}
 
 					disableBoard();
@@ -233,11 +235,16 @@
 				document.getElementById("basicAttacks").hidden = false;
 				document.getElementById("basicAttacks").innerHTML = "Push";
 				for (var i = 0; i < game.currPlayer.offensive.length; i++) {
-					offense += "<button onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.offensive[i]) + "\')\">";
+					offense += "<button id=\"offensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.offensive[i]) + "\')\">";
 					offense += game.currPlayer.offensive[i].name + "</button>";
+					// document.getElementById("offensive").disable = true;
 				}
+				// for (var i = 0; i < game.currPlayer.offensive.length - 1; i++) {
+				// 	var offensive_i = "offensive" + i;
+				// 	document.getElementById(offensive_i).disable = false;
+				// }
 				for (var i = 0; i < game.currPlayer.defensive.length; i++) {
-					defense += "<button onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.defensive[i]) + "\')\">";
+					defense += "<button id=\"defensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.defensive[i]) + "\')\">";
 					defense += game.currPlayer.defensive[i].name + "</button>";
 				}
 				document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense + " * Can only use right most.";
@@ -247,6 +254,7 @@
 			function itemSelected(index) {
 				var item = game.items[parseInt(index)]
 				game.chooseItem(item);
+				document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name;
 				disableBoard();
 				if (item.name == "Teleport" || item.name == "Move Again") {	// Teleport and Move Again show moves
 					for (var i = 0; i < game.moveSpaces.length; i++) {

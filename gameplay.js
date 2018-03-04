@@ -116,7 +116,7 @@ class Gameplay {
     // this.playerList = list;
 
     this.basicAttack = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack. Can hit players above, below, or to the sides for 10 damage.");
-    this.pushAttack = new Item("Push", 0, 0, 1, 0, 1.00, "Push your opponents away from you. You can even push them off the edge!")
+    this.pushAttack = new Item("Push", 0, 0, 1, 0, 1.00, "Push your opponents away from you. You can even push them off the edge!");
     // Trackers and counters for various properties of the current game
     this.currPlayer = null, this.currItem = null, this.fullTurnCount = 0;
     this.topBounds = 99, this.lowerBounds = 0, this.leftOffset = 0, this.rightOffset = 9;
@@ -154,7 +154,8 @@ class Gameplay {
     this.items.push(new Item("Minor Potion", 1, 0, 0, 10, 8, "Minor Potion Description"));// 9
     this.items.push(new Item("Major Potion", 1, 0, 0, 30, 4, "Major Potion Description"));// 10
     this.items.push(new Item("Move Again", 1, 0, 0, 0, 4, "Move Again Description"));     // 11
-    this.items.push(new Item("Teleport", 1, 1, 0, 0, 20, "Teleport Description"));        // 12
+    this.items.push(new Item("Teleport", 1, 1, 0, 0, 2, "Teleport Description"));        // 12
+    this.items.push(new Item("Push", 0, 0, 1, 0, 4, "Push your opponents away from you. You can even push them off the edge!"));        // 13
 
     // Array of item drops based on the rarity of each item
     this.drops = [];
@@ -306,7 +307,7 @@ class Gameplay {
     var isAttack = (item.itemType == Item.OFFENSE);
 
     if (isAttack) {
-      if (item !== this.basicAttack || item !== this.pushAttack) {
+      if (item !== this.basicAttack) {
         this.currPlayer.popOffensiveItem();
       }
       if (isRadius) { // Radius attack
@@ -318,7 +319,8 @@ class Gameplay {
       } else if (dir == -10 || dir == -1 || dir == 1 || dir == 10) {
         for (var i = 1; i <= item.range; i++) {
           if (this.attackSpaces.includes(this.currPlayer.position + (dir * i))) {
-           if (item === this.pushAttack) {
+           // if (item === this.pushAttack) {
+           if (item.name == "Push") {
              this.pushPlayer(this.board[this.currPlayer.position + (dir * i)], dir);
            } else {
              this.attack(item, this.board[this.currPlayer.position + (dir * i)]);
@@ -588,7 +590,7 @@ class Gameplay {
     var count = 0;
     var itemPos = 0;
     var item = null;
-    while(count < 10)
+    while(count < 40)
     {
       // item = call amjad's algorithm
       item = this.randomItem();
