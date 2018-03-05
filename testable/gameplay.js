@@ -119,6 +119,7 @@ module.exports = class Gameplay {
     // this.playerList = list;
 
     this.basicAttack = new Item("Basic", 0, 0, 1, 10, 1.00, "The most basic attack. Can hit players above, below, or to the sides for 10 damage.");
+    this.pushAttack = new Item("Push", 0, 0, 1, 0, 1.00, "Push your opponents away from you. You can even push them off the edge!");
 
     // Trackers and counters for various properties of the current game
     this.currPlayer = null, this.currItem = null, this.fullTurnCount = 0;
@@ -258,6 +259,21 @@ module.exports = class Gameplay {
     this.chooseItem(this.basicAttack);
   }
 
+  pushPlayer(boardspace, direction) {
+   var newBoardspace = this.board[boardspace.position + direction];
+   var boundsCheck = boardspace.position % this.rightOffset == 0 || boardspace.position % this.leftOffset == 0 ||
+    newBoardspace.position < this.lowerBounds || newBoardspace.position > this.topBounds;
+   if (boardspace.hasPlayer() && (newBoardspace.hasPlayer() == false || boundsCheck)) {
+     var playerToPush = boardspace.player;
+     boardspace.removePlayer();
+     newBoardspace.setPlayer(playerToPush);
+     if (newBoardspace.fallStage == Boardspace.FALLEN || boundsCheck) {
+       this.killPlayer(playerToPush);
+     }
+   }
+ }
+
+
   // Check if player, apply effects to player.
   // TODO: TESTED!
   attack(item, boardspace) {
@@ -298,6 +314,9 @@ module.exports = class Gameplay {
     var isAttack = (item.itemType == Item.OFFENSE);
 
     if (isAttack) {
+      if (item !== this.basicAttack) {
+        this.currPlayer.popOffensiveItem();
+      }
       if (isRadius) { // Radius attack
         for (var i = 0; i < this.attackSpaces.length; i++) {
           this.attack(item, this.board[this.attackSpaces[i]]);
@@ -307,12 +326,17 @@ module.exports = class Gameplay {
       } else if (dir == -10 || dir == -1 || dir == 1 || dir == 10) {
         for (var i = 1; i <= item.range; i++) {
           if (this.attackSpaces.includes(this.currPlayer.position + (dir * i))) {
-            this.attack(item, this.board[this.currPlayer.position + (dir * i)]);
-          }
-        }
-      }
-      this.currPlayer.popOffensiveItem();
+           // if (item === this.pushAttack) {
+           if (item.name == "Push") {
+             this.pushPlayer(this.board[this.currPlayer.position + (dir * i)], dir);
+           } else {
+             this.attack(item, this.board[this.currPlayer.position + (dir * i)]);
+           }
+         }
+       }
+     }
     } else if (!isAttack) {
+      this.currPlayer.popDefensiveItem();
       if (item.name == "Minor Potion") {  // Minor Potion
         this.currPlayer.healHealthBy(10);
       } else if (item.name == "Major Potion") { // Major Potion
@@ -321,12 +345,11 @@ module.exports = class Gameplay {
         if (this.moveSpaces.includes(dir)) {
           this.moveTo(this.board[dir]);
         }
-      } else if (item.name == "Move Again" && dir == -10 || dir == -1 || dir == 1 || dir == 10) { // Move Again
+      } else if (item.name == "Move Again") { // Move Again
         if (this.moveSpaces.includes(this.currPlayer.position + dir)) {
           this.moveTo(this.board[this.currPlayer.position + dir]);
         }
       }
-      this.currPlayer.popDefensiveItem();
     }
   }
 
@@ -403,6 +426,7 @@ module.exports = class Gameplay {
   killPlayer(player) {
     this.board[player.position].removePlayer();   // had to add this to remove the player from the boardspace
     this.playerList.removePlayer(player.id);
+    player.health = 0;
     // should we set the player to null?
     // call any animations
   }

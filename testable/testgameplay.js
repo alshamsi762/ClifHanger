@@ -799,3 +799,58 @@ module.exports.testTrapping = function testTrapping() {
 
   return true;
 }
+
+module.exports.testPushing = function testPushing() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+
+  // Clear board of all loot for testing
+  for (var i = 0; i < 100; i++) {
+    gameplay.board[i].removeLoot();
+  }
+  gameplay.startTurnFor(p1);
+  gameplay.board[0].removePlayer();
+  gameplay.board[9].removePlayer();
+  gameplay.board[45].setPlayer(p1);
+  gameplay.board[46].setPlayer(p2);
+  p1.pushOffensiveItem(gameplay.pushAttack);
+  gameplay.chooseItem(gameplay.pushAttack);
+  gameplay.useItem(gameplay.pushAttack, 1);
+
+  if (p2.position != 47) {
+    return false;
+  }
+
+  return true;
+}
+
+module.exports.testPushingOffEdge = function testPushingOffEdge() {
+  var p1 = new Player(0, 100, 0, null, null, "Andrew", 0);
+  var p2 = new Player(1, 100, 9, null, null, "Amjad", 0);
+  var p3 = new Player(2, 100, 90, null, null, "Sultan", 0);
+  var p4 = new Player(3, 100, 99, null, null, "Anirudh", 0);
+
+  var gameplay = new Gameplay(p1, p2, p3, p4);
+  gameplay.createBoard();
+
+  // Clear board of all loot for testing
+  for (var i = 0; i < 100; i++) {
+    gameplay.board[i].removeLoot();
+  }
+  gameplay.startTurnFor(p1);
+  gameplay.board[0].removePlayer();
+  gameplay.board[8].setPlayer(p1);
+  p1.pushOffensiveItem(gameplay.pushAttack);
+  gameplay.chooseItem(gameplay.pushAttack);
+  gameplay.useItem(gameplay.pushAttack, 1);
+
+  if (p2.health != 0) {
+    return false;
+  }
+  return true;
+}
