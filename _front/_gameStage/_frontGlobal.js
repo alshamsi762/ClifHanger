@@ -177,3 +177,16 @@ if(VERBOSE && !TESTING) {
 if (!TESTING) {
   var STL = new THREE.STLLoader();
 }
+// //Export if TESTING
+// if (TESTING) {
+//   module.exports = {
+//     plate,
+//     plateGeom,
+//     lambert,
+//     ambLight,
+//     pointLight,
+//     axes,
+//     scene,
+//     cam
+//   };
+}
