@@ -1,0 +1,27 @@
+{
+  "name": "move_animation",
+  "version": "1.0.0",
+  "description": "Test Animation ... Move on the Board.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alshamsi762/CliffHanger.git"
+  },
+  "keywords": [
+    "Animation",
+    "Move",
+    "Server"
+  ],
+  "author": "Anirudh Pal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alshamsi762/CliffHanger/issues"
+  },
+  "homepage": "https://github.com/alshamsi762/CliffHanger#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}

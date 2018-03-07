@@ -1,0 +1,25 @@
+{
+  "name": "animator",
+  "version": "1.0.0",
+  "description": "animates the objects that are passed to is such as move to block or drop object",
+  "main": "animator.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alshamsi762/CliffHanger.git"
+  },
+  "keywords": [
+    "Game"
+  ],
+  "author": "Andrew Amjad Sultan Anirudh Anjali",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alshamsi762/CliffHanger/issues"
+  },
+  "homepage": "https://github.com/alshamsi762/CliffHanger#readme",
+  "devDependencies": {
+    "jest": "^22.3.0"
+  }
+}
