@@ -9,443 +9,462 @@
 	width: 40px;
 }
 </style>
-	<!-- Head -->
-	<head>
+<!-- Head -->
+<head>
 
-		<!-- Tab Title -->
-    <title>
-			CliffHanger
-		</title>
+	<!-- Tab Title -->
+	<title>
+		CliffHanger
+	</title>
 
-		<!-- Import Bootstrap -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Put your CSS Stuff Here. -->
-	</head>
+	<!-- Import Bootstrap -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Put your CSS Stuff Here. -->
+</head>
 
-	<!-- Body -->
-	<body class="container-fluid">
-		<p id = "game">
-      		<!-- Put HTML Stuff Here. -->
+<!-- Body -->
+<body class="container-fluid">
+	<p id = "game">
+		<!-- Put HTML Stuff Here. -->
 
-    		</p>
+	</p>
 
-		<button id = "strtGameBttn" onclick="startGame()">Start Game</button>
-		<button id = "endTurn" onclick="endTurn()">End Turn</button>
-		<p id = "gameboard"></p>
-		<p id = "instructions"></p>
-		<p id = "timer"></p>
-		<p id = "status"></p>
-		<p id = "itemUsed"></p>
-		<button id = "basicAttacks" onclick = "selectBasicAttack()" hidden = true></button>
-		<p id = "basics"></p>
-		<p id = "offensiveItems"></p>
-		<p id = "defensiveItems"></p>
-		<p id = "currentItem"></p>
-		<p id = "damageGiven"></p>
-		<p id = "global"></p>
+	<button id = "strtGameBttn" onclick="startGame()">Start Game</button>
+	<button id = "endTurn" onclick="endTurn()">End Turn</button>
+	<p id = "gameboard"></p>
+	<p id = "instructions"></p>
+	<p id = "timer"></p>
+	<p id = "status"></p>
+	<p id = "itemUsed"></p>
+	<button id = "basicAttacks" onclick = "selectBasicAttack()" hidden = true></button>
+	<p id = "basics"></p>
+	<p id = "offensiveItems"></p>
+	<p id = "defensiveItems"></p>
+	<p id = "currentItem"></p>
+	<p id = "damageGiven"></p>
+	<p id = "global"></p>
 
-		<!-- JS Scripts -->
-    <!-- Put your JavaScript Here. -->
-		<script src="item.js" type="text/javascript"></script>
-		<script src="player.js" type="text/javascript"></script>
-		<script src="boardspace.js" type="text/javascript"></script>
-		<script src="gameplay.js" type="text/javascript"></script>
-		<script type="text/javascript">
+	<!-- Game Element -->
+	<canvas id="gameScreen"></canavas>
 
-		// <!-- <script> -->
-			let player1 = new Player(0, 100, 0, [], [], "Andrew", 0);
-			let player2 = new Player(1, 100, 0, [], [], "Amjad", 0);
-			let player3 = new Player(2, 100, 0, [], [], "Sultan", 0);
-			let player4 = new Player(3, 100, 0, [], [], "Anirudh", 0);
+	<!-- JS Scripts -->
+	<!-- Put your JavaScript Here. -->
+	<script src="http://threejs.org/build/three.min.js"></script>
+	<script src="https://threejs.org/examples/js/Detector.js"></script>
+	<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+	<script src="https://threejs.org/examples/js/loaders/STLLoader.js"></script>
+	<script src="_front/_gameStage/_frontGlobal.js"></script>
+	<script src="_front/_gameStage/_frontMain.js"></script>
+	<script src="_front/_gameStage/_frontBuilder.js"></script>
+	<script src="item.js" type="text/javascript"></script>
+	<script src="player.js" type="text/javascript"></script>
+	<script src="boardspace.js" type="text/javascript"></script>
+	<script src="gameplay.js" type="text/javascript"></script>
+	<script type="text/javascript">
 
-			var game = null;
-			var player = null;
+	// <!-- <script> -->
+	let player1 = new Player(0, 100, 0, [], [], "Andrew", 0);
+	let player2 = new Player(1, 100, 0, [], [], "Amjad", 0);
+	let player3 = new Player(2, 100, 0, [], [], "Sultan", 0);
+	let player4 = new Player(3, 100, 0, [], [], "Anirudh", 0);
+	loadSTL('_front/_assets/Spider_Scaled.stl');
 
-			var tempIDs = ["A", "B", "C", "D"]
-			function startGame() {
-				document.getElementById("strtGameBttn").disabled = true;
+	var game = null;
+	var player = null;
 
-				game = new Gameplay(player1, player2, player3, player4);
-				game.createBoard();
+	var tempIDs = ["A", "B", "C", "D"]
+	THREE.DefaultLoadingManager.onLoad = function ( ) {
+		function startGame() {
+			initScreen();
+			buildStage(10);
 
-				// Create button for basic/push attacks
-				document.getElementById("basicAttacks").innerHTML = "Push";
 
-				// Create all the buttons (boardspaces)
-				for (var i = 0; i < 100; i++) {
-					if (i % 10 == 0) {
-						document.getElementById("game").innerHTML += "<br />";
-					}
-					var button = "<button id = \"" + i + "\" class=\"test\" onclick = \"boardspacePressed(\'" + i;
-					button += "\')\" disabled>";
-					if (game.board[i].hasPlayer()) {
-						button += tempIDs[game.board[i].player.id];
-					} else if (game.board[i].hasLoot()) {
-						button += game.items.indexOf(game.board[i].loot);
-					} else {
-						button += "&nbsp";
-					}
 
-					button += "</button>";
-					document.getElementById("game").innerHTML += button;
+
+			document.getElementById("strtGameBttn").disabled = true;
+
+			game = new Gameplay(player1, player2, player3, player4);
+			game.createBoard();
+
+			// Create button for basic/push attacks
+			document.getElementById("basicAttacks").innerHTML = "Push";
+
+			// Create all the buttons (boardspaces)
+			for (var i = 0; i < 100; i++) {
+				if (i % 10 == 0) {
+					document.getElementById("game").innerHTML += "<br />";
 				}
-				// Start player 1's turn
-				nextTurn();
-			}
-
-			function nextTurn() {
-				// Get the next player
-				document.getElementById("currentItem").innerHTML = "";
-				if (player == null) {
-					player = game.playerList.head;
-				} else if (player.next.data.id == -1){
-					game.fullTurnCount++;
-					game.shouldShrinkBoard();
-					{
-						var i = game.dropItem();
-						document.getElementById("" + i).innerHTML = game.items.indexOf(game.board[i].loot);
-					}
-					player = game.playerList.head;
+				var button = "<button id = \"" + i + "\" class=\"test\" onclick = \"boardspacePressed(\'" + i;
+				button += "\')\" disabled>";
+				if (game.board[i].hasPlayer()) {
+					button += tempIDs[game.board[i].player.id];
+				} else if (game.board[i].hasLoot()) {
+					button += game.items.indexOf(game.board[i].loot);
 				} else {
-					player = player.next;
-				}
-				// Clear any active buttons
-				disableBoard();
-				document.getElementById("offensiveItems").innerHTML = "&nbsp";
-				document.getElementById("defensiveItems").innerHTML = "&nbsp";
-
-				// if (!game.hasEnded()) {
-				// // Tell the player to start their turn
-				// 	document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
-				// } else {
-				// 	document.getElementById("instructions").innerHTML = player.data.name + " has won!";
-				// 	return;
-				// }
-				if (game.hasEnded() == 1) {
-				// Tell the player to start their turn
-					document.getElementById("instructions").innerHTML = "Not every game has a winner!<br />";
-					document.getElementById("endTurn").disabled = true;
-					return;
-				} else if (game.hasEnded() == 2) {
-					document.getElementById("instructions").innerHTML = player.data.name + " has won!";
-					document.getElementById("endTurn").disabled = true;
-					return;
-				}
-				else {
-					document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
-				}
-				// Display possible moves
-				var possibleMoves = game.possibleMovesFrom(game.board[player.data.position]);
-				if(possibleMoves.length > 0) {
-					for (var i = 0; i < possibleMoves.length; i++) {
-						document.getElementById(""+possibleMoves[i]).disabled = false;
-						document.getElementById(""+possibleMoves[i]).style = "background-color: green";
-						document.getElementById("endTurn").disabled = true;
-					}
-					game.startTurnFor(player.data);
-					turnTimer(10, player.data.name, "timer");
-					displayPlayerInfo();
-				}
-				else {
-					game.startTurnFor(player.data);
-					turnTimer(10, player.data.name, "timer");
-					displayPlayerInfo();
-					document.getElementById("global").innerHTML = game.currPlayer.name+" has no possible moves!";
-					disableBoard();
-					endTurn();
+					button += "&nbsp";
 				}
 
+				button += "</button>";
+				document.getElementById("game").innerHTML += button;
 			}
+			// Start player 1's turn
+			nextTurn();
+		}
 
-			function boardspacePressed(boardspace) {
-				// This function will handle pressing a boardspace with different player statuses
-				if (game.currPlayer.status == 1) {	// Moving
-					document.getElementById("" + player.data.position).innerHTML = "&nbsp";
-					game.moveTo(game.board[parseInt(boardspace)]);
-					document.getElementById("endTurn").disabled = false;
-					document.getElementById("" + boardspace).innerHTML =  tempIDs[player.data.id];
-					disableBoard();
-					if (game.currPlayer.status == 2) {	// Player was not trapped
-						for (var i = 0; i < game.attackSpaces.length; i++) {
-								document.getElementById("" + game.attackSpaces[i]).disabled = false;
-								document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
-						}
-						displayItems();
-						document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
-					} else if (game.currPlayer.status == 0) {
-						document.getElementById("global").innerHTML = player.data.name + " was trapped!<br />";
-						disableBoard();
-						endTurn();
-					}
-				} else if (game.currPlayer.status == 2) {	// Attacking or Defending
-					var dir = 0;
-
-					var diff = game.currPlayer.position - parseInt(boardspace);
-					if (diff >= 10) {	dir = -10; }
-					else if (diff <= -10) { dir = 10;	}
-					else if (diff >= 1 && diff < 10) { dir = -1; }
-					else if (diff <= -1 && diff > -10) { dir = 1; }
-
-					if (game.currItem.attackType != Item.BASIC || game.currItem.name == "Teleport") {
-						dir = parseInt(boardspace);
-					}
-					if (game.currItem.name == "Teleport" || game.currItem.name == "Move Again") {
-						document.getElementById("" + player.data.position).innerHTML = "&nbsp";
-						game.useItem(game.currItem, dir);
-						document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
-						document.getElementById("" + player.data.position).innerHTML =  tempIDs[player.data.id];
-					} else {
-						game.useItem(game.currItem, dir);
-						document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
-					}
-
-					disableBoard();
-					endTurn();
-				}
-			}
-
-			function endTurn() {
-				document.getElementById("basicAttacks").hidden = true;
-				game.endTurnFor(player.data);
-				disableBoard();
-				nextTurn();
-			}
-
-			function disableBoard() {
-				for (var i = 0; i < 100; i++) {
-					document.getElementById("" + i).disabled = true;
-					if (game.board[i].fallStage == 1) {
-						document.getElementById("" + i).style = "background-color: yellow";
-					} else if (game.board[i].fallStage == 2) {
-						document.getElementById("" + i).style = "background-color: transparent";
-						document.getElementById("" + i).innerHTML = "&nbsp";
-					} else {
-						document.getElementById("" + i).style = "";
-					}
-					if (game.board[i].hasPlayer()) {
-						document.getElementById("" + i).innerHTML = tempIDs[game.board[i].player.id];
-					} else if (game.board[i].hasLoot() == false) {
-						document.getElementById("" + i).innerHTML = "&nbsp";
-					}
-				}
-			}
-
-			function displayItems() {
-				var offense = "";
-				var defense = "";
-				document.getElementById("basicAttacks").hidden = false;
-				document.getElementById("basicAttacks").innerHTML = "Push";
-				for (var i = 0; i < game.currPlayer.offensive.length; i++) {
-					offense += "<button id=\"offensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.offensive[i]) + "\')\">";
-					offense += game.currPlayer.offensive[i].name + "</button>";
-					// document.getElementById("offensive").disable = true;
-				}
-				// for (var i = 0; i < game.currPlayer.offensive.length - 1; i++) {
-				// 	var offensive_i = "offensive" + i;
-				// 	document.getElementById(offensive_i).disable = false;
-				// }
-				for (var i = 0; i < game.currPlayer.defensive.length; i++) {
-					defense += "<button id=\"defensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.defensive[i]) + "\')\">";
-					defense += game.currPlayer.defensive[i].name + "</button>";
-				}
-				document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense + " * Can only use right most.";
-				document.getElementById("defensiveItems").innerHTML = "Defensive Items:  " + defense + " * Can only use right most.";
-			}
-
-			function itemSelected(index) {
-				var item = game.items[parseInt(index)]
-				game.chooseItem(item);
-				document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name;
-				disableBoard();
-				if (item.name == "Teleport" || item.name == "Move Again") {	// Teleport and Move Again show moves
-					for (var i = 0; i < game.moveSpaces.length; i++) {
-						document.getElementById(""+game.moveSpaces[i]).disabled = false;
-						document.getElementById(""+game.moveSpaces[i]).style = "background-color: green";
-					}
-				} else {	// Other items show attack spaces
-					for (var i = 0; i < game.attackSpaces.length; i++) {
-						document.getElementById("" + game.attackSpaces[i]).disabled = false;
-						document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
-					}
-				}
-			}
-
-			function selectBasicAttack() {
-				// Switch the button to the other basic attack
-				if (document.getElementById("basicAttacks").innerHTML == "Push") {
-					document.getElementById("basicAttacks").innerHTML = "Slash";
-					game.chooseItem(game.pushAttack);
-					disableBoard();
-					for (var i = 0; i < game.attackSpaces.length; i++) {
-						document.getElementById("" + game.attackSpaces[i]).disabled = false;
-						document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
-					}
-				} else {
-					document.getElementById("basicAttacks").innerHTML = "Push";
-					game.chooseItem(game.basicAttack);
-					for (var i = 0; i < game.attackSpaces.length; i++) {
-						document.getElementById("" + game.attackSpaces[i]).disabled = false;
-						document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
-					}
-				}
-
-
-			}
-
-			function displayPlayerInfo() {
-				var pInfo = "";
-				pInfo += "Health:&nbsp\t&nbsp[";
-				for (var i = 0; i < 10; i++) {
-					if (game.currPlayer.getHealth() / 10 >= i) {
-						pInfo += "=";
-					} else {
-						pInfo += "&nbsp";
-					}
-				}
-				pInfo += "]";
-				pInfo += game.currPlayer.getHealth();
-				document.getElementById("status").innerHTML = pInfo;
-			}
-
-			function turnTimer(secs, name, x) {		// Issue: When player's turn ends, old print statement was still printing once before terminating. Had to add else statements
-				var element = document.getElementById(x);
-				if(game.currPlayer.name != name)			// Issue: needed to end timer when player ends turn
+		function nextTurn() {
+			// Get the next player
+			document.getElementById("currentItem").innerHTML = "";
+			if (player == null) {
+				player = game.playerList.head;
+			} else if (player.next.data.id == -1){
+				game.fullTurnCount++;
+				game.shouldShrinkBoard();
 				{
-					clearTimeout(timer);
-					// element.innerHTML = "<h2>You ended your turn!</h2>";
-					return;
+					var i = game.dropItem();
+					document.getElementById("" + i).innerHTML = game.items.indexOf(game.board[i].loot);
 				}
-				else if(secs < 1)			// Issue: Player's status is undefined after 1 second
-				{
-					clearTimeout(timer);
-					// element.innerHTML = "<h2>You ran out of time! You shall lose 10 HP!</h2>";
-					document.getElementById("global").innerHTML = game.currPlayer.name+" ran out of time! They shall lose 10 HP!";
-					game.currPlayer.damageHealthBy(10);
-					endTurn();
-					return;
-				}
-				else {
-					element.innerHTML = "You have "+secs+" seconds to finish your turn!";// Name= "+name+" currPlayer= "+game.currPlayer.name;
-					secs--;
-					var timer = setTimeout('turnTimer('+secs+',"'+name+'","'+x+'")',1000);		// Issue: double quotes around string parameter were missing causing issues
-				}
+				player = game.playerList.head;
+			} else {
+				player = player.next;
 			}
+			// Clear any active buttons
+			disableBoard();
+			document.getElementById("offensiveItems").innerHTML = "&nbsp";
+			document.getElementById("defensiveItems").innerHTML = "&nbsp";
 
-			/** Event Handler **/
-			window.addEventListener("keydown", keyCatcher, false);
-
-			// Parse Key Strokes
-			function keyCatcher(key) {
-
-				document.getElementById("global").innerHTML = "";
-
-				var possibleMoves = game.possibleMovesFrom(game.board[game.currPlayer.position]);
-				var up = game.currPlayer.position - 10;
-				var down = game.currPlayer.position + 10;
-				var right = game.currPlayer.position + 1;
-				var left = game.currPlayer.position - 1;
-
-			  // Up (W)
-				if(key.keyCode == "87" && possibleMoves.includes(up) && game.currPlayer.status == 1 ) {
-			    console.log("keyCatcher(): Registered \'W\' Key");
-					boardspacePressed(game.currPlayer.position - 10);
-			  }
-				else if(key.keyCode == "87" && game.attackSpaces.includes(up) && game.currPlayer.status == 2) {
-					console.log("keyCatcher(): Registered \'W\' Key");
-					boardspacePressed(game.currPlayer.position - 10);
-				}
-
-			  // Down (S)
-				else if(key.keyCode == "83" && possibleMoves.includes(down) && game.currPlayer.status == 1 ) {
-			    console.log("keyCatcher(): Registered \'S\' Key");
-					boardspacePressed(game.currPlayer.position + 10);
-			  }
-				else if(key.keyCode == "83" && game.attackSpaces.includes(down) && game.currPlayer.status == 2) {
-					console.log("keyCatcher(): Registered \'S\' Key");
-					boardspacePressed(game.currPlayer.position + 10);
-				}
-
-
-			  // Right (D)
-				else if(key.keyCode == "68" && possibleMoves.includes(right) && game.currPlayer.status == 1 ) {
-			    console.log("keyCatcher(): Registered \'D\' Key");
-					boardspacePressed(game.currPlayer.position + 1);
-			  }
-				else if(key.keyCode == "68" && game.attackSpaces.includes(right) && game.currPlayer.status == 2) {
-					console.log("keyCatcher(): Registered \'D\' Key");
-					boardspacePressed(game.currPlayer.position + 1);
-			  }
-
-			  // Left (A)
-				else if(key.keyCode == "65" && possibleMoves.includes(left) && game.currPlayer.status == 1 ) {
-			    console.log("keyCatcher(): Registered \'A\' Key");
-					boardspacePressed(game.currPlayer.position - 1);
-			  }
-				else if(key.keyCode == "65" && game.attackSpaces.includes(left) && game.currPlayer.status == 2) {
-					console.log("keyCatcher(): Registered \'A\' Key");
-					boardspacePressed(game.currPlayer.position - 1);
-			  }
-
-				// Player's position, for potions (Spacebar)
-				else if(key.keyCode == "32" && game.attackSpaces.includes(game.currPlayer.position) && game.currPlayer.status == 2) {
-					console.log("keyCatcher(): Registered \'Spacebar\' Key");
-					boardspacePressed(game.currPlayer.position);
-			  }
-
-				// Offensive items (P)
-				else if(key.keyCode == "80" && game.currPlayer.offensive.length > 0) {
-					console.log("keyCatcher(): Registered \'P\' Key");
-					disableBoard();
-					itemSelected(game.items.indexOf(game.currPlayer.offensive[game.currPlayer.offensive.length - 1]));
-				}
-				// Defensive items (L)
-				else if(key.keyCode == "76" && game.currPlayer.defensive.length > 0) {
-					console.log("keyCatcher(): Registered \'L\' Key");
-					disableBoard();
-					itemSelected(game.items.indexOf(game.currPlayer.defensive[game.currPlayer.defensive.length - 1]));
-				}
-				// Basic attack (B)
-				else if(key.keyCode == "66" && game.currPlayer.status != 1) {
-					console.log("keyCatcher(): Registered \'B\' Key");
-					disableBoard();
-					game.chooseItem(game.basicAttack);
-					for (var i = 0; i < game.attackSpaces.length; i++) {
-						document.getElementById("" + game.attackSpaces[i]).disabled = false;
-						document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
-					}
-				}
-
-				// End turn (E)
-				else if(key.keyCode == "69" && game.currPlayer.status != 1) {
-					console.log("keyCatcher(): Registered \'B\' Key");
-					disableBoard();
-					endTurn();
-				}
-
-			  // Invalid
-			  else {
-			    console.log("keyCatcher(): Registered Invalid Key");
-			  }
-			}
-
-			// More issues to fix:
-			// 1) disable endTurn() button if hadnt moved yet		- Done!
-			// 2) if everyone dies, print something		- Done!
-			// 3) if someone cant move, game hangs!		- Done! Except if they have a teleport, it still skips their turn!
-
-
-
-			// function sleep(milliseconds) {
-			// 	var startTime = new Date().getTime();
-			// 	var endTime = new Date().getTime();
-			// 	while(endTime - startTime < 1000)
-			// 	{
-			// 		endTime = new Date().getTime();
-			// 	}
+			// if (!game.hasEnded()) {
+			// // Tell the player to start their turn
+			// 	document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
+			// } else {
+			// 	document.getElementById("instructions").innerHTML = player.data.name + " has won!";
+			// 	return;
 			// }
+			if (game.hasEnded() == 1) {
+				// Tell the player to start their turn
+				document.getElementById("instructions").innerHTML = "Not every game has a winner!<br />";
+				document.getElementById("endTurn").disabled = true;
+				return;
+			} else if (game.hasEnded() == 2) {
+				document.getElementById("instructions").innerHTML = player.data.name + " has won!";
+				document.getElementById("endTurn").disabled = true;
+				return;
+			}
+			else {
+				document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
+			}
+			// Display possible moves
+			var possibleMoves = game.possibleMovesFrom(game.board[player.data.position]);
+			if(possibleMoves.length > 0) {
+				for (var i = 0; i < possibleMoves.length; i++) {
+					document.getElementById(""+possibleMoves[i]).disabled = false;
+					document.getElementById(""+possibleMoves[i]).style = "background-color: green";
+					document.getElementById("endTurn").disabled = true;
+				}
+				game.startTurnFor(player.data);
+				turnTimer(10, player.data.name, "timer");
+				displayPlayerInfo();
+			}
+			else {
+				game.startTurnFor(player.data);
+				turnTimer(10, player.data.name, "timer");
+				displayPlayerInfo();
+				document.getElementById("global").innerHTML = game.currPlayer.name+" has no possible moves!";
+				disableBoard();
+				endTurn();
+			}
 
-		</script>
-		<script src="http://threejs.org/build/three.min.js"></script>
+		}
 
-	</body>
+		function boardspacePressed(boardspace) {
+			// This function will handle pressing a boardspace with different player statuses
+			if (game.currPlayer.status == 1) {	// Moving
+				document.getElementById("" + player.data.position).innerHTML = "&nbsp";
+				game.moveTo(game.board[parseInt(boardspace)]);
+				document.getElementById("endTurn").disabled = false;
+				document.getElementById("" + boardspace).innerHTML =  tempIDs[player.data.id];
+				disableBoard();
+				if (game.currPlayer.status == 2) {	// Player was not trapped
+					for (var i = 0; i < game.attackSpaces.length; i++) {
+						document.getElementById("" + game.attackSpaces[i]).disabled = false;
+						document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+					}
+					displayItems();
+					document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
+				} else if (game.currPlayer.status == 0) {
+					document.getElementById("global").innerHTML = player.data.name + " was trapped!<br />";
+					disableBoard();
+					endTurn();
+				}
+			} else if (game.currPlayer.status == 2) {	// Attacking or Defending
+				var dir = 0;
+
+				var diff = game.currPlayer.position - parseInt(boardspace);
+				if (diff >= 10) {	dir = -10; }
+				else if (diff <= -10) { dir = 10;	}
+				else if (diff >= 1 && diff < 10) { dir = -1; }
+				else if (diff <= -1 && diff > -10) { dir = 1; }
+
+				if (game.currItem.attackType != Item.BASIC || game.currItem.name == "Teleport") {
+					dir = parseInt(boardspace);
+				}
+				if (game.currItem.name == "Teleport" || game.currItem.name == "Move Again") {
+					document.getElementById("" + player.data.position).innerHTML = "&nbsp";
+					game.useItem(game.currItem, dir);
+					document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
+					document.getElementById("" + player.data.position).innerHTML =  tempIDs[player.data.id];
+				} else {
+					game.useItem(game.currItem, dir);
+					document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
+				}
+
+				disableBoard();
+				endTurn();
+			}
+		}
+
+		function endTurn() {
+			document.getElementById("basicAttacks").hidden = true;
+			game.endTurnFor(player.data);
+			disableBoard();
+			nextTurn();
+		}
+
+		function disableBoard() {
+			for (var i = 0; i < 100; i++) {
+				document.getElementById("" + i).disabled = true;
+				if (game.board[i].fallStage == 1) {
+					document.getElementById("" + i).style = "background-color: yellow";
+				} else if (game.board[i].fallStage == 2) {
+					document.getElementById("" + i).style = "background-color: transparent";
+					document.getElementById("" + i).innerHTML = "&nbsp";
+				} else {
+					document.getElementById("" + i).style = "";
+				}
+				if (game.board[i].hasPlayer()) {
+					document.getElementById("" + i).innerHTML = tempIDs[game.board[i].player.id];
+				} else if (game.board[i].hasLoot() == false) {
+					document.getElementById("" + i).innerHTML = "&nbsp";
+				}
+			}
+		}
+
+		function displayItems() {
+			var offense = "";
+			var defense = "";
+			document.getElementById("basicAttacks").hidden = false;
+			document.getElementById("basicAttacks").innerHTML = "Push";
+			for (var i = 0; i < game.currPlayer.offensive.length; i++) {
+				offense += "<button id=\"offensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.offensive[i]) + "\')\">";
+				offense += game.currPlayer.offensive[i].name + "</button>";
+				// document.getElementById("offensive").disable = true;
+			}
+			// for (var i = 0; i < game.currPlayer.offensive.length - 1; i++) {
+			// 	var offensive_i = "offensive" + i;
+			// 	document.getElementById(offensive_i).disable = false;
+			// }
+			for (var i = 0; i < game.currPlayer.defensive.length; i++) {
+				defense += "<button id=\"defensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.defensive[i]) + "\')\">";
+				defense += game.currPlayer.defensive[i].name + "</button>";
+			}
+			document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense + " * Can only use right most.";
+			document.getElementById("defensiveItems").innerHTML = "Defensive Items:  " + defense + " * Can only use right most.";
+		}
+
+		function itemSelected(index) {
+			var item = game.items[parseInt(index)]
+			game.chooseItem(item);
+			document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name;
+			disableBoard();
+			if (item.name == "Teleport" || item.name == "Move Again") {	// Teleport and Move Again show moves
+				for (var i = 0; i < game.moveSpaces.length; i++) {
+					document.getElementById(""+game.moveSpaces[i]).disabled = false;
+					document.getElementById(""+game.moveSpaces[i]).style = "background-color: green";
+				}
+			} else {	// Other items show attack spaces
+				for (var i = 0; i < game.attackSpaces.length; i++) {
+					document.getElementById("" + game.attackSpaces[i]).disabled = false;
+					document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+				}
+			}
+		}
+
+		function selectBasicAttack() {
+			// Switch the button to the other basic attack
+			if (document.getElementById("basicAttacks").innerHTML == "Push") {
+				document.getElementById("basicAttacks").innerHTML = "Slash";
+				game.chooseItem(game.pushAttack);
+				disableBoard();
+				for (var i = 0; i < game.attackSpaces.length; i++) {
+					document.getElementById("" + game.attackSpaces[i]).disabled = false;
+					document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+				}
+			} else {
+				document.getElementById("basicAttacks").innerHTML = "Push";
+				game.chooseItem(game.basicAttack);
+				for (var i = 0; i < game.attackSpaces.length; i++) {
+					document.getElementById("" + game.attackSpaces[i]).disabled = false;
+					document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+				}
+			}
+
+
+		}
+
+		function displayPlayerInfo() {
+			var pInfo = "";
+			pInfo += "Health:&nbsp\t&nbsp[";
+			for (var i = 0; i < 10; i++) {
+				if (game.currPlayer.getHealth() / 10 >= i) {
+					pInfo += "=";
+				} else {
+					pInfo += "&nbsp";
+				}
+			}
+			pInfo += "]";
+			pInfo += game.currPlayer.getHealth();
+			document.getElementById("status").innerHTML = pInfo;
+		}
+
+		function turnTimer(secs, name, x) {		// Issue: When player's turn ends, old print statement was still printing once before terminating. Had to add else statements
+		var element = document.getElementById(x);
+		if(game.currPlayer.name != name)			// Issue: needed to end timer when player ends turn
+		{
+			clearTimeout(timer);
+			// element.innerHTML = "<h2>You ended your turn!</h2>";
+			return;
+		}
+		else if(secs < 1)			// Issue: Player's status is undefined after 1 second
+		{
+			clearTimeout(timer);
+			// element.innerHTML = "<h2>You ran out of time! You shall lose 10 HP!</h2>";
+			document.getElementById("global").innerHTML = game.currPlayer.name+" ran out of time! They shall lose 10 HP!";
+			game.currPlayer.damageHealthBy(10);
+			endTurn();
+			return;
+		}
+		else {
+			element.innerHTML = "You have "+secs+" seconds to finish your turn!";// Name= "+name+" currPlayer= "+game.currPlayer.name;
+			secs--;
+			var timer = setTimeout('turnTimer('+secs+',"'+name+'","'+x+'")',1000);		// Issue: double quotes around string parameter were missing causing issues
+		}
+	}
+
+	/** Event Handler **/
+	window.addEventListener("keydown", keyCatcher, false);
+
+	// Parse Key Strokes
+	function keyCatcher(key) {
+
+		document.getElementById("global").innerHTML = "";
+
+		var possibleMoves = game.possibleMovesFrom(game.board[game.currPlayer.position]);
+		var up = game.currPlayer.position - 10;
+		var down = game.currPlayer.position + 10;
+		var right = game.currPlayer.position + 1;
+		var left = game.currPlayer.position - 1;
+
+		// Up (W)
+		if(key.keyCode == "87" && possibleMoves.includes(up) && game.currPlayer.status == 1 ) {
+			console.log("keyCatcher(): Registered \'W\' Key");
+			boardspacePressed(game.currPlayer.position - 10);
+		}
+		else if(key.keyCode == "87" && game.attackSpaces.includes(up) && game.currPlayer.status == 2) {
+			console.log("keyCatcher(): Registered \'W\' Key");
+			boardspacePressed(game.currPlayer.position - 10);
+		}
+
+		// Down (S)
+		else if(key.keyCode == "83" && possibleMoves.includes(down) && game.currPlayer.status == 1 ) {
+			console.log("keyCatcher(): Registered \'S\' Key");
+			boardspacePressed(game.currPlayer.position + 10);
+		}
+		else if(key.keyCode == "83" && game.attackSpaces.includes(down) && game.currPlayer.status == 2) {
+			console.log("keyCatcher(): Registered \'S\' Key");
+			boardspacePressed(game.currPlayer.position + 10);
+		}
+
+
+		// Right (D)
+		else if(key.keyCode == "68" && possibleMoves.includes(right) && game.currPlayer.status == 1 ) {
+			console.log("keyCatcher(): Registered \'D\' Key");
+			boardspacePressed(game.currPlayer.position + 1);
+		}
+		else if(key.keyCode == "68" && game.attackSpaces.includes(right) && game.currPlayer.status == 2) {
+			console.log("keyCatcher(): Registered \'D\' Key");
+			boardspacePressed(game.currPlayer.position + 1);
+		}
+
+		// Left (A)
+		else if(key.keyCode == "65" && possibleMoves.includes(left) && game.currPlayer.status == 1 ) {
+			console.log("keyCatcher(): Registered \'A\' Key");
+			boardspacePressed(game.currPlayer.position - 1);
+		}
+		else if(key.keyCode == "65" && game.attackSpaces.includes(left) && game.currPlayer.status == 2) {
+			console.log("keyCatcher(): Registered \'A\' Key");
+			boardspacePressed(game.currPlayer.position - 1);
+		}
+
+		// Player's position, for potions (Spacebar)
+		else if(key.keyCode == "32" && game.attackSpaces.includes(game.currPlayer.position) && game.currPlayer.status == 2) {
+			console.log("keyCatcher(): Registered \'Spacebar\' Key");
+			boardspacePressed(game.currPlayer.position);
+		}
+
+		// Offensive items (P)
+		else if(key.keyCode == "80" && game.currPlayer.offensive.length > 0) {
+			console.log("keyCatcher(): Registered \'P\' Key");
+			disableBoard();
+			itemSelected(game.items.indexOf(game.currPlayer.offensive[game.currPlayer.offensive.length - 1]));
+		}
+		// Defensive items (L)
+		else if(key.keyCode == "76" && game.currPlayer.defensive.length > 0) {
+			console.log("keyCatcher(): Registered \'L\' Key");
+			disableBoard();
+			itemSelected(game.items.indexOf(game.currPlayer.defensive[game.currPlayer.defensive.length - 1]));
+		}
+		// Basic attack (B)
+		else if(key.keyCode == "66" && game.currPlayer.status != 1) {
+			console.log("keyCatcher(): Registered \'B\' Key");
+			disableBoard();
+			game.chooseItem(game.basicAttack);
+			for (var i = 0; i < game.attackSpaces.length; i++) {
+				document.getElementById("" + game.attackSpaces[i]).disabled = false;
+				document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+			}
+		}
+
+		// End turn (E)
+		else if(key.keyCode == "69" && game.currPlayer.status != 1) {
+			console.log("keyCatcher(): Registered \'B\' Key");
+			disableBoard();
+			endTurn();
+		}
+
+		// Invalid
+		else {
+			console.log("keyCatcher(): Registered Invalid Key");
+		}
+	}
+}
+
+// More issues to fix:
+// 1) disable endTurn() button if hadnt moved yet		- Done!
+// 2) if everyone dies, print something		- Done!
+// 3) if someone cant move, game hangs!		- Done! Except if they have a teleport, it still skips their turn!
+
+
+
+// function sleep(milliseconds) {
+// 	var startTime = new Date().getTime();
+// 	var endTime = new Date().getTime();
+// 	while(endTime - startTime < 1000)
+// 	{
+// 		endTime = new Date().getTime();
+// 	}
+// }
+
+</script>
+<script src="http://threejs.org/build/three.min.js"></script>
+
+</body>
 </html>
