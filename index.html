@@ -173,6 +173,7 @@
 						displayItems();
 						document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
 					} else if (game.currPlayer.status == 0) {
+						document.getElementById("global").innerHTML = player.data.name + " was trapped!<br />";
 						disableBoard();
 						endTurn();
 					}
@@ -344,34 +345,53 @@
 				var right = game.currPlayer.position + 1;
 				var left = game.currPlayer.position - 1;
 
-				for (var i = 0; i < game.attackSpaces.length; i++) {
-					document.getElementById("global").innerHTML += game.attackSpaces[i] + ",";
-				}
-				document.getElementById("global").innerHTML += "-----" + right;
-				document.getElementById("global").innerHTML += "-----" + game.currPlayer.status;
 			  // Up (W)
-				if(key.keyCode == "87" && ((possibleMoves.includes(up) && game.currPlayer.status == 1) || (attackSpaces.includes(up) && game.currPlayer.status == 2))) {
+				if(key.keyCode == "87" && possibleMoves.includes(up) && game.currPlayer.status == 1 ) {
 			    console.log("keyCatcher(): Registered \'W\' Key");
 					boardspacePressed(game.currPlayer.position - 10);
 			  }
+				else if(key.keyCode == "87" && game.attackSpaces.includes(up) && game.currPlayer.status == 2) {
+					console.log("keyCatcher(): Registered \'W\' Key");
+					boardspacePressed(game.currPlayer.position - 10);
+				}
 
 			  // Down (S)
-			  else if(key.keyCode == "83" && ((possibleMoves.includes(down) && game.currPlayer.status == 1) || (attackSpaces.includes(down) && game.currPlayer.status == 2))) {
+				else if(key.keyCode == "83" && possibleMoves.includes(down) && game.currPlayer.status == 1 ) {
 			    console.log("keyCatcher(): Registered \'S\' Key");
 					boardspacePressed(game.currPlayer.position + 10);
 			  }
+				else if(key.keyCode == "83" && game.attackSpaces.includes(down) && game.currPlayer.status == 2) {
+					console.log("keyCatcher(): Registered \'S\' Key");
+					boardspacePressed(game.currPlayer.position + 10);
+				}
+
 
 			  // Right (D)
-				else if(key.keyCode == "68" && ((possibleMoves.includes(right) && game.currPlayer.status == 1) || (attackSpaces.includes(right) && game.currPlayer.status == 2))) {
+				else if(key.keyCode == "68" && possibleMoves.includes(right) && game.currPlayer.status == 1 ) {
 			    console.log("keyCatcher(): Registered \'D\' Key");
+					boardspacePressed(game.currPlayer.position + 1);
+			  }
+				else if(key.keyCode == "68" && game.attackSpaces.includes(right) && game.currPlayer.status == 2) {
+					console.log("keyCatcher(): Registered \'D\' Key");
 					boardspacePressed(game.currPlayer.position + 1);
 			  }
 
 			  // Left (A)
-				else if(key.keyCode == "65" && ((possibleMoves.includes(left) && game.currPlayer.status == 1) || (attackSpaces.includes(left) && game.currPlayer.status == 2))) {
+				else if(key.keyCode == "65" && possibleMoves.includes(left) && game.currPlayer.status == 1 ) {
 			    console.log("keyCatcher(): Registered \'A\' Key");
 					boardspacePressed(game.currPlayer.position - 1);
 			  }
+				else if(key.keyCode == "65" && game.attackSpaces.includes(left) && game.currPlayer.status == 2) {
+					console.log("keyCatcher(): Registered \'A\' Key");
+					boardspacePressed(game.currPlayer.position - 1);
+			  }
+
+				// Player's position, for potions (Spacebar)
+				else if(key.keyCode == "32" && game.attackSpaces.includes(game.currPlayer.position) && game.currPlayer.status == 2) {
+					console.log("keyCatcher(): Registered \'Spacebar\' Key");
+					boardspacePressed(game.currPlayer.position);
+			  }
+
 				// Offensive items (P)
 				else if(key.keyCode == "80" && game.currPlayer.offensive.length > 0) {
 					console.log("keyCatcher(): Registered \'P\' Key");
