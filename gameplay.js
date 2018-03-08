@@ -293,6 +293,7 @@ class Gameplay {
      else if(direction == 1) {moveRelative(playerToPush.id, 22, 0, 0);}
 
      if (newBoardspace.fallStage == Boardspace.FALLEN) {
+       moveRelative(playerToPush.id, 0, 0, -5000);
        this.killPlayer(playerToPush);
      }
    }
@@ -431,6 +432,7 @@ class Gameplay {
       invisible(i+4);
       if(this.board[i].hasPlayer())
       {
+        moveRelative(this.board[i].player.id, 0, 0, -5000);
         this.killPlayer(this.board[i].player);
       }
 
@@ -439,6 +441,7 @@ class Gameplay {
       invisible(99-i+4);
       if(this.board[99 - i].hasPlayer())
       {
+        moveRelative(this.board[99 - i].player.id, 0, 0, -5000);
         this.killPlayer(this.board[99 - i].player);
       }
     }
@@ -450,6 +453,7 @@ class Gameplay {
       invisible(i+4);
       if(this.board[i].hasPlayer())
       {
+        moveRelative(this.board[i].player.id, 0, 0, -5000);
         this.killPlayer(this.board[i].player);
       }
 
@@ -458,6 +462,7 @@ class Gameplay {
       invisible(99-i+4);
       if(this.board[99 - i].hasPlayer())
       {
+        moveRelative(this.board[99 - i].player.id, 0, 0, -5000);
         this.killPlayer(this.board[99 - i].player);
       }
     }

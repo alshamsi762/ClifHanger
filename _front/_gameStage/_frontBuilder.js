@@ -14,7 +14,8 @@ function initScreen() {
   draw.setSize(screen.width, screen.height);
   // Attach Render to HTML Element
   document.body.appendChild(draw.domElement);
-  // Set cam Postion
+  // document.getElementById("gameScreen").body.appendChild(draw.domElement);
+    // Set cam Postion
   cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
 
   // Add Axes
