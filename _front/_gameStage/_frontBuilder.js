@@ -16,8 +16,12 @@ function initScreen() {
   document.body.appendChild(draw.domElement);
   // Set cam Postion
   cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
+  // cam.position.set(screen.width/2, screen.height/2, CAM_POS.Z);
   // Set cam Direction
   cam.lookAt(new THREE.Vector3(CAM_LOOK.X, CAM_LOOK.Y, CAM_LOOK.Z));
+  // cam.lookAt(new THREE.Vector3(screen.width/2, screen.height/2, CAM_LOOK.Z));
+  cam.updateProjectionMatrix();
+
   // Add Axes
   if(AXES) {
     scene.add(axes);
@@ -74,12 +78,14 @@ function initScreen() {
 /** Build Stage **/
 function buildStage(size) {
   // Add Plate to Scene
+  var count = 0;
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) {
       obj3DArray[SP] = new THREE.Mesh(plateGeom.clone(), lambert.clone());
       obj3DArray[SP].position.z = PLATE_DEPTH;
       obj3DArray[SP].position.x = (PLATE_SIZE + PLATE_GAP) * j;
       obj3DArray[SP].position.y = (PLATE_SIZE + PLATE_GAP) * -i;
+      obj3DArray[SP].name = "tile" + (count++);
       scene.add(obj3DArray[SP]);
       SP++;
     }
@@ -257,6 +263,10 @@ function setColorRGB(index, r, g, b) {
 
 function getColorRGB(index) {
   return obj3DArray[index].material.color;
+}
+
+function invisible(index) {
+  obj3DArray[index].visible = false;
 }
 
 // Smart Scaling (If Time)

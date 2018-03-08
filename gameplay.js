@@ -428,6 +428,7 @@ class Gameplay {
     {
       this.board[i].fallStage = Boardspace.FALLEN;
       setColorHex(i+4, 0xFF0000);
+      invisible(i+4);
       if(this.board[i].hasPlayer())
       {
         this.killPlayer(this.board[i].player);
@@ -435,6 +436,7 @@ class Gameplay {
 
       this.board[99 - i].fallStage = Boardspace.FALLEN;
       setColorHex(99 - i + 4, 0xFF0000);
+      invisible(99-i+4);
       if(this.board[99 - i].hasPlayer())
       {
         this.killPlayer(this.board[99 - i].player);
@@ -445,6 +447,7 @@ class Gameplay {
     {
       this.board[i].fallStage = Boardspace.FALLEN;
       setColorHex(i+4, 0xFF0000);
+      invisible(i+4);
       if(this.board[i].hasPlayer())
       {
         this.killPlayer(this.board[i].player);
@@ -452,6 +455,7 @@ class Gameplay {
 
       this.board[99 - i].fallStage = Boardspace.FALLEN;
       setColorHex(99 - i + 4, 0xFF0000);
+      invisible(99-i+4);
       if(this.board[99 - i].hasPlayer())
       {
         this.killPlayer(this.board[99 - i].player);

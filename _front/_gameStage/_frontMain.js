@@ -12,6 +12,7 @@ if (!TESTING) {
     requestAnimationFrame(animate);
 
     // Update based on Orbital Controls
+    controls.target = new THREE.Vector3(220/2, -220/2, 0);
     controls.update();
     pointLight.position.copy(cam.position);
 
