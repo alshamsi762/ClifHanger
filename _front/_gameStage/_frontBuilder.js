@@ -79,7 +79,7 @@ function buildStage(size) {
       obj3DArray[SP] = new THREE.Mesh(plateGeom.clone(), lambert.clone());
       obj3DArray[SP].position.z = PLATE_DEPTH;
       obj3DArray[SP].position.x = (PLATE_SIZE + PLATE_GAP) * i;
-      obj3DArray[SP].position.y = (PLATE_SIZE + PLATE_GAP) * j;
+      obj3DArray[SP].position.y = -(PLATE_SIZE + PLATE_GAP) * j;
       scene.add(obj3DArray[SP]);
       SP++;
     }

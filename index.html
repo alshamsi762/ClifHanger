@@ -68,15 +68,30 @@
 	let player3 = new Player(2, 100, 0, [], [], "Sultan", 0);
 	let player4 = new Player(3, 100, 0, [], [], "Anirudh", 0);
 	loadSTL('_front/_assets/Spider_Scaled.stl');
+	loadSTL('_front/_assets/Spider_Scaled.stl');
+	loadSTL('_front/_assets/Spider_Scaled.stl');
+	loadSTL('_front/_assets/Spider_Scaled.stl');
 
 	var game = null;
 	var player = null;
 
 	var tempIDs = ["A", "B", "C", "D"]
-	THREE.DefaultLoadingManager.onLoad = function ( ) {
+	//THREE.DefaultLoadingManager.onLoad = function ( ) {
 		function startGame() {
 			initScreen();
 			buildStage(10);
+			moveAbsolute(0, 0, 0, 0);
+			moveAbsolute(1, 220-22, 0, 0);
+			moveAbsolute(2, 0, -(220-22), 0);
+			moveAbsolute(3, 220-22, -(220-22), 0);
+			rotateAbsolute(0, 0, 0, -135);		// - for clockwise
+			rotateAbsolute(1, 0, 0, -45);
+			rotateAbsolute(2, 0, 0, 135);
+			rotateAbsolute(3, 0, 0, 45);
+			setColorHex(0, 0xFF0000);
+			setColorHex(1, 0x00FF00);
+			setColorHex(2, 0x0000FF);
+			setColorHex(3, 0xFFFF00);
 
 
 
@@ -174,6 +189,9 @@
 			}
 
 		}
+
+
+
 
 		function boardspacePressed(boardspace) {
 			// This function will handle pressing a boardspace with different player statuses
@@ -345,7 +363,7 @@
 		else {
 			element.innerHTML = "You have "+secs+" seconds to finish your turn!";// Name= "+name+" currPlayer= "+game.currPlayer.name;
 			secs--;
-			var timer = setTimeout('turnTimer('+secs+',"'+name+'","'+x+'")',1000);		// Issue: double quotes around string parameter were missing causing issues
+			// var timer = setTimeout('turnTimer('+secs+',"'+name+'","'+x+'")',1000);		// Issue: double quotes around string parameter were missing causing issues
 		}
 	}
 
@@ -366,7 +384,10 @@
 		// Up (W)
 		if(key.keyCode == "87" && possibleMoves.includes(up) && game.currPlayer.status == 1 ) {
 			console.log("keyCatcher(): Registered \'W\' Key");
+			rotateAbsolute(game.currPlayer.id, 0, 0, -90);
+			moveRelative(game.currPlayer.id, 0, 22, 0);
 			boardspacePressed(game.currPlayer.position - 10);
+
 		}
 		else if(key.keyCode == "87" && game.attackSpaces.includes(up) && game.currPlayer.status == 2) {
 			console.log("keyCatcher(): Registered \'W\' Key");
@@ -376,6 +397,8 @@
 		// Down (S)
 		else if(key.keyCode == "83" && possibleMoves.includes(down) && game.currPlayer.status == 1 ) {
 			console.log("keyCatcher(): Registered \'S\' Key");
+			rotateAbsolute(game.currPlayer.id, 0, 0, 90);
+			moveRelative(game.currPlayer.id, 0, -22, 0);
 			boardspacePressed(game.currPlayer.position + 10);
 		}
 		else if(key.keyCode == "83" && game.attackSpaces.includes(down) && game.currPlayer.status == 2) {
@@ -387,6 +410,8 @@
 		// Right (D)
 		else if(key.keyCode == "68" && possibleMoves.includes(right) && game.currPlayer.status == 1 ) {
 			console.log("keyCatcher(): Registered \'D\' Key");
+			rotateAbsolute(game.currPlayer.id, 0, 0, 180);
+			moveRelative(game.currPlayer.id, 22, 0, 0);
 			boardspacePressed(game.currPlayer.position + 1);
 		}
 		else if(key.keyCode == "68" && game.attackSpaces.includes(right) && game.currPlayer.status == 2) {
@@ -397,6 +422,8 @@
 		// Left (A)
 		else if(key.keyCode == "65" && possibleMoves.includes(left) && game.currPlayer.status == 1 ) {
 			console.log("keyCatcher(): Registered \'A\' Key");
+			rotateAbsolute(game.currPlayer.id, 0, 0, 0);
+			moveRelative(game.currPlayer.id, -22, 0, 0);
 			boardspacePressed(game.currPlayer.position - 1);
 		}
 		else if(key.keyCode == "65" && game.attackSpaces.includes(left) && game.currPlayer.status == 2) {
@@ -445,7 +472,7 @@
 			console.log("keyCatcher(): Registered Invalid Key");
 		}
 	}
-}
+//}
 
 // More issues to fix:
 // 1) disable endTurn() button if hadnt moved yet		- Done!
@@ -454,14 +481,7 @@
 
 
 
-// function sleep(milliseconds) {
-// 	var startTime = new Date().getTime();
-// 	var endTime = new Date().getTime();
-// 	while(endTime - startTime < 1000)
-// 	{
-// 		endTime = new Date().getTime();
-// 	}
-// }
+
 
 </script>
 <script src="http://threejs.org/build/three.min.js"></script>
