@@ -9,7 +9,7 @@
 /** Config Vars **/
 var TESTING = false;
 var VERBOSE = true;
-var DEEP_VERBOSE = true;
+var DEEP_VERBOSE = false;
 var ELEMENT_ID = 'gameScreen';
 var BACKGROUND_COLOR = 0x87CEEB;
 var LAMBERT_COLOR = 0xD7DFE5;
@@ -112,6 +112,8 @@ var cam = new THREE.PerspectiveCamera(CAM_FOV, screen.width / screen.height, CAM
 // NOT TESTABLE
 if (!TESTING) {
   var controls = new THREE.OrbitControls(cam, draw.domElement);
+  // controls.target = new THREE.Vector3(220/2, -220/2, -1);
+  controls.enabled = false;
 }
 
 // Console Print
