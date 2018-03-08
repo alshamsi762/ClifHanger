@@ -197,6 +197,21 @@ class Gameplay {
     temp = temp.next;
     this.board[99].setPlayer(temp.data);
 
+    initScreen();
+    buildStage(10);
+    moveAbsolute(0, 0, 0, 0);
+    moveAbsolute(1, 220-22, 0, 0);
+    moveAbsolute(2, 0, -(220-22), 0);
+    moveAbsolute(3, 220-22, -(220-22), 0);
+    rotateAbsolute(0, 0, 0, 135);		// - for clockwise
+    rotateAbsolute(1, 0, 0, 45);
+    rotateAbsolute(2, 0, 0, -135);
+    rotateAbsolute(3, 0, 0, -45);
+    setColorHex(0, 0xFFFF00);
+    setColorHex(1, 0xFFFF00);
+    setColorHex(2, 0xFFFF00);
+    setColorHex(3, 0xFFFF00);
+
     // place items on board
     this.initialDrop();
   }
@@ -206,15 +221,22 @@ class Gameplay {
   startTurnFor(player) {
     // TODO Start turn timer
     player.status = Player.MOVING;  // Change player status to moving
+    setColorHex(player.id, 0x00FF00);
     this.currPlayer = player;
-    this.possibleMovesFrom(this.board[player.position]); // Calculate possible moves
+    this.moveSpaces = this.possibleMovesFrom(this.board[player.position]); // Calculate possible moves
+    for(var i = 0; i < this.moveSpaces.length; i++) {
+      setColorHex(this.moveSpaces[i]+4, 0x00FF00);
+    }
   }
 
   // Update Linked List, change player state to Idle
   // NOTE: TESTED!
   endTurnFor(player) {
     // TODO Reset turn timer?
+    this.clearMoveSpaces();
+    this.clearAttackSpaces();
     player.status = Player.IDLE;  // Change player status to idle
+    setColorHex(player.id, 0xFFFF00);
     this.currPlayer = null;
   }
 
@@ -227,6 +249,7 @@ class Gameplay {
     this.board[this.currPlayer.position].removePlayer(); // Remove player from current boardspace
     boardspace.setPlayer(this.currPlayer);  // Move the player to the requested boardspace
     this.currPlayer.status = Player.READY;             // Set the player ready to attack or defend
+    this.clearMoveSpaces();
 
     // Check for Traps
     if (boardspace.hasTrap()) {
@@ -240,12 +263,14 @@ class Gameplay {
       if (boardspace.loot.itemType == Item.OFFENSE) {  // Offensive
         if (this.currPlayer.pushOffensiveItem(boardspace.loot) == true) { // Player has room in inventory
           boardspace.removeLoot();
+          setColorHex(boardspace.position+4, 0xD7DFE5);
         } else {  // Inventory full
           //TODO UI Change
         }
       } else if (boardspace.loot.itemType == Item.DEFENSE) { // Defensive
         if (this.currPlayer.pushDefensiveItem(boardspace.loot) == true) { // Player has room in inventory
           boardspace.removeLoot();
+          setColorHex(boardspace.position+4, 0xD7DFE5);
         } else {  // Inventory full
           //TODO UI Change
         }
@@ -262,6 +287,11 @@ class Gameplay {
      var playerToPush = boardspace.player;
      boardspace.removePlayer();
      newBoardspace.setPlayer(playerToPush);
+     if(direction == -10) {moveRelative(playerToPush.id, 0, 22, 0);}
+     else if(direction == 10) {moveRelative(playerToPush.id, 0, -22, 0);}
+     else if(direction == -1) {moveRelative(playerToPush.id, -22, 0, 0);}
+     else if(direction == 1) {moveRelative(playerToPush.id, 22, 0, 0);}
+
      if (newBoardspace.fallStage == Boardspace.FALLEN) {
        this.killPlayer(playerToPush);
      }
@@ -285,14 +315,30 @@ class Gameplay {
   chooseItem(item) {
     this.currItem = item;
     if (item.itemType == Item.OFFENSE) { // Offensive
-      this.possibleAttacksBy(item);
+      this.attackSpaces = this.possibleAttacksBy(item);
+      for(var i = 0; i < this.attackSpaces.length; i++)
+      {
+        setColorHex(this.attackSpaces[i]+4, 0xFF0000);
+      }
     } else if (item.itemType == Item.DEFENSE) { // Defensive
       if (item.name == "Move Again") {
-        this.possibleMovesFrom(this.board[this.currPlayer.position]);
+        this.moveSpaces = this.possibleMovesFrom(this.board[this.currPlayer.position]);
+        for(var i = 0; i < this.moveSpaces.length; i++)
+        {
+          setColorHex(this.moveSpaces[i]+4, 0x00FF00);
+        }
       } else if (item.name == "Teleport") {
-        this.possibleMovesFrom(null);
+        this.attackSpaces = this.possibleMovesFrom(null);
+        for(var i = 0; i < this.attackSpaces.length; i++)
+        {
+          setColorHex(this.attackSpaces[i]+4, 0x00FF00);
+        }
       } else if (item.name == "Minor Potion" || item.name == "Major Potion") {
-        this.possibleAttacksBy(item);
+        this.attackSpaces = this.possibleAttacksBy(item);
+        for(var i = 0; i < this.attackSpaces.length; i++)
+        {
+          setColorHex(this.attackSpaces[i]+4, 0xFF0000);
+        }
       }
     }
     // Display current item as selected in UI
@@ -301,6 +347,8 @@ class Gameplay {
   // Called when user activates item. Checks if Offensive or Defensive. Attack if offens. Apply effects if defens.
   // remove item from player inventory.
   useItem(item, dir) {
+    this.clearMoveSpaces();
+    this.clearAttackSpaces();
     var index = 0;
     var isRadius = (item.attackType == Item.RADIUS);
     var isTrap = (item.attackType == Item.TRAP);
@@ -335,16 +383,20 @@ class Gameplay {
       } else if (item.name == "Major Potion") { // Major Potion
         this.currPlayer.healHealthBy(30);
       } else if (item.name == "Teleport") { // Teleport
-        if (this.moveSpaces.includes(dir)) {
+        if (this.attackSpaces.includes(dir)) {
           this.moveTo(this.board[dir]);
         }
       } else if (item.name == "Move Again") { // Move Again
         if (this.moveSpaces.includes(this.currPlayer.position + dir)) {
           this.moveTo(this.board[this.currPlayer.position + dir]);
+          if(dir == -10) {moveRelative(this.currPlayer.id, 0, 22, 0);}
+          else if(dir == 10) {moveRelative(this.currPlayer.id, 0, -22, 0);}
+          else if(dir == -1) {moveRelative(this.currPlayer.id, -22, 0, 0);}
+          else if(dir == 1) {moveRelative(this.currPlayer.id, 22, 0, 0);}
         }
       }
     }
-  }
+}
 
   // Randomly drop an item on a random (valid) boardspace.
   // NOTE: TESTED!
@@ -362,6 +414,7 @@ class Gameplay {
 
     // Apply changes
     this.board[itemPos].setLoot(item);
+    setColorHex(itemPos+4, 0x00FFFF);
     // Call UI
     return itemPos;
   }
@@ -422,6 +475,7 @@ class Gameplay {
   killPlayer(player) {
     this.board[player.position].removePlayer();  // Remove player from Board
     this.playerList.removePlayer(player.id);    // Remove player from List
+    setColorHex(player.id, 0xFF0000);
     //IDEA should we set the player to null?
     // call any animations
   }
@@ -609,7 +663,42 @@ class Gameplay {
         itemPos = Math.floor(Math.random() * this.size + this.lowerBounds);
       }
       this.board[itemPos].setLoot(item);
+      setColorHex(itemPos+4, 0x00FFFF);
       count++;
+    }
+  }
+
+  clearMoveSpaces() {
+    if(this.moveSpaces.length > 0) {
+      for(var i = 0; i < this.moveSpaces.length; i++)
+      {
+        if(this.board[this.moveSpaces[i]].fallStage == 1) {
+          setColorHex(this.moveSpaces[i]+4, 0xFFFF00);
+        }
+        else if(this.board[this.moveSpaces[i]].hasLoot()) {
+          setColorHex(this.moveSpaces[i]+4, 0x00FFFF);
+        }
+        else {
+          setColorHex(this.moveSpaces[i]+4, 0xD7DFE5);
+        }
+      }
+    }
+  }
+
+  clearAttackSpaces() {
+    if(this.attackSpaces.length > 0) {
+      for(var i = 0; i < this.attackSpaces.length; i++)
+      {
+        if(this.board[this.attackSpaces[i]].fallStage == 1) {
+          setColorHex(this.attackSpaces[i]+4, 0xFFFF00);
+        }
+        else if(this.board[this.attackSpaces[i]].hasLoot()) {
+          setColorHex(this.attackSpaces[i]+4, 0x00FFFF);
+        }
+        else {
+        setColorHex(this.attackSpaces[i]+4, 0xD7DFE5);
+        }
+      }
     }
   }
 
