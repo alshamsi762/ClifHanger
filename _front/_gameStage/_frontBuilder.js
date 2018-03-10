@@ -5,15 +5,30 @@
 * This should only be used as a setup and not as a continously
 * running script.
 **/
+if (TESTING){
+  const gSG = require('./_frontGlobal.js');
+  var THREE = require('three');
+  screen = gSG.screen;
+  obj3DArray = gSG.obj3DArray;
+  plateGeom = gSG.plateGeom;
+  lambert = gSG.lambert;
+  ambLight = gSG.ambLight;
+  pointLight = gSG.pointLight;
+  axes = gSG.axes;
+  scene = gSG.scene;
+  cam = gSG.cam;
+}
 
 /** Initialize Minimum Vars **/
 function initScreen() {
-  // Set Background Color
-  draw.setClearColor(BACKGROUND_COLOR);
-  // Set Size
-  draw.setSize(screen.width, screen.height);
-  // Attach Render to HTML Element
-  document.body.appendChild(draw.domElement);
+  if (!TESTING) {
+    // Set Background Color
+    draw.setClearColor(BACKGROUND_COLOR);
+    // Set Size
+    draw.setSize(screen.width, screen.height);
+    // Attach Render to HTML Element
+    document.body.appendChild(draw.domElement);
+  }
   // Set cam Postion
   cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
   // Set cam Direction
@@ -257,6 +272,27 @@ function setColorRGB(index, r, g, b) {
 
 function getColorRGB(index) {
   return obj3DArray[index].material.color;
+}
+
+if (TESTING) {
+  //require('./_frontGlobal.js');
+  module.exports = {
+    loadHandler,
+    moveRelative,
+    moveAbsolute,
+    rotateRelative,
+    rotateAbsolute,
+    scaleRigid,
+    scaleLoose,
+    setColorHex,
+    setColorRGB,
+    getColorRGB,
+    getColorHex,
+    buildStage,
+    obj3DArray,
+    cam,
+    initScreen
+  };
 }
 
 // Smart Scaling (If Time)

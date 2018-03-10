@@ -6,8 +6,9 @@
 * used once instead of here. Also objects are created here.
 **/
 
+
 /** Config Vars **/
-var TESTING = false;
+var TESTING = true;
 var VERBOSE = true;
 var DEEP_VERBOSE = false;
 var ELEMENT_ID = 'gameScreen';
@@ -28,6 +29,10 @@ var PLATE_GAP = 2;
 var PLATE_DEPTH = -10;
 var SP = 0;
 
+if (TESTING) {
+  var THREE = require('three');
+}
+
 // Console Print
 if(VERBOSE && !TESTING) {
   console.log("Config Vars Done");
@@ -36,6 +41,7 @@ if(VERBOSE && !TESTING) {
 // TESTABLE
 if (TESTING) {
   global.TESTING = true;
+  global.TESTING_SSIDE = true;
   global.VERBOSE = false;
   global.DEEP_VERBOSE = false;
   global.ELEMENT_ID = 'gameScreen';
@@ -45,10 +51,10 @@ if (TESTING) {
   global.AXES_SIZE = 5;
   global.LIGHT_COLOR = 0xFFFFF0;
   global.LIGHT_INTENSITY = 0.5;
-  global.PLATE_SIZE = 7;
-  global.PLATE_THICKNESS = 1;
+  global.PLATE_SIZE = 20;
+  global.PLATE_THICKNESS = 20;
   global.CAM_FOV = 45;
-  global.CAM_FAR_PLANE = 500;
+  global.CAM_FAR_PLANE = 5000;
   global.CAM_NEAR_PLANE = 1;
   global.CAM_POS = {X:0, Y:0, Z:100};
   global.CAM_LOOK = {X:0, Y:0, Z:0};
@@ -78,6 +84,7 @@ if (TESTING && TESTING_SSIDE) {
     width: 100,
     height: 50
   };
+
 }
 
 // Console Print
@@ -177,16 +184,18 @@ if(VERBOSE && !TESTING) {
 if (!TESTING) {
   var STL = new THREE.STLLoader();
 }
-// //Export if TESTING
-// if (TESTING) {
-//   module.exports = {
-//     plate,
-//     plateGeom,
-//     lambert,
-//     ambLight,
-//     pointLight,
-//     axes,
-//     scene,
-//     cam
-//   };
+//Export if TESTING
+if (TESTING) {
+  module.exports = {
+    screen,
+    obj3DArray,
+    plateGeom,
+    lambert,
+    ambLight,
+    pointLight,
+    axes,
+    scene,
+    cam
+
+  };
 }
