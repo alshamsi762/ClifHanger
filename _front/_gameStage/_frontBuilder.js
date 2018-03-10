@@ -275,7 +275,6 @@ function getColorRGB(index) {
 }
 
 if (TESTING) {
-  //require('./_frontGlobal.js');
   module.exports = {
     loadHandler,
     moveRelative,

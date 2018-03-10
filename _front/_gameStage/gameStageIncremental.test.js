@@ -81,6 +81,8 @@ test('Test if Geometry is Created', () => {
 // });
 
 /** Builder **/
+
+/*     builder Initialization      */
 test('Test if The 3dArray is defined', () => {
     expect(gSG.obj3DArray).not.toEqual('undefined');
 });
@@ -105,12 +107,107 @@ test('camera is defined at the location matching the global (x,y,z) variable dec
   gSB.initScreen();
   expect(gSB.cam.position).toEqual({"x": global.CAM_POS.X, "y": global.CAM_POS.Y, "z": global.CAM_POS.Z});
 });
+/*     builder movement      */
 
-test('Test if The 25 plates have been created', () => {
-  for (var i = 0; i < plateArray.length; i++) {
-  expect(plateArray[i].length).toEqual(5);
-  }
-  expect(plateArray.length).toEqual(5);
+test('check if move absolute locates the object to be moved to the specific location', () => {
+  gSB.buildStage(5);
+  gSB.moveAbsolute(1,5,5,5);
+  expect(gSB.obj3DArray[1].position).toEqual({"x": 5, "y": 5, "z": 5});
+});
+test('check if move absolute locates the object to be moved to the specific location with negative values', () => {
+  gSB.buildStage(5);
+  gSB.moveAbsolute(1,-5,-5,-5);
+  expect(gSB.obj3DArray[1].position).toEqual({"x": -5, "y": -5, "z": -5});
+});
+test('check if move relative moves the object to be moved to the specific location with respect to the old location', () => {
+  gSB.buildStage(5);
+  gSB.moveAbsolute(1,5,5,5);
+  gSB.moveRelative(1,5,5,5);
+  expect(gSB.obj3DArray[1].position).toEqual({"x": 10, "y": 10, "z": 10});
+});
+
+test('check if move relative moves the object to be moved to the specific location with respect to the old location with negative values', () => {
+  gSB.buildStage(5);
+  gSB.moveAbsolute(1,5,5,5);
+  gSB.moveRelative(1,-5,-5,-5);
+  expect(gSB.obj3DArray[1].position).toEqual({"x": 0, "y": 0, "z": 0});
+});
+
+test('check if move relative moves the object to be moved to the specific location with respect to the old location with negative values', () => {
+  gSB.buildStage(5);
+  gSB.moveAbsolute(1,5,5,5);
+  gSB.moveRelative(1,-5,-5,-5);
+  expect(gSB.obj3DArray[1].position).toEqual({"x": 0, "y": 0, "z": 0});
+});
+
+test('check if rotate Absolute rotates object according to given values', () => {
+  var radian =  0.0174533;
+  gSB.buildStage(5);
+  gSB.rotateAbsolute(1,5,5,5);
+
+  expect(gSB.obj3DArray[1].rotation.x).toEqual(radian * 5);
+  expect(gSB.obj3DArray[1].rotation.y).toEqual(radian * 5);
+  expect(gSB.obj3DArray[1].rotation.z).toEqual(radian * 5);
+});
+
+
+test('check if rotate relative rotates object according to given values with respect to the older positions', () => {
+  var radian =  0.0174533;
+  gSB.buildStage(5);
+  gSB.rotateAbsolute(1,0,0,0);
+  gSB.rotateRelative(1,5,5,5);
+
+  expect(gSB.obj3DArray[1].rotation.x).toEqual(radian * 5);
+  expect(gSB.obj3DArray[1].rotation.y).toEqual(radian * 5);
+  expect(gSB.obj3DArray[1].rotation.z).toEqual(radian * 5);
+});
+test('test if value of rigid (xyz) to be equal after rigid scale', () => {
+  gSB.buildStage(5);
+  gSB.scaleRigid(1,2);
+
+  expect(gSB.obj3DArray[1].scale.x).toEqual(2);
+  expect(gSB.obj3DArray[1].scale.y).toEqual(2);
+  expect(gSB.obj3DArray[1].scale.z).toEqual(2);
+});
+
+test('test if value of loose (xyz) to be equal after loose scale', () => {
+  gSB.buildStage(5);
+  gSB.scaleLoose(1,2,3,4);
+
+  expect(gSB.obj3DArray[1].scale.x).toEqual(2);
+  expect(gSB.obj3DArray[1].scale.y).toEqual(3);
+  expect(gSB.obj3DArray[1].scale.z).toEqual(4);
+});
+
+
+/*  Builder colors */
+
+test('test is set hex color could change the color of a given object index', () => {
+  gSB.buildStage(5);
+  gSB.setColorHex(1,0xFF0000);
+
+  expect(gSB.obj3DArray[1].material.color.getHex()).toEqual(0xFF0000);
+});
+
+test('test is get hex color could return the color of a given object index', () => {
+  gSB.buildStage(5);
+  gSB.setColorHex(1,0xFF0000);
+
+  expect(gSB.getColorHex(1)).toEqual(0xFF0000);
+});
+
+test('test is set rgb color could change the color of a given object index', () => {
+  gSB.buildStage(5);
+  gSB.setColorRGB(1,255,0,0);
+  var color = new THREE.Color( 255, 0, 0 )
+  expect(gSB.obj3DArray[1].material.color).toEqual(color);
+});
+
+test('test is get rgb color could return the color of a given object index', () => {
+  gSB.buildStage(5);
+  gSB.setColorRGB(1,255,0,0);
+  var color = new THREE.Color( 255, 0, 0 )
+  expect(gSB.getColorRGB(1)).toEqual(color);
 });
 
 /** Builder **/
