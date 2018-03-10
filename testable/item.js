@@ -4,8 +4,7 @@ const DEFENSE = 1;
 const BASIC = 0;
 const RADIUS = 1;
 const TRAP = 2;
-
-class Item {
+module.exports = class Item {
 
   // Constructor for Item Object
   constructor(name, itemType, attackType, range, damage, rarity, description) {
@@ -16,7 +15,6 @@ class Item {
     this.damage = damage; // number
     this.rarity = rarity; //
     this.description = description  // String
-
   }
 
   static get OFFENSE() { return OFFENSE; }

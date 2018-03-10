@@ -1,9 +1,12 @@
 /** Boardspace Object & Functions **/
+const Item = require('./item.js');
+const Player = require('./player.js');
+
 const STABLE = 0;
 const UNSTABLE = 1;
 const FALLEN = 2;
 
-class Boardspace {
+module.exports = class Boardspace {
 
 
   // Constructor for Boardspace Object

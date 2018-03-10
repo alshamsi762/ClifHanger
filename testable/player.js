@@ -1,8 +1,11 @@
+/** Player Object & Functions **/
+const Item = require('./item.js');
+
 const IDLE = 0;
 const MOVING = 1;
 const READY = 2;
+module.exports = class Player {
 
-class Player {
 
   // Constructor for Player
   constructor(id, health, position, offensive, defensive, name, status) {

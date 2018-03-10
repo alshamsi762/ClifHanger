@@ -78,20 +78,22 @@
 	var tempIDs = ["A", "B", "C", "D"]
 	//THREE.DefaultLoadingManager.onLoad = function ( ) {
 		function startGame() {
-			// initScreen();
-			// buildStage(10);
-			// moveAbsolute(0, 0, 0, 0);
-			// moveAbsolute(1, 220-22, 0, 0);
-			// moveAbsolute(2, 0, -(220-22), 0);
-			// moveAbsolute(3, 220-22, -(220-22), 0);
-			// rotateAbsolute(0, 0, 0, 135);		// - for clockwise
-			// rotateAbsolute(1, 0, 0, 45);
-			// rotateAbsolute(2, 0, 0, -135);
-			// rotateAbsolute(3, 0, 0, -45);
-			// setColorHex(0, 0xFF0000);
-			// setColorHex(1, 0x00FF00);
-			// setColorHex(2, 0x0000FF);
-			// setColorHex(3, 0xFFFF00);
+			initScreen();
+			buildStage(10);
+			moveAbsolute(0, 0, 0, 0);
+			moveAbsolute(1, 220-22, 0, 0);
+			moveAbsolute(2, 0, -(220-22), 0);
+			moveAbsolute(3, 220-22, -(220-22), 0);
+			rotateAbsolute(0, 0, 0, 135);		// - for clockwise
+			rotateAbsolute(1, 0, 0, 45);
+			rotateAbsolute(2, 0, 0, -135);
+			rotateAbsolute(3, 0, 0, -45);
+			setColorHex(0, 0xFF0000);
+			setColorHex(1, 0x00FF00);
+			setColorHex(2, 0x0000FF);
+			setColorHex(3, 0xFFFF00);
+
+
 
 
 			document.getElementById("strtGameBttn").disabled = true;
@@ -103,24 +105,23 @@
 			document.getElementById("basicAttacks").innerHTML = "Push";
 
 			// Create all the buttons (boardspaces)
-			// for (var i = 0; i < 100; i++) {
-			// 	if (i % 10 == 0) {
-			// 		document.getElementById("game").innerHTML += "<br />";
-			// 	}
-			// 	var button = "<button id = \"" + i + "\" class=\"test\" onclick = \"boardspacePressed(\'" + i;
-			// 	button += "\')\" disabled>";
-			// 	if (game.board[i].hasPlayer()) {
-			// 		button += tempIDs[game.board[i].player.id];
-			// 	} else if (game.board[i].hasLoot()) {
-			// 		button += game.items.indexOf(game.board[i].loot);
-			// 		// setColorHex(i+4, 0x00FFFF);
-			// 	} else {
-			// 		button += "&nbsp";
-			// 	}
-			//
-			// 	button += "</button>";
-			// 	document.getElementById("game").innerHTML += button;
-			// }
+			for (var i = 0; i < 100; i++) {
+				if (i % 10 == 0) {
+					document.getElementById("game").innerHTML += "<br />";
+				}
+				var button = "<button id = \"" + i + "\" class=\"test\" onclick = \"boardspacePressed(\'" + i;
+				button += "\')\" disabled>";
+				if (game.board[i].hasPlayer()) {
+					button += tempIDs[game.board[i].player.id];
+				} else if (game.board[i].hasLoot()) {
+					button += game.items.indexOf(game.board[i].loot);
+				} else {
+					button += "&nbsp";
+				}
+
+				button += "</button>";
+				document.getElementById("game").innerHTML += button;
+			}
 			// Start player 1's turn
 			nextTurn();
 		}
@@ -135,14 +136,14 @@
 				game.shouldShrinkBoard();
 				{
 					var i = game.dropItem();
-					// document.getElementById("" + i).innerHTML = game.items.indexOf(game.board[i].loot);
+					document.getElementById("" + i).innerHTML = game.items.indexOf(game.board[i].loot);
 				}
 				player = game.playerList.head;
 			} else {
 				player = player.next;
 			}
 			// Clear any active buttons
-			// disableBoard();
+			disableBoard();
 			document.getElementById("offensiveItems").innerHTML = "&nbsp";
 			document.getElementById("defensiveItems").innerHTML = "&nbsp";
 
@@ -169,11 +170,11 @@
 			// Display possible moves
 			var possibleMoves = game.possibleMovesFrom(game.board[player.data.position]);
 			if(possibleMoves.length > 0) {
-				// for (var i = 0; i < possibleMoves.length; i++) {
-				// 	document.getElementById(""+possibleMoves[i]).disabled = false;
-				// 	document.getElementById(""+possibleMoves[i]).style = "background-color: green";
-				// 	document.getElementById("endTurn").disabled = true;
-				// }
+				for (var i = 0; i < possibleMoves.length; i++) {
+					document.getElementById(""+possibleMoves[i]).disabled = false;
+					document.getElementById(""+possibleMoves[i]).style = "background-color: green";
+					document.getElementById("endTurn").disabled = true;
+				}
 				game.startTurnFor(player.data);
 				turnTimer(10, player.data.name, "timer");
 				displayPlayerInfo();
@@ -183,7 +184,7 @@
 				turnTimer(10, player.data.name, "timer");
 				displayPlayerInfo();
 				document.getElementById("global").innerHTML = game.currPlayer.name+" has no possible moves!";
-				// disableBoard();
+				disableBoard();
 				endTurn();
 			}
 
@@ -195,22 +196,21 @@
 		function boardspacePressed(boardspace) {
 			// This function will handle pressing a boardspace with different player statuses
 			if (game.currPlayer.status == 1) {	// Moving
-				// document.getElementById("" + player.data.position).innerHTML = "&nbsp";
+				document.getElementById("" + player.data.position).innerHTML = "&nbsp";
 				game.moveTo(game.board[parseInt(boardspace)]);
 				document.getElementById("endTurn").disabled = false;
-				// document.getElementById("" + boardspace).innerHTML =  tempIDs[player.data.id];
-				// disableBoard();
+				document.getElementById("" + boardspace).innerHTML =  tempIDs[player.data.id];
+				disableBoard();
 				if (game.currPlayer.status == 2) {	// Player was not trapped
-					// for (var i = 0; i < game.attackSpaces.length; i++) {
-					// 	document.getElementById("" + game.attackSpaces[i]).disabled = false;
-					// 	document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
-					// }
+					for (var i = 0; i < game.attackSpaces.length; i++) {
+						document.getElementById("" + game.attackSpaces[i]).disabled = false;
+						document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+					}
 					displayItems();
 					document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
 				} else if (game.currPlayer.status == 0) {
 					document.getElementById("global").innerHTML = player.data.name + " was trapped!<br />";
-					game.clearAttackSpaces();
-					// disableBoard();
+					disableBoard();
 					endTurn();
 				}
 			} else if (game.currPlayer.status == 2) {	// Attacking or Defending
@@ -226,16 +226,16 @@
 					dir = parseInt(boardspace);
 				}
 				if (game.currItem.name == "Teleport" || game.currItem.name == "Move Again") {
-					// document.getElementById("" + player.data.position).innerHTML = "&nbsp";
+					document.getElementById("" + player.data.position).innerHTML = "&nbsp";
 					game.useItem(game.currItem, dir);
 					document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
-					// document.getElementById("" + player.data.position).innerHTML =  tempIDs[player.data.id];
+					document.getElementById("" + player.data.position).innerHTML =  tempIDs[player.data.id];
 				} else {
 					game.useItem(game.currItem, dir);
 					document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
 				}
 
-				// disableBoard();
+				disableBoard();
 				endTurn();
 			}
 		}
@@ -243,28 +243,28 @@
 		function endTurn() {
 			document.getElementById("basicAttacks").hidden = true;
 			game.endTurnFor(player.data);
-			// disableBoard();
+			disableBoard();
 			nextTurn();
 		}
 
-		// function disableBoard() {
-		// 	for (var i = 0; i < 100; i++) {
-		// 		document.getElementById("" + i).disabled = true;
-		// 		if (game.board[i].fallStage == 1) {
-		// 			document.getElementById("" + i).style = "background-color: yellow";
-		// 		} else if (game.board[i].fallStage == 2) {
-		// 			document.getElementById("" + i).style = "background-color: transparent";
-		// 			document.getElementById("" + i).innerHTML = "&nbsp";
-		// 		} else {
-		// 			document.getElementById("" + i).style = "";
-		// 		}
-		// 		if (game.board[i].hasPlayer()) {
-		// 			document.getElementById("" + i).innerHTML = tempIDs[game.board[i].player.id];
-		// 		} else if (game.board[i].hasLoot() == false) {
-		// 			document.getElementById("" + i).innerHTML = "&nbsp";
-		// 		}
-		// 	}
-		// }
+		function disableBoard() {
+			for (var i = 0; i < 100; i++) {
+				document.getElementById("" + i).disabled = true;
+				if (game.board[i].fallStage == 1) {
+					document.getElementById("" + i).style = "background-color: yellow";
+				} else if (game.board[i].fallStage == 2) {
+					document.getElementById("" + i).style = "background-color: transparent";
+					document.getElementById("" + i).innerHTML = "&nbsp";
+				} else {
+					document.getElementById("" + i).style = "";
+				}
+				if (game.board[i].hasPlayer()) {
+					document.getElementById("" + i).innerHTML = tempIDs[game.board[i].player.id];
+				} else if (game.board[i].hasLoot() == false) {
+					document.getElementById("" + i).innerHTML = "&nbsp";
+				}
+			}
+		}
 
 		function displayItems() {
 			var offense = "";
@@ -292,18 +292,18 @@
 			var item = game.items[parseInt(index)]
 			game.chooseItem(item);
 			document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name;
-			// disableBoard();
-			// if (item.name == "Teleport" || item.name == "Move Again") {	// Teleport and Move Again show moves
-			// 	for (var i = 0; i < game.moveSpaces.length; i++) {
-			// 		document.getElementById(""+game.moveSpaces[i]).disabled = false;
-			// 		document.getElementById(""+game.moveSpaces[i]).style = "background-color: green";
-			// 	}
-			// } else {	// Other items show attack spaces
-			// 	for (var i = 0; i < game.attackSpaces.length; i++) {
-			// 		document.getElementById("" + game.attackSpaces[i]).disabled = false;
-			// 		document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
-			// 	}
-			// }
+			disableBoard();
+			if (item.name == "Teleport" || item.name == "Move Again") {	// Teleport and Move Again show moves
+				for (var i = 0; i < game.moveSpaces.length; i++) {
+					document.getElementById(""+game.moveSpaces[i]).disabled = false;
+					document.getElementById(""+game.moveSpaces[i]).style = "background-color: green";
+				}
+			} else {	// Other items show attack spaces
+				for (var i = 0; i < game.attackSpaces.length; i++) {
+					document.getElementById("" + game.attackSpaces[i]).disabled = false;
+					document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+				}
+			}
 		}
 
 		function selectBasicAttack() {
@@ -311,7 +311,7 @@
 			if (document.getElementById("basicAttacks").innerHTML == "Push") {
 				document.getElementById("basicAttacks").innerHTML = "Slash";
 				game.chooseItem(game.pushAttack);
-				// disableBoard();
+				disableBoard();
 				for (var i = 0; i < game.attackSpaces.length; i++) {
 					document.getElementById("" + game.attackSpaces[i]).disabled = false;
 					document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
@@ -387,6 +387,7 @@
 			rotateAbsolute(game.currPlayer.id, 0, 0, -90);
 			moveRelative(game.currPlayer.id, 0, 22, 0);
 			boardspacePressed(game.currPlayer.position - 10);
+
 		}
 		else if(key.keyCode == "87" && game.attackSpaces.includes(up) && game.currPlayer.status == 2) {
 			console.log("keyCatcher(): Registered \'W\' Key");
@@ -437,38 +438,32 @@
 		}
 
 		// Offensive items (P)
-		else if(key.keyCode == "80" && game.currPlayer.offensive.length > 0 && game.currPlayer.status == 2) {
+		else if(key.keyCode == "80" && game.currPlayer.offensive.length > 0) {
 			console.log("keyCatcher(): Registered \'P\' Key");
-			// disableBoard();
-			game.clearMoveSpaces();
-			game.clearAttackSpaces();
+			disableBoard();
 			itemSelected(game.items.indexOf(game.currPlayer.offensive[game.currPlayer.offensive.length - 1]));
 		}
 		// Defensive items (L)
-		else if(key.keyCode == "76" && game.currPlayer.defensive.length > 0 && game.currPlayer.status == 2) {
+		else if(key.keyCode == "76" && game.currPlayer.defensive.length > 0) {
 			console.log("keyCatcher(): Registered \'L\' Key");
-			// disableBoard();
-			game.clearMoveSpaces();
-			game.clearAttackSpaces();
+			disableBoard();
 			itemSelected(game.items.indexOf(game.currPlayer.defensive[game.currPlayer.defensive.length - 1]));
 		}
 		// Basic attack (B)
 		else if(key.keyCode == "66" && game.currPlayer.status != 1) {
 			console.log("keyCatcher(): Registered \'B\' Key");
-			// disableBoard();
-			game.clearMoveSpaces();
-			game.clearAttackSpaces();
+			disableBoard();
 			game.chooseItem(game.basicAttack);
-			// for (var i = 0; i < game.attackSpaces.length; i++) {
-			// 	document.getElementById("" + game.attackSpaces[i]).disabled = false;
-			// 	document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
-			// }
+			for (var i = 0; i < game.attackSpaces.length; i++) {
+				document.getElementById("" + game.attackSpaces[i]).disabled = false;
+				document.getElementById("" + game.attackSpaces[i]).style = "background-color: red";
+			}
 		}
 
 		// End turn (E)
 		else if(key.keyCode == "69" && game.currPlayer.status != 1) {
 			console.log("keyCatcher(): Registered \'B\' Key");
-			// disableBoard();
+			disableBoard();
 			endTurn();
 		}
 
