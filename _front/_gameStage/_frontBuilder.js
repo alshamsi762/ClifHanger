@@ -259,6 +259,13 @@ function getColorRGB(index) {
   return obj3DArray[index].material.color;
 }
 
+function invisible(index) {
+  obj3DArray[index].invisible = true;
+}
+
+function visible(index) {
+  obj3DArray[index].invisible = false;
+}
 // Smart Scaling (If Time)
 
 // Smart Centering (If Time)
