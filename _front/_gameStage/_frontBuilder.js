@@ -15,11 +15,13 @@ function initScreen() {
   // Attach Render to HTML Element
   document.body.appendChild(draw.domElement);
   // Set cam Postion
+  // controls.target.set(220/2, -220/2, -1);
   cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
+  controls.update();
+
   // Set cam Direction
   // cam.lookAt(new THREE.Vector3(CAM_LOOK.X, CAM_LOOK.Y, CAM_LOOK.Z));
-  // Set cam position
-  cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
+  // controls.target.set(220/2, -220/2, -1);
   // Add Axes
   if(AXES) {
     scene.add(axes);
@@ -54,7 +56,6 @@ function initScreen() {
   if (!TESTING) {
     if (Detector.webgl) {
       animate();
-
       // Console Print
       if(VERBOSE && !TESTING) {
         console.log("WebGL Detected \n Lights Camera Action!!!");
@@ -88,7 +89,9 @@ function buildStage(size) {
       obj3DArray[SP] = new THREE.Mesh(plateGeom.clone(), lambert.clone());
       obj3DArray[SP].position.set((PLATE_SIZE + PLATE_GAP) * j, (PLATE_SIZE + PLATE_GAP) * -i, PLATE_DEPTH);
       obj3DArray[SP].name = "tile" + (count++);
+      console.log(obj3DArray[SP].name);
       scene.add(obj3DArray[SP]);
+      obj3DArray[SP].needsupdate = true;
       SP++;
 
     }
@@ -270,10 +273,17 @@ function getColorRGB(index) {
 
 function invisible(index) {
   obj3DArray[index].visible = false;
+  obj3DArray[index].needsupdate = true;
 }
 
 function visible(index) {
   obj3DArray[index].visible = true;
+}
+
+function updateCamera() {
+  controls.target.set((220-22)/2, (-220+22)/2, -1);
+  cam.position.set(CAM_POS.X, CAM_POS.Y, 600/1);
+  controls.update();
 }
 // Smart Scaling (If Time)
 

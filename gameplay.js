@@ -214,6 +214,9 @@ class Gameplay {
 
     // place items on board
     this.initialDrop();
+
+    // updateCamera();
+
   }
 
   // Starts turn timer, calculate possible moves, set currentPlayer, change player state to Active. Disable "end turn"
@@ -287,13 +290,26 @@ class Gameplay {
      var playerToPush = boardspace.player;
      boardspace.removePlayer();
      newBoardspace.setPlayer(playerToPush);
-     if(direction == -10) {moveRelative(playerToPush.id, 0, 22, 0);}
-     else if(direction == 10) {moveRelative(playerToPush.id, 0, -22, 0);}
-     else if(direction == -1) {moveRelative(playerToPush.id, -22, 0, 0);}
-     else if(direction == 1) {moveRelative(playerToPush.id, 22, 0, 0);}
+     if(direction == -10) {
+       moveRelative(playerToPush.id, 0, 22, 0);
+       movePiece(playerToPush.id, "Y+");
+     }
+     else if(direction == 10) {
+       moveRelative(playerToPush.id, 0, -22, 0);
+       movePiece(playerToPush.id, "Y-");
+     }
+     else if(direction == -1) {
+       moveRelative(playerToPush.id, -22, 0, 0);
+       movePiece(playerToPush.id, "X-");
+     }
+     else if(direction == 1) {
+       moveRelative(playerToPush.id, 22, 0, 0);
+       movePiece(playerToPush.id, "X+");
+     }
 
      if (newBoardspace.fallStage == Boardspace.FALLEN) {
        this.killPlayer(playerToPush);
+       fallPiece(playerToPush.id);
      }
    }
  }
@@ -428,18 +444,21 @@ class Gameplay {
     {
       this.board[i].fallStage = Boardspace.FALLEN;
       //setColorHex(i+4, 0xFF0000);
-      invisible(i + 4);
+      // invisible(i + 4);
+      fallPiece(i+4);
       if(this.board[i].hasPlayer())
       {
+        fallPiece(this.board[i].player.id);
         this.killPlayer(this.board[i].player);
-        // TODO: Fall player
       }
 
       this.board[99 - i].fallStage = Boardspace.FALLEN;
-      invisible(99 - i + 4);
+      // invisible(99 - i + 4);
+      fallPiece(99 - i + 4);
       // setColorHex(99 - i + 4, 0xFF0000);
       if(this.board[99 - i].hasPlayer())
       {
+        fallPiece(this.board[99 - i].player.id);
         this.killPlayer(this.board[99 - i].player);
       }
     }
@@ -448,18 +467,22 @@ class Gameplay {
     {
       this.board[i].fallStage = Boardspace.FALLEN;
       // setColorHex(i+4, 0xFF0000);
-      invisible(i + 4);
+      // invisible(i + 4);
+      fallPiece(i+4);
       if(this.board[i].hasPlayer())
       {
+        fallPiece(this.board[i].player.id);
         this.killPlayer(this.board[i].player);
       }
 
       this.board[99 - i].fallStage = Boardspace.FALLEN;
       // setColorHex(99 - i + 4, 0xFF0000);
-      invisible(99 - i + 4);
+      // invisible(99 - i + 4);
+      fallPiece(99 - i + 4);
 
       if(this.board[99 - i].hasPlayer())
       {
+        fallPiece(this.board[99 - i].player.id);
         this.killPlayer(this.board[99 - i].player);
       }
     }

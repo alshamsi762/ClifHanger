@@ -12,10 +12,11 @@ if (!TESTING) {
     requestAnimationFrame(animate);
 
     // Update based on Orbital Controls
-    controls.target.set(220/2, -220/2, 0);
+
     controls.update();
     pointLight.position.copy(cam.position);
-
+    // controls.target.set(220/2, -108, -1);
+    // controls.update();
     // Render Scene
     draw.render(scene, cam);
   }
