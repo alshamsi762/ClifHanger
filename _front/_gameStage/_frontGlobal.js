@@ -9,7 +9,7 @@
 /** Config Vars **/
 var TESTING = false;
 var VERBOSE = true;
-var DEEP_VERBOSE = false;
+var DEEP_VERBOSE = true;
 var ELEMENT_ID = 'gameScreen';
 var BACKGROUND_COLOR = 0x87CEEB;
 var LAMBERT_COLOR = 0xD7DFE5;
@@ -27,6 +27,10 @@ var CAM_LOOK = {X:220/2, Y:220/2, Z:100};
 var PLATE_GAP = 2;
 var PLATE_DEPTH = -10;
 var SP = 0;
+var MP_DUR = 0.5;
+var FP_DUR = 5.00;
+var FP_BUF = 1000;
+var FP_EXP = 5;
 
 // Console Print
 if(VERBOSE && !TESTING) {
@@ -105,6 +109,10 @@ if(VERBOSE && !TESTING) {
 }
 
 
+/** Setup Clock **/
+var clock = new THREE.Clock();
+
+
 /** Setup cam & Orbital Controls **/
 // Set cam
 var cam = new THREE.PerspectiveCamera(CAM_FOV, screen.width / screen.height, CAM_NEAR_PLANE, CAM_FAR_PLANE);
@@ -155,10 +163,6 @@ if(VERBOSE && !TESTING) {
   console.log("Point Light Done");
   if(DEEP_VERBOSE){
     console.log(pointLight);
-  }
-  console.log("Plate Done");
-  if(DEEP_VERBOSE){
-    console.log(plate);
   }
 }
 
