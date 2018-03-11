@@ -9,7 +9,7 @@
 /** Config Vars **/
 var TESTING = false;
 var VERBOSE = true;
-var DEEP_VERBOSE = true;
+var DEEP_VERBOSE = false;
 var ELEMENT_ID = 'gameScreen';
 var BACKGROUND_COLOR = 0x87CEEB;
 var LAMBERT_COLOR = 0xD7DFE5;
@@ -22,8 +22,8 @@ var PLATE_THICKNESS = 20;
 var CAM_FOV = 45;
 var CAM_FAR_PLANE = 5000;
 var CAM_NEAR_PLANE = 1;
-var CAM_POS = {X:220/2, Y:220/2, Z:400};
-var CAM_LOOK = {X:220/2, Y:220/2, Z:0};
+var CAM_POS = {X:220/2, Y:-220/2, Z:400/1};
+var CAM_LOOK = {X:0, Y:0, Z:-1};
 var PLATE_GAP = 2;
 var PLATE_DEPTH = -10;
 var SP = 0;
@@ -71,10 +71,10 @@ if (TESTING) {
 // Get Element Reference
 // NOT TESTABLE
 if (!TESTING) {
-  var screen = document.getElementById(ELEMENT_ID);
-  // Change Based on Available setSize
-  screen.width = window.innerWidth;
-  screen.height = window.innerHeight;
+  // var screen = document.getElementById(ELEMENT_ID);
+  // // Change Based on Available setSize
+  // screen.width = window.innerWidth;
+  // screen.height = window.innerHeight;
 }
 // TESTABLE ALTERNATIVE
 if (TESTING && TESTING_SSIDE) {

@@ -17,7 +17,9 @@ function initScreen() {
   // Set cam Postion
   cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
   // Set cam Direction
-  cam.lookAt(new THREE.Vector3(CAM_LOOK.X, CAM_LOOK.Y, CAM_LOOK.Z));
+  // cam.lookAt(new THREE.Vector3(CAM_LOOK.X, CAM_LOOK.Y, CAM_LOOK.Z));
+  // Set cam position
+  cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
   // Add Axes
   if(AXES) {
     scene.add(axes);
@@ -74,14 +76,21 @@ function initScreen() {
 /** Build Stage **/
 function buildStage(size) {
   // Add Plate to Scene
+  var count = 0;
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) {
+      // obj3DArray[SP] = new THREE.Mesh(plateGeom.clone(), lambert.clone());
+      // obj3DArray[SP].position.z = PLATE_DEPTH;
+      // obj3DArray[SP].position.x = (PLATE_SIZE + PLATE_GAP) * j;
+      // obj3DArray[SP].position.y = (PLATE_SIZE + PLATE_GAP) * -i;
+      // scene.add(obj3DArray[SP]);
+      // SP++;
       obj3DArray[SP] = new THREE.Mesh(plateGeom.clone(), lambert.clone());
-      obj3DArray[SP].position.z = PLATE_DEPTH;
-      obj3DArray[SP].position.x = (PLATE_SIZE + PLATE_GAP) * j;
-      obj3DArray[SP].position.y = (PLATE_SIZE + PLATE_GAP) * -i;
+      obj3DArray[SP].position.set((PLATE_SIZE + PLATE_GAP) * j, (PLATE_SIZE + PLATE_GAP) * -i, PLATE_DEPTH);
+      obj3DArray[SP].name = "tile" + (count++);
       scene.add(obj3DArray[SP]);
       SP++;
+
     }
   }
 
@@ -260,11 +269,11 @@ function getColorRGB(index) {
 }
 
 function invisible(index) {
-  obj3DArray[index].invisible = true;
+  obj3DArray[index].visible = false;
 }
 
 function visible(index) {
-  obj3DArray[index].invisible = false;
+  obj3DArray[index].visible = true;
 }
 // Smart Scaling (If Time)
 

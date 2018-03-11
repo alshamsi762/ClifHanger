@@ -427,14 +427,17 @@ class Gameplay {
     for(var i = lower + left; i <= lower + this.width; i++)   // lower row
     {
       this.board[i].fallStage = Boardspace.FALLEN;
-      setColorHex(i+4, 0xFF0000);
+      //setColorHex(i+4, 0xFF0000);
+      invisible(i + 4);
       if(this.board[i].hasPlayer())
       {
         this.killPlayer(this.board[i].player);
+        // TODO: Fall player
       }
 
       this.board[99 - i].fallStage = Boardspace.FALLEN;
-      setColorHex(99 - i + 4, 0xFF0000);
+      invisible(99 - i + 4);
+      // setColorHex(99 - i + 4, 0xFF0000);
       if(this.board[99 - i].hasPlayer())
       {
         this.killPlayer(this.board[99 - i].player);
@@ -444,14 +447,17 @@ class Gameplay {
     for(var i = lower + left; i <= top - right; i+=10)   // left column
     {
       this.board[i].fallStage = Boardspace.FALLEN;
-      setColorHex(i+4, 0xFF0000);
+      // setColorHex(i+4, 0xFF0000);
+      invisible(i + 4);
       if(this.board[i].hasPlayer())
       {
         this.killPlayer(this.board[i].player);
       }
 
       this.board[99 - i].fallStage = Boardspace.FALLEN;
-      setColorHex(99 - i + 4, 0xFF0000);
+      // setColorHex(99 - i + 4, 0xFF0000);
+      invisible(99 - i + 4);
+
       if(this.board[99 - i].hasPlayer())
       {
         this.killPlayer(this.board[99 - i].player);
