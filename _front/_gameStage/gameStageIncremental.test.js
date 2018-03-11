@@ -145,9 +145,9 @@ test('check if rotate Absolute rotates object according to given values', () => 
   gSB.buildStage(5);
   gSB.rotateAbsolute(1,5,5,5);
 
-  expect(gSB.obj3DArray[1].rotation.x).toEqual(radian * 5);
-  expect(gSB.obj3DArray[1].rotation.y).toEqual(radian * 5);
-  expect(gSB.obj3DArray[1].rotation.z).toEqual(radian * 5);
+  expect(gSB.obj3DArray[1].rotation._x).toEqual(radian * 5);
+  expect(gSB.obj3DArray[1].rotation._y).toEqual(radian * 5);
+  expect(gSB.obj3DArray[1].rotation._z).toEqual(radian * 5);
 });
 
 
@@ -157,9 +157,9 @@ test('check if rotate relative rotates object according to given values with res
   gSB.rotateAbsolute(1,0,0,0);
   gSB.rotateRelative(1,5,5,5);
 
-  expect(gSB.obj3DArray[1].rotation.x).toEqual(radian * 5);
-  expect(gSB.obj3DArray[1].rotation.y).toEqual(radian * 5);
-  expect(gSB.obj3DArray[1].rotation.z).toEqual(radian * 5);
+  expect(gSB.obj3DArray[1].rotation._x).toEqual(radian * 5);
+  expect(gSB.obj3DArray[1].rotation._y).toEqual(radian * 5);
+  expect(gSB.obj3DArray[1].rotation._z).toEqual(radian * 5);
 });
 test('test if value of rigid (xyz) to be equal after rigid scale', () => {
   gSB.buildStage(5);

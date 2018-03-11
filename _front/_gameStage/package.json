@@ -1,7 +1,6 @@
 {
   "name": "gamestage",
   "version": "1.0.0",
-  "description": "",
   "main": "_frontBuilder.js",
   "scripts": {
     "test": "jest"
@@ -13,5 +12,6 @@
   },
   "dependencies": {
     "three": "^0.90.0"
-  }
+  },
+  "description": ""
 }
