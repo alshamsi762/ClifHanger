@@ -35,7 +35,6 @@ function initScreen() {
   controls.update();
 
   // Set cam Direction
-  cam.lookAt(new THREE.Vector3(CAM_LOOK.X, CAM_LOOK.Y, CAM_LOOK.Z));
   // cam.lookAt(new THREE.Vector3(CAM_LOOK.X, CAM_LOOK.Y, CAM_LOOK.Z));
   // controls.target.set(220/2, -220/2, -1);
   // Add Axes
@@ -72,7 +71,6 @@ function initScreen() {
   if (!TESTING) {
     if (Detector.webgl) {
       animate();
-
       // Console Print
       if(VERBOSE && !TESTING) {
         console.log("WebGL Detected \n Lights Camera Action!!!");
@@ -104,9 +102,6 @@ function buildStage(size) {
       // scene.add(obj3DArray[SP]);
       // SP++;
       obj3DArray[SP] = new THREE.Mesh(plateGeom.clone(), lambert.clone());
-      obj3DArray[SP].position.z = PLATE_DEPTH;
-      obj3DArray[SP].position.x = (PLATE_SIZE + PLATE_GAP) * j;
-      obj3DArray[SP].position.y = (PLATE_SIZE + PLATE_GAP) * -i;
       obj3DArray[SP].position.set((PLATE_SIZE + PLATE_GAP) * j, (PLATE_SIZE + PLATE_GAP) * -i, PLATE_DEPTH);
       obj3DArray[SP].name = "tile" + (count++);
       console.log(obj3DArray[SP].name);
@@ -325,7 +320,6 @@ if (TESTING) {
     initScreen
   };
 }
-
 // Smart Scaling (If Time)
 
 // Smart Centering (If Time)
