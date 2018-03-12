@@ -32,7 +32,10 @@ function initScreen() {
   // Set cam Postion
   // controls.target.set(220/2, -220/2, -1);
   cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
-  controls.update();
+
+  if (!TESTING) {
+    controls.update();
+  }
 
   // Set cam Direction
   // cam.lookAt(new THREE.Vector3(CAM_LOOK.X, CAM_LOOK.Y, CAM_LOOK.Z));
@@ -104,7 +107,7 @@ function buildStage(size) {
       obj3DArray[SP] = new THREE.Mesh(plateGeom.clone(), lambert.clone());
       obj3DArray[SP].position.set((PLATE_SIZE + PLATE_GAP) * j, (PLATE_SIZE + PLATE_GAP) * -i, PLATE_DEPTH);
       obj3DArray[SP].name = "tile" + (count++);
-      console.log(obj3DArray[SP].name);
+      //console.log(obj3DArray[SP].name);
       scene.add(obj3DArray[SP]);
       obj3DArray[SP].needsupdate = true;
       SP++;

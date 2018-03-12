@@ -1,3 +1,12 @@
+
+var TESTING = true;
+var DEEP_VERBOSE = true;
+if (TESTING) {
+  FP_BUF = global.FP_BUF;
+  CAM_FAR_PLANE = global.CAM_FAR_PLANE;
+  clock = global.clock;
+}
+
 // Makes Piece Fall
 function fallPiece(index) {
   // Local Vars
@@ -9,7 +18,6 @@ function fallPiece(index) {
   var accel = (2 * (CAM_FAR_PLANE + FP_BUF)) / (FP_DUR * FP_DUR);
 
   // Console Print
-  if(VERBOSE && !TESTING) {
     console.log("Falling Object");
     console.log("Index:", index);
     console.log("From: ", initalP, " To: ", finalP);
@@ -33,7 +41,6 @@ function fallPiece(index) {
 
       // Console Print
       if(DEEP_VERBOSE){
-        console.log("Postion: ", obj.position.z);
       }
 
       // Exit
@@ -55,4 +62,10 @@ function fallPiece(index) {
     }
   }
   fallPieceAnimate();
+
+}
+if (TESTING) {
+  module.exports = {
+    fallPiece
+  };
 }

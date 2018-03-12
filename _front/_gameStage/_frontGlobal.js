@@ -9,7 +9,7 @@
 
 /** Config Vars **/
 
-var TESTING = false;
+var TESTING = true;
 var VERBOSE = false;
 
 var DEEP_VERBOSE = false;
@@ -58,7 +58,7 @@ if (TESTING) {
   global.LIGHT_COLOR = 0xFFFFF0;
   global.LIGHT_INTENSITY = 0.5;
   global.PLATE_SIZE = 20;
-  global.PLATE_THICKNESS = 20;
+  global.PLATE_THICKNESS = 5;
   global.CAM_FOV = 45;
   global.CAM_FAR_PLANE = 5000;
   global.CAM_NEAR_PLANE = 1;
@@ -67,6 +67,11 @@ if (TESTING) {
   global.PLATE_GAP = 1;
   global.PLATE_DEPTH = -3;
   global.SP = 0;
+  global.MP_DUR = 0.5;
+  global.FP_DUR = 5.00;
+  global.FP_BUF = 1000;
+  global.FP_EXP = 5;
+
 }
 
 // Import Node Lib
@@ -121,6 +126,9 @@ if(VERBOSE && !TESTING) {
 
 /** Setup Clock **/
 var clock = new THREE.Clock();
+if (TESTING) {
+  global.clock = clock;
+}
 
 
 /** Setup cam & Orbital Controls **/

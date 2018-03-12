@@ -1,0 +1,15 @@
+{
+  "name": "animators",
+  "version": "1.0.0",
+  "description": "",
+  "main": "_fallPiece.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^22.4.2",
+    "three": "^0.90.0"
+  }
+}

@@ -1,3 +1,8 @@
+if (TESTING) {
+  FP_BUF = global.FP_BUF;
+  CAM_FAR_PLANE = global.CAM_FAR_PLANE;
+  clock = global.clock;
+}
 // Moves a piece on the board.
 function movePiece(index, dir) {
   if(dir == "X+") {
@@ -235,4 +240,9 @@ function movePiece(index, dir) {
     }
     movePieceYMAnimate();
   }
+}
+if (TESTING) {
+  module.exports = {
+    movePiece
+  };
 }
