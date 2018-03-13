@@ -8,7 +8,7 @@
 
 /** Config Vars **/
 var TESTING = false;
-var VERBOSE = true;
+var VERBOSE = false;
 var DEEP_VERBOSE = false;
 var ELEMENT_ID = 'gameScreen';
 var BACKGROUND_COLOR = 0x87CEEB;
@@ -18,15 +18,23 @@ var AXES_SIZE = 100;
 var LIGHT_COLOR = 0xFFFFF0;
 var LIGHT_INTENSITY = 0.5;
 var PLATE_SIZE = 20;
-var PLATE_THICKNESS = 20;
+var PLATE_THICKNESS = 5;
 var CAM_FOV = 45;
 var CAM_FAR_PLANE = 5000;
 var CAM_NEAR_PLANE = 1;
+<<<<<<< HEAD
 var CAM_POS = {X:220/2, Y:-220/2, Z:400/1};
+=======
+var CAM_POS = {X:(220-22)/2, Y:(-220+22)/2, Z:10/1};
+>>>>>>> master
 var CAM_LOOK = {X:0, Y:0, Z:-1};
 var PLATE_GAP = 2;
 var PLATE_DEPTH = -10;
 var SP = 0;
+var MP_DUR = 0.5;
+var FP_DUR = 5.00;
+var FP_BUF = 1000;
+var FP_EXP = 5;
 
 // Console Print
 if(VERBOSE && !TESTING) {
@@ -93,7 +101,8 @@ if(VERBOSE && !TESTING) {
 // Set WebGL
 // NOT TESTABLE
 if (!TESTING) {
-  var draw = new THREE.WebGLRenderer();
+  var draw = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  draw.sortObjects = false;
 }
 
 // Console Print
@@ -103,6 +112,10 @@ if(VERBOSE && !TESTING) {
     console.log(draw);
   }
 }
+
+
+/** Setup Clock **/
+var clock = new THREE.Clock();
 
 
 /** Setup cam & Orbital Controls **/
@@ -158,10 +171,13 @@ if(VERBOSE && !TESTING) {
   if(DEEP_VERBOSE){
     console.log(pointLight);
   }
+<<<<<<< HEAD
   console.log("Plate Done");
   if(DEEP_VERBOSE){
     console.log(plateGeom);
   }
+=======
+>>>>>>> master
 }
 
 /** Load Custom Object **/

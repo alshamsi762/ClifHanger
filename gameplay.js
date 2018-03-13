@@ -214,6 +214,9 @@ class Gameplay {
 
     // place items on board
     this.initialDrop();
+
+    // updateCamera();
+
   }
 
   // Starts turn timer, calculate possible moves, set currentPlayer, change player state to Active. Disable "end turn"
@@ -287,14 +290,27 @@ class Gameplay {
      var playerToPush = boardspace.player;
      boardspace.removePlayer();
      newBoardspace.setPlayer(playerToPush);
-     if(direction == -10) {moveRelative(playerToPush.id, 0, 22, 0);}
-     else if(direction == 10) {moveRelative(playerToPush.id, 0, -22, 0);}
-     else if(direction == -1) {moveRelative(playerToPush.id, -22, 0, 0);}
-     else if(direction == 1) {moveRelative(playerToPush.id, 22, 0, 0);}
+     if(direction == -10) {
+       moveRelative(playerToPush.id, 0, 22, 0);
+       movePiece(playerToPush.id, "Y+");
+     }
+     else if(direction == 10) {
+       moveRelative(playerToPush.id, 0, -22, 0);
+       movePiece(playerToPush.id, "Y-");
+     }
+     else if(direction == -1) {
+       moveRelative(playerToPush.id, -22, 0, 0);
+       movePiece(playerToPush.id, "X-");
+     }
+     else if(direction == 1) {
+       moveRelative(playerToPush.id, 22, 0, 0);
+       movePiece(playerToPush.id, "X+");
+     }
 
      if (newBoardspace.fallStage == Boardspace.FALLEN) {
        moveRelative(playerToPush.id, 0, 0, -5000);
        this.killPlayer(playerToPush);
+       fallPiece(playerToPush.id);
      }
    }
  }
@@ -428,20 +444,38 @@ class Gameplay {
     for(var i = lower + left; i <= lower + this.width; i++)   // lower row
     {
       this.board[i].fallStage = Boardspace.FALLEN;
+<<<<<<< HEAD
       setColorHex(i+4, 0xFF0000);
       invisible(i+4);
       if(this.board[i].hasPlayer())
       {
         moveRelative(this.board[i].player.id, 0, 0, -5000);
+=======
+      //setColorHex(i+4, 0xFF0000);
+      // invisible(i + 4);
+      fallPiece(i+4);
+      if(this.board[i].hasPlayer())
+      {
+        fallPiece(this.board[i].player.id);
+>>>>>>> master
         this.killPlayer(this.board[i].player);
       }
 
       this.board[99 - i].fallStage = Boardspace.FALLEN;
+<<<<<<< HEAD
       setColorHex(99 - i + 4, 0xFF0000);
       invisible(99-i+4);
       if(this.board[99 - i].hasPlayer())
       {
         moveRelative(this.board[99 - i].player.id, 0, 0, -5000);
+=======
+      // invisible(99 - i + 4);
+      fallPiece(99 - i + 4);
+      // setColorHex(99 - i + 4, 0xFF0000);
+      if(this.board[99 - i].hasPlayer())
+      {
+        fallPiece(this.board[99 - i].player.id);
+>>>>>>> master
         this.killPlayer(this.board[99 - i].player);
       }
     }
@@ -449,20 +483,39 @@ class Gameplay {
     for(var i = lower + left; i <= top - right; i+=10)   // left column
     {
       this.board[i].fallStage = Boardspace.FALLEN;
+<<<<<<< HEAD
       setColorHex(i+4, 0xFF0000);
       invisible(i+4);
       if(this.board[i].hasPlayer())
       {
         moveRelative(this.board[i].player.id, 0, 0, -5000);
+=======
+      // setColorHex(i+4, 0xFF0000);
+      // invisible(i + 4);
+      fallPiece(i+4);
+      if(this.board[i].hasPlayer())
+      {
+        fallPiece(this.board[i].player.id);
+>>>>>>> master
         this.killPlayer(this.board[i].player);
       }
 
       this.board[99 - i].fallStage = Boardspace.FALLEN;
+<<<<<<< HEAD
       setColorHex(99 - i + 4, 0xFF0000);
       invisible(99-i+4);
       if(this.board[99 - i].hasPlayer())
       {
         moveRelative(this.board[99 - i].player.id, 0, 0, -5000);
+=======
+      // setColorHex(99 - i + 4, 0xFF0000);
+      // invisible(99 - i + 4);
+      fallPiece(99 - i + 4);
+
+      if(this.board[99 - i].hasPlayer())
+      {
+        fallPiece(this.board[99 - i].player.id);
+>>>>>>> master
         this.killPlayer(this.board[99 - i].player);
       }
     }

@@ -31,6 +31,7 @@
 
 	<button id = "strtGameBttn" onclick="startGame()">Start Game</button>
 	<button id = "endTurn" onclick="endTurn()">End Turn</button>
+	<button id = "changeCam" onclick="changeCam()">ChangeCam</button>
 	<p id = "gameboard"></p>
 	<p id = "instructions"></p>
 	<p id = "timer"></p>
@@ -56,6 +57,9 @@
 	<script src="_front/_gameStage/_frontGlobal.js"></script>
 	<script src="_front/_gameStage/_frontMain.js"></script>
 	<script src="_front/_gameStage/_frontBuilder.js"></script>
+	<script src="_front/_animators/_movePiece.js"></script>
+	<script src="_front/_animators/_fallPiece.js"></script>
+	<script src="_front/_animators/_lookAtMeNow.js"></script>
 	<script src="item.js" type="text/javascript"></script>
 	<script src="player.js" type="text/javascript"></script>
 	<script src="boardspace.js" type="text/javascript"></script>
@@ -72,12 +76,21 @@
 	loadSTL('_front/_assets/Spider_Scaled.stl');
 	loadSTL('_front/_assets/Spider_Scaled.stl');
 
+
 	var game = null;
 	var player = null;
 
 	var tempIDs = ["A", "B", "C", "D"]
+
+		function changeCam() {
+			updateCamera();
+		}
 	//THREE.DefaultLoadingManager.onLoad = function ( ) {
 		function startGame() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 			document.getElementById("strtGameBttn").disabled = true;
 
 			game = new Gameplay(player1, player2, player3, player4);
@@ -90,6 +103,7 @@
 		}
 
 		function nextTurn() {
+
 			// Get the next player
 			document.getElementById("currentItem").innerHTML = "";
 			if (player == null) {
@@ -151,6 +165,7 @@
 				}
 			}
 		}
+<<<<<<< HEAD
 
 		function useItemOn(boardspace) {
 			var diff = game.currPlayer.position - boardspace;
@@ -170,12 +185,37 @@
 				game.useItem(game.currItem, dir);
 				document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
 			}
+=======
+
+		function useItemOn(boardspace) {
+			var diff = game.currPlayer.position - boardspace;
+			var dir = 0;
+			if (diff >= 10) {	dir = -10; }
+			else if (diff <= -10) { dir = 10;	}
+			else if (diff >= 1 && diff < 10) { dir = -1; }
+			else if (diff <= -1 && diff > -10) { dir = 1; }
+
+			if (game.currItem.attackType != Item.BASIC || game.currItem.name == "Teleport") {
+				dir = boardspace;
+			}
+			if (game.currItem.name == "Teleport" || game.currItem.name == "Move Again") {
+				game.useItem(game.currItem, dir);
+				document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
+			} else {
+				game.useItem(game.currItem, dir);
+				document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
+			}
+>>>>>>> master
 			endTurn();
 		}
 
 		function endTurn() {
 			document.getElementById("basicAttacks").hidden = true;
 			game.endTurnFor(player.data);
+<<<<<<< HEAD
+=======
+			updateCamera();
+>>>>>>> master
 			nextTurn();
 		}
 
@@ -272,8 +312,14 @@
 		if(key.keyCode == "87" && possibleMoves.includes(up) && game.currPlayer.status == 1 ) {
 			console.log("keyCatcher(): Registered \'W\' Key");
 			rotateAbsolute(game.currPlayer.id, 0, 0, -90);
+<<<<<<< HEAD
 			moveRelative(game.currPlayer.id, 0, 22, 0);
 			moveTo(game.currPlayer.position - 10);
+=======
+			// moveRelative(game.currPlayer.id, 0, 22, 0);
+			moveTo(game.currPlayer.position - 10);
+			movePiece(game.currPlayer.id, "Y+");
+>>>>>>> master
 		}
 		else if(key.keyCode == "87" && game.attackSpaces.includes(up) && game.currPlayer.status == 2) {
 			console.log("keyCatcher(): Registered \'W\' Key");
@@ -284,8 +330,14 @@
 		else if(key.keyCode == "83" && possibleMoves.includes(down) && game.currPlayer.status == 1 ) {
 			console.log("keyCatcher(): Registered \'S\' Key");
 			rotateAbsolute(game.currPlayer.id, 0, 0, 90);
+<<<<<<< HEAD
 			moveRelative(game.currPlayer.id, 0, -22, 0);
 			moveTo(game.currPlayer.position + 10);
+=======
+			// moveRelative(game.currPlayer.id, 0, -22, 0);
+			moveTo(game.currPlayer.position + 10);
+			movePiece(game.currPlayer.id, "Y-");
+>>>>>>> master
 		}
 		else if(key.keyCode == "83" && game.attackSpaces.includes(down) && game.currPlayer.status == 2) {
 			console.log("keyCatcher(): Registered \'S\' Key");
@@ -297,8 +349,14 @@
 		else if(key.keyCode == "68" && possibleMoves.includes(right) && game.currPlayer.status == 1 ) {
 			console.log("keyCatcher(): Registered \'D\' Key");
 			rotateAbsolute(game.currPlayer.id, 0, 0, 180);
+<<<<<<< HEAD
 			moveRelative(game.currPlayer.id, 22, 0, 0);
 			moveTo(game.currPlayer.position + 1);
+=======
+			// moveRelative(game.currPlayer.id, 22, 0, 0);
+			moveTo(game.currPlayer.position + 1);
+			movePiece(game.currPlayer.id, "X+");
+>>>>>>> master
 		}
 		else if(key.keyCode == "68" && game.attackSpaces.includes(right) && game.currPlayer.status == 2) {
 			console.log("keyCatcher(): Registered \'D\' Key");
@@ -309,8 +367,14 @@
 		else if(key.keyCode == "65" && possibleMoves.includes(left) && game.currPlayer.status == 1 ) {
 			console.log("keyCatcher(): Registered \'A\' Key");
 			rotateAbsolute(game.currPlayer.id, 0, 0, 0);
+<<<<<<< HEAD
 			moveRelative(game.currPlayer.id, -22, 0, 0);
 			moveTo(game.currPlayer.position - 1);
+=======
+			// moveRelative(game.currPlayer.id, -22, 0, 0);
+			moveTo(game.currPlayer.position - 1);
+			movePiece(game.currPlayer.id, "X-");
+>>>>>>> master
 		}
 		else if(key.keyCode == "65" && game.attackSpaces.includes(left) && game.currPlayer.status == 2) {
 			console.log("keyCatcher(): Registered \'A\' Key");
