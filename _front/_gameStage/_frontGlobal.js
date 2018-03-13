@@ -22,11 +22,8 @@ var PLATE_THICKNESS = 5;
 var CAM_FOV = 45;
 var CAM_FAR_PLANE = 5000;
 var CAM_NEAR_PLANE = 1;
-<<<<<<< HEAD
 var CAM_POS = {X:220/2, Y:-220/2, Z:400/1};
-=======
 var CAM_POS = {X:(220-22)/2, Y:(-220+22)/2, Z:10/1};
->>>>>>> master
 var CAM_LOOK = {X:0, Y:0, Z:-1};
 var PLATE_GAP = 2;
 var PLATE_DEPTH = -10;
@@ -171,13 +168,10 @@ if(VERBOSE && !TESTING) {
   if(DEEP_VERBOSE){
     console.log(pointLight);
   }
-<<<<<<< HEAD
   console.log("Plate Done");
   if(DEEP_VERBOSE){
     console.log(plateGeom);
   }
-=======
->>>>>>> master
 }
 
 /** Load Custom Object **/

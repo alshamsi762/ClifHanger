@@ -14,12 +14,10 @@ function initScreen() {
   draw.setSize(screen.width, screen.height);
   // Attach Render to HTML Element
   document.body.appendChild(draw.domElement);
-<<<<<<< HEAD
   // document.getElementById("gameScreen").body.appendChild(draw.domElement);
     // Set cam Postion
   cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
 
-=======
   // Set cam Postion
   // controls.target.set(220/2, -220/2, -1);
   cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
@@ -28,7 +26,6 @@ function initScreen() {
   // Set cam Direction
   // cam.lookAt(new THREE.Vector3(CAM_LOOK.X, CAM_LOOK.Y, CAM_LOOK.Z));
   // controls.target.set(220/2, -220/2, -1);
->>>>>>> master
   // Add Axes
   if(AXES) {
     scene.add(axes);
@@ -96,10 +93,7 @@ function buildStage(size) {
       obj3DArray[SP] = new THREE.Mesh(plateGeom.clone(), lambert.clone());
       obj3DArray[SP].position.set((PLATE_SIZE + PLATE_GAP) * j, (PLATE_SIZE + PLATE_GAP) * -i, PLATE_DEPTH);
       obj3DArray[SP].name = "tile" + (count++);
-<<<<<<< HEAD
-=======
       console.log(obj3DArray[SP].name);
->>>>>>> master
       scene.add(obj3DArray[SP]);
       obj3DArray[SP].needsupdate = true;
       SP++;
@@ -283,24 +277,18 @@ function getColorRGB(index) {
 
 function invisible(index) {
   obj3DArray[index].visible = false;
-<<<<<<< HEAD
-=======
   obj3DArray[index].needsupdate = true;
->>>>>>> master
 }
 
 function visible(index) {
   obj3DArray[index].visible = true;
 }
 
-<<<<<<< HEAD
-=======
 function updateCamera() {
   controls.target.set((220-22)/2, (-220+22)/2, -1);
   cam.position.set(CAM_POS.X, CAM_POS.Y, 600/1);
   controls.update();
 }
->>>>>>> master
 // Smart Scaling (If Time)
 
 // Smart Centering (If Time)
