@@ -95,15 +95,19 @@ function initScreen() {
 /** Build Stage **/
 function buildStage(size) {
   // Add Plate to Scene
+  SP = 4;
   var count = 0;
   for (i = 0; i < size; i++) {
     for (j = 0; j < size; j++) {
-      // obj3DArray[SP] = new THREE.Mesh(plateGeom.clone(), lambert.clone());
-      // obj3DArray[SP].position.z = PLATE_DEPTH;
-      // obj3DArray[SP].position.x = (PLATE_SIZE + PLATE_GAP) * j;
-      // obj3DArray[SP].position.y = (PLATE_SIZE + PLATE_GAP) * -i;
-      // scene.add(obj3DArray[SP]);
-      // SP++;
+      obj3DArray[SP] = new THREE.Mesh(plateGeom.clone(), lambert.clone());
+      obj3DArray[SP].position.z = PLATE_DEPTH;
+      obj3DArray[SP].position.x = (PLATE_SIZE + PLATE_GAP) * j;
+      obj3DArray[SP].position.y = (PLATE_SIZE + PLATE_GAP) * -i;
+      obj3DArray[SP].name = "tile" + (count++);
+      scene.add(obj3DArray[SP]);
+      SP++;
+
+      /** Andrew Testing
       obj3DArray[SP] = new THREE.Mesh(plateGeom.clone(), lambert.clone());
       obj3DArray[SP].position.set((PLATE_SIZE + PLATE_GAP) * j, (PLATE_SIZE + PLATE_GAP) * -i, PLATE_DEPTH);
       obj3DArray[SP].name = "tile" + (count++);
@@ -111,6 +115,7 @@ function buildStage(size) {
       scene.add(obj3DArray[SP]);
       obj3DArray[SP].needsupdate = true;
       SP++;
+      **/
 
     }
   }
@@ -128,6 +133,7 @@ function buildStage(size) {
 
 
 /** Load Asset **/
+/** Depricated
 // Handler
 function loadHandler(geometry) {
   obj3DArray[SP] = new THREE.Mesh(geometry.clone(), lambert.clone());
@@ -150,7 +156,94 @@ function loadHandler(geometry) {
 function loadSTL(filename) {
   STL.load(filename, loadHandler);
 }
+**/
+// Handler
+function loadHandler0(geometry) {
+  obj3DArray[0] = new THREE.Mesh(geometry.clone(), lambert.clone());
+  obj3DArray[0].castShadow = true;
+  scene.add(obj3DArray[0]);
 
+  // Console Print
+  if(VERBOSE && !TESTING) {
+    console.log("Load Object onto Scene and Added to Array");
+    console.log("Stack Pointer: ", 0);
+    if(DEEP_VERBOSE){
+      console.log(obj3DArray);
+      console.log(scene);
+    }
+  }
+}
+
+// Function Needs to be fixed (I am lying to you)
+function loadSTL0(filename) {
+  STL.load(filename, loadHandler0);
+}
+
+// Handler
+function loadHandler1(geometry) {
+  obj3DArray[1] = new THREE.Mesh(geometry.clone(), lambert.clone());
+  obj3DArray[1].castShadow = true;
+  scene.add(obj3DArray[1]);
+
+  // Console Print
+  if(VERBOSE && !TESTING) {
+    console.log("Load Object onto Scene and Added to Array");
+    console.log("Stack Pointer: ", 1);
+    if(DEEP_VERBOSE){
+      console.log(obj3DArray);
+      console.log(scene);
+    }
+  }
+}
+
+// Function Needs to be fixed (I am lying to you)
+function loadSTL1(filename) {
+  STL.load(filename, loadHandler1);
+}
+
+// Handler
+function loadHandler2(geometry) {
+  obj3DArray[2] = new THREE.Mesh(geometry.clone(), lambert.clone());
+  obj3DArray[2].castShadow = true;
+  scene.add(obj3DArray[2]);
+
+  // Console Print
+  if(VERBOSE && !TESTING) {
+    console.log("Load Object onto Scene and Added to Array");
+    console.log("Stack Pointer: ", 2);
+    if(DEEP_VERBOSE){
+      console.log(obj3DArray);
+      console.log(scene);
+    }
+  }
+}
+
+// Function Needs to be fixed (I am lying to you)
+function loadSTL2(filename) {
+  STL.load(filename, loadHandler2);
+}
+
+// Handler
+function loadHandler3(geometry) {
+  obj3DArray[3] = new THREE.Mesh(geometry.clone(), lambert.clone());
+  obj3DArray[3].castShadow = true;
+  scene.add(obj3DArray[3]);
+
+  // Console Print
+  if(VERBOSE && !TESTING) {
+    console.log("Load Object onto Scene and Added to Array");
+    console.log("Stack Pointer: ", 3);
+    if(DEEP_VERBOSE){
+      console.log(obj3DArray);
+      console.log(scene);
+    }
+  }
+}
+
+// Function Needs to be fixed (I am lying to you)
+function loadSTL3(filename) {
+  STL.load(filename, loadHandler3);
+}
 
 /** Object Manipulators **/
 // Translation
