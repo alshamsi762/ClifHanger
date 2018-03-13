@@ -30,16 +30,17 @@ function initScreen() {
     document.body.appendChild(draw.domElement);
   }
   // Set cam Postion
-  // controls.target.set(220/2, -220/2, -1);
   cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
+  controls.update();
+  // Set cam Direction
+  cam.lookAt(new THREE.Vector3(CAM_LOOK.X, CAM_LOOK.Y, CAM_LOOK.Z));
+  controls.target.set(CAM_LOOK.X, CAM_LOOK.Y, CAM_LOOK.Z);
+  controls.update();
 
   if (!TESTING) {
     controls.update();
   }
 
-  // Set cam Direction
-  // cam.lookAt(new THREE.Vector3(CAM_LOOK.X, CAM_LOOK.Y, CAM_LOOK.Z));
-  // controls.target.set(220/2, -220/2, -1);
   // Add Axes
   if(AXES) {
     scene.add(axes);
