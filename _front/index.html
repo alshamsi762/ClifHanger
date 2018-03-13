@@ -13,13 +13,28 @@
 
     <!-- Import Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body {
+        font-family: Monospace;
+        background-color: #000;
+        color: #000;
+        margin: 0px;
+        overflow: hidden;
+      }
+      #gameScreen {
+        position: absolute;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+      }
+    </style>
     <!-- Put your CSS Stuff Here. -->
   </head>
 
   <!-- Body -->
   <body class="container-fluid">
     <!-- Game Element -->
-    <canvas id="gameScreen"></canavas>
+    <div id="gameScreen"></div>
 
     <!-- JS Scripts -->
     <!-- Put your JavaScript Here. -->
@@ -33,6 +48,8 @@
     <script src="_animators/_movePiece.js"></script>
     <script src="_animators/_fallPiece.js"></script>
     <script src="_animators/_lookAtMeNow.js"></script>
+    <script src="_animators/_shrinkPiece.js"></script>
+    <script src="_animators/_growPiece.js"></script>
     <script src="backDriver.js"></script>
   </body>
 </html>

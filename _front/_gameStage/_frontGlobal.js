@@ -32,6 +32,8 @@ var MP_DUR = 0.5;
 var FP_DUR = 5.00;
 var FP_BUF = 1000;
 var FP_EXP = 5;
+var SP_RED = 0.05;
+var SP_MIN = 0.00001;
 
 if (TESTING) {
   var THREE = require('three');
@@ -82,10 +84,10 @@ if (TESTING) {
 // Get Element Reference
 // NOT TESTABLE
 if (!TESTING) {
-  // var screen = document.getElementById(ELEMENT_ID);
+  var screen = document.getElementById(ELEMENT_ID);
   // // Change Based on Available setSize
-  // screen.width = window.innerWidth;
-  // screen.height = window.innerHeight;
+  screen.width = window.innerWidth;
+  screen.height = window.innerHeight;
 }
 // TESTABLE ALTERNATIVE
 if (TESTING && TESTING_SSIDE) {
@@ -197,6 +199,16 @@ if(VERBOSE && !TESTING) {
 if (!TESTING) {
   var STL = new THREE.STLLoader();
 }
+
+// Win size
+function onWindowResize() {
+  cam.aspect = screen.innerWidth / screen.innerHeight;
+  cam.updateProjectionMatrix();
+  draw.setSize( screen.innerWidth, screen.innerHeight );
+}
+window.addEventListener('resize', onWindowResize, false);
+
+
 //Export if TESTING
 if (TESTING) {
   module.exports = {
