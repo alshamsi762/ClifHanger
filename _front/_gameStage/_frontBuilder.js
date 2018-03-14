@@ -25,7 +25,7 @@ function initScreen() {
     // Set Background Color
     draw.setClearColor(BACKGROUND_COLOR);
     // Set Size
-    draw.setSize(screen.width, screen.height);
+    draw.setSize(screen.width/2, screen.height/2);
     // Attach Render to HTML Element
     document.body.appendChild(draw.domElement);
   }
@@ -402,7 +402,7 @@ function visible(index) {
 
 function updateCamera() {
   controls.target.set((220-22)/2, (-220+22)/2, -1);
-  cam.position.set(CAM_POS.X, CAM_POS.Y, 600/1);
+  cam.position.set(CAM_POS.X, CAM_POS.Y, CAM_POS.Z);
   controls.update();
 }
 

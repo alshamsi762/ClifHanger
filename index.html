@@ -46,7 +46,7 @@
 	<p id = "global"></p>
 
 	<!-- Game Element -->
-	<canvas id="gameScreen"></canavas>
+	<!-- <canvas id="gameScreen"></canavas> -->
 
 	<!-- JS Scripts -->
 	<!-- Put your JavaScript Here. -->
@@ -287,7 +287,7 @@
 		var right = game.currPlayer.position + 1;
 		var left = game.currPlayer.position - 1;
 
-		if (game.currItem != null && game.currItem.name == "Teleport") {
+		if (game.currItem != null && (game.currItem.name == "Teleport" || game.currItem.attackType == Item.TRAP)) {
 			up = teleportMove - 10;
 		 	down = teleportMove + 10;
 			right = teleportMove + 1;
@@ -300,17 +300,17 @@
 			console.log("keyCatcher(): Registered \'W\' Key");
 			rotateAbsolute(game.currPlayer.id, 0, 0, -90);
 			// moveRelative(game.currPlayer.id, 0, 22, 0);
-			moveTo(game.currPlayer.position - 10);
 			movePiece(game.currPlayer.id, "Y+");
+			moveTo(game.currPlayer.position - 10);
 			teleportMove = game.currPlayer.position;
 		}
 		else if(key.keyCode == "87" && game.attackSpaces.includes(up) && game.currPlayer.status == 2) {
 			console.log("keyCatcher(): Registered \'W\' Key");
-			if (game.currItem.name != "Teleport") {
+			if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
 				teleportMove = game.currPlayer.position;
 				useItemOn(game.currPlayer.position - 10);
 			} else if (up >= game.lowerBounds) {
-				game.selectBlock(teleportMove, 0x00FF00);
+				game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
 				teleportMove -= 10;
 				// movePiece(game.currPlayer.id, "Y+");
 				game.selectBlock(teleportMove, 0xFF00FF);
@@ -322,17 +322,17 @@
 			console.log("keyCatcher(): Registered \'S\' Key");
 			rotateAbsolute(game.currPlayer.id, 0, 0, 90);
 			// moveRelative(game.currPlayer.id, 0, -22, 0);
-			moveTo(game.currPlayer.position + 10);
 			movePiece(game.currPlayer.id, "Y-");
+			moveTo(game.currPlayer.position + 10);
 			teleportMove = game.currPlayer.position;
 		}
 		else if(key.keyCode == "83" && game.attackSpaces.includes(down) && game.currPlayer.status == 2) {
 			console.log("keyCatcher(): Registered \'S\' Key");
-			if (game.currItem.name != "Teleport") {
+			if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
 				teleportMove = game.currPlayer.position;
 				useItemOn(game.currPlayer.position + 10);
 			} else if (down <= game.topBounds) {
-				game.selectBlock(teleportMove, 0x00FF00);
+				game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
 				teleportMove += 10;
 				// movePiece(game.currPlayer.id, "Y-");
 				game.selectBlock(teleportMove, 0xFF00FF);
@@ -345,17 +345,17 @@
 			console.log("keyCatcher(): Registered \'D\' Key");
 			rotateAbsolute(game.currPlayer.id, 0, 0, 180);
 			// moveRelative(game.currPlayer.id, 22, 0, 0);
-			moveTo(game.currPlayer.position + 1);
 			movePiece(game.currPlayer.id, "X+");
+			moveTo(game.currPlayer.position + 1);
 			teleportMove = game.currPlayer.position;
 		}
 		else if(key.keyCode == "68" && game.attackSpaces.includes(right) && game.currPlayer.status == 2) {
 			console.log("keyCatcher(): Registered \'D\' Key");
-			if (game.currItem.name != "Teleport") {
+			if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
 				teleportMove = game.currPlayer.position;
 				useItemOn(game.currPlayer.position + 1);
 			} else if (right % 10 <= game.rightOffset) {
-				game.selectBlock(teleportMove, 0x00FF00);
+				game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
 				teleportMove += 1;
 				// movePiece(game.currPlayer.id, "X+");
 				game.selectBlock(teleportMove, 0xFF00FF);
@@ -367,17 +367,17 @@
 			console.log("keyCatcher(): Registered \'A\' Key");
 			rotateAbsolute(game.currPlayer.id, 0, 0, 0);
 			// moveRelative(game.currPlayer.id, -22, 0, 0);
-			moveTo(game.currPlayer.position - 1);
 			movePiece(game.currPlayer.id, "X-");
+			moveTo(game.currPlayer.position - 1);
 			teleportMove = game.currPlayer.position;
 		}
 		else if(key.keyCode == "65" && game.attackSpaces.includes(left) && game.currPlayer.status == 2) {
 			console.log("keyCatcher(): Registered \'A\' Key");
-			if (game.currItem.name != "Teleport") {
+			if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
 				teleportMove = game.currPlayer.position;
 				useItemOn(game.currPlayer.position - 1);
 			} else if (left % 10 >= game.leftOffset) {
-				game.selectBlock(teleportMove, 0x00FF00);
+				game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
 				teleportMove -= 1;
 				// movePiece(game.currPlayer.id, "X-");
 				game.selectBlock(teleportMove, 0xFF00FF);
@@ -385,9 +385,10 @@
 		}
 
 		// Player's position, for potions (Spacebar)
-		else if(key.keyCode == "32" && (game.attackSpaces.includes(game.currPlayer.position) || game.currItem.name == "Teleport") && game.currPlayer.status == 2) {
+		else if(key.keyCode == "32" && (game.attackSpaces.includes(game.currPlayer.position) || game.currItem.name == "Teleport" || game.currItem.attackType == Item.TRAP) && game.currPlayer.status == 2) {
 			console.log("keyCatcher(): Registered \'Spacebar\' Key");
-			if (game.currItem.name != "Teleport") {
+			game.selectBlock(game.currPlayer.position, LAMBERT_COLOR);
+			if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
 				teleportMove = game.currPlayer.position;
 				useItemOn(game.currPlayer.position);
 			} else {
@@ -438,11 +439,11 @@
 // 1) disable endTurn() button if hadnt moved yet		- Done!
 // 2) if everyone dies, print something		- Done!
 // 3) if someone cant move, game hangs!		- Done! Except if they have a teleport, it still skips their turn!
-
-/* Stuff to fix:
-1) Push player pushes them 2 plates(backend is fine, only UI appears to move twice)
-2) Walking into a trap also fucks it up
-3) Teleport and placing traps
+//
+// Stuff to fix:
+// 1) Push player pushes them 2 plates(backend is fine, only UI appears to move twice)
+// 2) Walking into a trap also fucks it up
+// 3) Teleport and placing traps
 
 
 
