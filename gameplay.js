@@ -400,7 +400,10 @@ class Gameplay {
         this.currPlayer.healHealthBy(30);
       } else if (item.name == "Teleport") { // Teleport
         if (this.attackSpaces.includes(dir)) {
+          setColorHex(this.currPlayer.position + 4, LAMBERT_COLOR);
           this.moveTo(this.board[dir]);
+          telePiece(this.currPlayer.id, dir + 4);
+
         }
       } else if (item.name == "Move Again") { // Move Again
         if (this.moveSpaces.includes(this.currPlayer.position + dir)) {
@@ -412,7 +415,11 @@ class Gameplay {
         }
       }
     }
-}
+  }
+
+  selectBlock(tileNumber, color) {
+    setColorHex(tileNumber+4, color);
+  }
 
   // Randomly drop an item on a random (valid) boardspace.
   // NOTE: TESTED!
@@ -498,6 +505,8 @@ class Gameplay {
     // call UI
 
   }
+
+
 
   // Remove player from linked list. Call any animations
   // NOTE: TESTED!

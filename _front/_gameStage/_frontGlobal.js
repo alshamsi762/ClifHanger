@@ -10,7 +10,7 @@
 /** Config Vars **/
 var TESTING = false;
 var VERBOSE = true;
-var DEEP_VERBOSE = true;
+var DEEP_VERBOSE = false;
 var ELEMENT_ID = 'gameScreen';
 var BACKGROUND_COLOR = 0x87CEEB;
 var LAMBERT_COLOR = 0xD7DFE5;
@@ -84,10 +84,10 @@ if (TESTING) {
 // Get Element Reference
 // NOT TESTABLE
 if (!TESTING) {
-  var screen = document.getElementById(ELEMENT_ID);
-  // // Change Based on Available setSize
-  screen.width = window.innerWidth;
-  screen.height = window.innerHeight;
+  // var screen = document.getElementById(ELEMENT_ID);
+  // // // Change Based on Available setSize
+  // screen.width = window.innerWidth;
+  // screen.height = window.innerHeight;
 }
 // TESTABLE ALTERNATIVE
 if (TESTING && TESTING_SSIDE) {
