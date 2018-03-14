@@ -131,6 +131,11 @@ if (TESTING) {
 }
 
 
+/** Setup Raycaster **/
+var ray = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+
+
 /** Setup cam & Orbital Controls **/
 // Set cam
 var cam = new THREE.PerspectiveCamera(CAM_FOV, screen.width / screen.height, CAM_NEAR_PLANE, CAM_FAR_PLANE);
