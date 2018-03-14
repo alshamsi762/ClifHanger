@@ -9,6 +9,5 @@ THREE.DefaultLoadingManager.onLoad = function ( ) {
   //movePiece(0, "Y-");
   //movePiece(1, "Y+");
   //movePiece(2, "X-");
-  scaleRigid(0, 0.00001);
-  growPiece(0);
+  telePiece(0, 103);
 };
