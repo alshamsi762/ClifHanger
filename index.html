@@ -46,7 +46,7 @@
 	<p id = "global"></p>
 
 	<!-- Game Element -->
-	<!-- <canvas id="gameScreen"></canavas> -->
+	<canvas id="gameScreen"></canavas>
 
 	<!-- JS Scripts -->
 	<!-- Put your JavaScript Here. -->
@@ -59,6 +59,9 @@
 	<script src="_front/_gameStage/_frontBuilder.js"></script>
 	<script src="_front/_animators/_movePiece.js"></script>
 	<script src="_front/_animators/_fallPiece.js"></script>
+	<script src="_front/_animators/_shrinkPiece.js"></script>
+	<script src="_front/_animators/_growPiece.js"></script>
+	<script src="_front/_animators/_telePiece.js"></script>
 	<script src="_front/_animators/_lookAtMeNow.js"></script>
 	<script src="_front/_animators/_growPiece.js"></script>
 	<script src="_front/_animators/_shrinkPiece.js"></script>
@@ -436,6 +439,10 @@
 // 2) if everyone dies, print something		- Done!
 // 3) if someone cant move, game hangs!		- Done! Except if they have a teleport, it still skips their turn!
 
+/* Stuff to fix:
+1) Push player pushes them 2 plates(backend is fine, only UI appears to move twice)
+2) Walking into a trap also fucks it up
+3) Teleport and placing traps
 
 
 

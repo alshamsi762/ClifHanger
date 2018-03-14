@@ -224,6 +224,10 @@ class Gameplay {
   startTurnFor(player) {
     // TODO Start turn timer
     player.status = Player.MOVING;  // Change player status to moving
+    setColorHex(0, 0xFFFF00);
+    setColorHex(1, 0xFFFF00);
+    setColorHex(2, 0xFFFF00);
+    setColorHex(3, 0xFFFF00);
     setColorHex(player.id, 0x00FF00);
     this.currPlayer = player;
     this.moveSpaces = this.possibleMovesFrom(this.board[player.position]); // Calculate possible moves
@@ -319,6 +323,7 @@ class Gameplay {
   attack(item, boardspace) {
     if (boardspace.hasPlayer()) {
       boardspace.player.damageHealthBy(item.damage);
+      growPiece(boardspace.player.id);
       if (boardspace.player.getHealth() == 0) {
         this.killPlayer(boardspace.player);
       }
