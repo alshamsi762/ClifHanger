@@ -14,7 +14,7 @@ var DEEP_VERBOSE = false;
 var ELEMENT_ID = 'gameScreen';
 var BACKGROUND_COLOR = 0x87CEEB;
 var LAMBERT_COLOR = 0xD7DFE5;
-var AXES = true;
+var AXES = false;
 var AXES_SIZE = 100;
 var LIGHT_COLOR = 0xFFFFF0;
 var LIGHT_INTENSITY = 0.5;
@@ -26,7 +26,7 @@ var CAM_NEAR_PLANE = 1;
 var CAM_POS = {X:99, Y:-99, Z:300};
 var CAM_LOOK = {X:99, Y:-99, Z:0};
 var PLATE_GAP = 2;
-var PLATE_DEPTH = -10;
+var PLATE_DEPTH = -5;
 var SP = 0;
 var MP_DUR = 0.5;
 var FP_DUR = 5.00;
@@ -35,12 +35,12 @@ var FP_EXP = 5;
 var SP_RED = 0.05;
 var SP_MIN = 0.00001;
 
-// Animations Performance Test: Graph frames rendered in the last second (FPS), msecs needed to render a frame (MS), and mbytes of allocated memory (MB). 
+// Animations Performance Test: Graph frames rendered in the last second (FPS), msecs needed to render a frame (MS), and mbytes of allocated memory (MB).
 /* Anjali uncomment for testing */
 /*(function performanceTest()
 {
   var script=document.createElement('script');
-  script.onload=function measureStats() 
+  script.onload=function measureStats()
   {
     var stats=new Stats();
     document.body.appendChild(stats.dom);

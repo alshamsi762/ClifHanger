@@ -109,7 +109,7 @@
 	function nextTurn() {
 
 		// Get the next player
-		document.getElementById("currentItem").innerHTML = "";
+		document.getElementById("currentItem").innerHTML = "Current item: ";
 		if (player == null) {
 			player = game.playerList.head;
 		} else if (player.next.data.id == -1){
@@ -123,8 +123,9 @@
 		} else {
 			player = player.next;
 		}
-		document.getElementById("offensiveItems").innerHTML = "&nbsp";
-		document.getElementById("defensiveItems").innerHTML = "&nbsp";
+		document.getElementById("offensiveItems").innerHTML = "Offensive Items:  ";
+		document.getElementById("defensiveItems").innerHTML = "Defensive Items:  ";
+		document.getElementById("itemUsed").innerHTML = "Item used: ";
 
 		if (game.hasEnded() == 1) {
 			// Tell the player to start their turn
@@ -143,12 +144,12 @@
 		var possibleMoves = game.possibleMovesFrom(game.board[player.data.position]);
 		if(possibleMoves.length > 0) {
 			game.startTurnFor(player.data);
-			turnTimer(10, player.data.name, "timer");
+			turnTimer(15, player.data.name, "timer");
 			displayPlayerInfo();
 		}
 		else {
 			game.startTurnFor(player.data);
-			turnTimer(10, player.data.name, "timer");
+			turnTimer(15, player.data.name, "timer");
 			displayPlayerInfo();
 			document.getElementById("global").innerHTML = game.currPlayer.name+" has no possible moves!";
 			endTurn();
@@ -201,19 +202,21 @@
 	function displayItems() {
 		var offense = "";
 		var defense = "";
-		document.getElementById("basicAttacks").hidden = false;
+		document.getElementById("basicAttacks").hidden = true;
 		document.getElementById("basicAttacks").innerHTML = "Push";
 		for (var i = 0; i < game.currPlayer.offensive.length; i++) {
-			offense += "<button id=\"offensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.offensive[i]) + "\')\">";
-			offense += game.currPlayer.offensive[i].name + "</button>";
+			// offense += "<button id=\"offensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.offensive[i]) + "\')\">";
+			// offense += game.currPlayer.offensive[i].name + "</button>";
+			offense += game.currPlayer.offensive[i].name + " - ";
 		}
 
 		for (var i = 0; i < game.currPlayer.defensive.length; i++) {
-			defense += "<button id=\"defensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.defensive[i]) + "\')\">";
-			defense += game.currPlayer.defensive[i].name + "</button>";
+			// defense += "<button id=\"defensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.defensive[i]) + "\')\">";
+			// defense += game.currPlayer.defensive[i].name + "</button>";
+			defense += game.currPlayer.defensive[i].name + " - ";
 		}
-		document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense + " * Can only use right most.";
-		document.getElementById("defensiveItems").innerHTML = "Defensive Items:  " + defense + " * Can only use right most.";
+		document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense;
+		document.getElementById("defensiveItems").innerHTML = "Defensive Items:  " + defense;
 	}
 
 	function itemSelected(index) {
@@ -263,13 +266,14 @@
 		// element.innerHTML = "<h2>You ran out of time! You shall lose 10 HP!</h2>";
 		document.getElementById("global").innerHTML = game.currPlayer.name+" ran out of time! They shall lose 10 HP!";
 		game.currPlayer.damageHealthBy(10);
+		growPiece(game.currPlayer.id);
 		endTurn();
 		return;
 	}
 	else {
 		element.innerHTML = "You have "+secs+" seconds to finish your turn!";// Name= "+name+" currPlayer= "+game.currPlayer.name;
 		secs--;
-		// var timer = setTimeout('turnTimer('+secs+',"'+name+'","'+x+'")',1000);		// Issue: double quotes around string parameter were missing causing issues
+		var timer = setTimeout('turnTimer('+secs+',"'+name+'","'+x+'")',1000);		// Issue: double quotes around string parameter were missing causing issues
 	}
 }
 
@@ -419,6 +423,7 @@ function keyCatcher(key) {
 		game.clearMoveSpaces();
 		game.clearAttackSpaces();
 		game.chooseItem(game.basicAttack);
+		document.getElementById("currentItem").innerHTML = "Current item: " + "Basic attack";
 	}
 
 	// End turn (E)

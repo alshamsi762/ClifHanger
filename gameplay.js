@@ -616,7 +616,7 @@ class Gameplay {
   // NOTE: TESTED!
   shouldShrinkBoard() {
     var count = this.fullTurnCount;
-    if(count == 1 || count == 3 || count == 5)
+    if(count == 6 || count == 9 || count == 12)
     {
       var top = this.topBounds, lower = this.lowerBounds, right = this.rightOffset, left = this.leftOffset;
 
@@ -638,7 +638,7 @@ class Gameplay {
       }
 
     }
-    if(count == 2 || count == 4 || count == 6)    // After 5 - 7 - 9 turns
+    if(count == 7 || count == 10 || count == 13)    // After 7 - 10 - 13 turns
     {
       // call shrinkBoarb
       this.shrinkBoard();

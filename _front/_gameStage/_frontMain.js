@@ -12,14 +12,14 @@ if (!TESTING) {
     requestAnimationFrame(animate);
 
     // Put Ray
-    ray.setFromCamera( mouse, cam );
+    // ray.setFromCamera( mouse, cam );
 
     // Get Intersection
     var intersects = ray.intersectObjects(scene.children);
 
     // Set Intersection
-    if(intersects.length >= 1)
-      intersects[0].object.material.color.set( 0xff0000 );
+    // if(intersects.length >= 1)
+      // intersects[0].object.material.color.set( 0xff0000 );
 
     // Update based on Orbital Controls
     controls.update();
