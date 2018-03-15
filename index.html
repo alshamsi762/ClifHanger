@@ -89,350 +89,350 @@
 
 	var tempIDs = ["A", "B", "C", "D"]
 
-		function changeCam() {
-			updateCamera();
-		}
+	function changeCam() {
+		updateCamera();
+	}
 	//THREE.DefaultLoadingManager.onLoad = function ( ) {
-		function startGame() {
+	function startGame() {
 
-			document.getElementById("strtGameBttn").disabled = true;
+		document.getElementById("strtGameBttn").disabled = true;
 
-			game = new Gameplay(player1, player2, player3, player4);
-			game.createBoard();
+		game = new Gameplay(player1, player2, player3, player4);
+		game.createBoard();
 
-			// Create button for basic/push attacks
-			document.getElementById("basicAttacks").innerHTML = "Push";
-			// Start player 1's turn
-			nextTurn();
+		// Create button for basic/push attacks
+		document.getElementById("basicAttacks").innerHTML = "Push";
+		// Start player 1's turn
+		nextTurn();
+	}
+
+	function nextTurn() {
+
+		// Get the next player
+		document.getElementById("currentItem").innerHTML = "";
+		if (player == null) {
+			player = game.playerList.head;
+		} else if (player.next.data.id == -1){
+			game.fullTurnCount++;
+			game.shouldShrinkBoard();
+			{
+				var i = game.dropItem();
+				// document.getElementById("" + i).innerHTML = game.items.indexOf(game.board[i].loot);
+			}
+			player = game.playerList.head;
+		} else {
+			player = player.next;
 		}
+		document.getElementById("offensiveItems").innerHTML = "&nbsp";
+		document.getElementById("defensiveItems").innerHTML = "&nbsp";
 
-		function nextTurn() {
-
-			// Get the next player
-			document.getElementById("currentItem").innerHTML = "";
-			if (player == null) {
-				player = game.playerList.head;
-			} else if (player.next.data.id == -1){
-				game.fullTurnCount++;
-				game.shouldShrinkBoard();
-				{
-					var i = game.dropItem();
-					// document.getElementById("" + i).innerHTML = game.items.indexOf(game.board[i].loot);
-				}
-				player = game.playerList.head;
-			} else {
-				player = player.next;
-			}
-			document.getElementById("offensiveItems").innerHTML = "&nbsp";
-			document.getElementById("defensiveItems").innerHTML = "&nbsp";
-
-			if (game.hasEnded() == 1) {
-				// Tell the player to start their turn
-				document.getElementById("instructions").innerHTML = "Not every game has a winner!<br />";
-				document.getElementById("endTurn").disabled = true;
-				return;
-			} else if (game.hasEnded() == 2) {
-				document.getElementById("instructions").innerHTML = player.data.name + " has won!";
-				document.getElementById("endTurn").disabled = true;
-				return;
-			}
-			else {
-				document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
-			}
-			// Display possible moves
-			var possibleMoves = game.possibleMovesFrom(game.board[player.data.position]);
-			if(possibleMoves.length > 0) {
-				game.startTurnFor(player.data);
-				turnTimer(10, player.data.name, "timer");
-				displayPlayerInfo();
-			}
-			else {
-				game.startTurnFor(player.data);
-				turnTimer(10, player.data.name, "timer");
-				displayPlayerInfo();
-				document.getElementById("global").innerHTML = game.currPlayer.name+" has no possible moves!";
-				endTurn();
-			}
-		}
-
-		function moveTo(boardspace) {
-			if (game.currPlayer.status == 1) {
-				game.moveTo(game.board[boardspace]);
-				document.getElementById("endTurn").disabled = false;
-				if (game.currPlayer.status == 0) { // Player was trapped
-					document.getElementById("global").innerHTML = player.data.name + " was trapped!<br />";
-					game.clearAttackSpaces();
-					endTurn();
-				} else {													// Not trapped
-					displayItems();
-					document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
-				}
-			}
-		}
-
-		function useItemOn(boardspace) {
-			var diff = game.currPlayer.position - boardspace;
-			var dir = 0;
-			if (diff >= 10) {	dir = -10; }
-			else if (diff <= -10) { dir = 10;	}
-			else if (diff >= 1 && diff < 10) { dir = -1; }
-			else if (diff <= -1 && diff > -10) { dir = 1; }
-
-			if (game.currItem.attackType != Item.BASIC || game.currItem.name == "Teleport") {
-				dir = boardspace;
-			}
-			if (game.currItem.name == "Teleport" || game.currItem.name == "Move Again") {
-				game.useItem(game.currItem, dir);
-				document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
-			} else {
-				game.useItem(game.currItem, dir);
-				document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
-			}
-			endTurn();
-		}
-
-		function endTurn() {
-			document.getElementById("basicAttacks").hidden = true;
-			game.endTurnFor(player.data);
-			updateCamera();
-			nextTurn();
-		}
-
-		function displayItems() {
-			var offense = "";
-			var defense = "";
-			document.getElementById("basicAttacks").hidden = false;
-			document.getElementById("basicAttacks").innerHTML = "Push";
-			for (var i = 0; i < game.currPlayer.offensive.length; i++) {
-				offense += "<button id=\"offensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.offensive[i]) + "\')\">";
-				offense += game.currPlayer.offensive[i].name + "</button>";
-			}
-
-			for (var i = 0; i < game.currPlayer.defensive.length; i++) {
-				defense += "<button id=\"defensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.defensive[i]) + "\')\">";
-				defense += game.currPlayer.defensive[i].name + "</button>";
-			}
-			document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense + " * Can only use right most.";
-			document.getElementById("defensiveItems").innerHTML = "Defensive Items:  " + defense + " * Can only use right most.";
-		}
-
-		function itemSelected(index) {
-			var item = game.items[parseInt(index)]
-			game.chooseItem(item);
-			document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name;
-
-		}
-
-		function selectBasicAttack() {
-			// Switch the button to the other basic attack
-			if (document.getElementById("basicAttacks").innerHTML == "Push") {
-				document.getElementById("basicAttacks").innerHTML = "Slash";
-				game.chooseItem(game.pushAttack);
-			} else {
-				document.getElementById("basicAttacks").innerHTML = "Push";
-				game.chooseItem(game.basicAttack);
-			}
-		}
-
-		function displayPlayerInfo() {
-			var pInfo = "";
-			pInfo += "Health:&nbsp\t&nbsp[";
-			for (var i = 0; i < 10; i++) {
-				if (game.currPlayer.getHealth() / 10 >= i) {
-					pInfo += "=";
-				} else {
-					pInfo += "&nbsp";
-				}
-			}
-			pInfo += "]";
-			pInfo += game.currPlayer.getHealth();
-			document.getElementById("status").innerHTML = pInfo;
-		}
-
-		function turnTimer(secs, name, x) {		// Issue: When player's turn ends, old print statement was still printing once before terminating. Had to add else statements
-		var element = document.getElementById(x);
-		if(game.currPlayer.name != name)			// Issue: needed to end timer when player ends turn
-		{
-			clearTimeout(timer);
-			// element.innerHTML = "<h2>You ended your turn!</h2>";
+		if (game.hasEnded() == 1) {
+			// Tell the player to start their turn
+			document.getElementById("instructions").innerHTML = "Not every game has a winner!<br />";
+			document.getElementById("endTurn").disabled = true;
 			return;
-		}
-		else if(secs < 1)			// Issue: Player's status is undefined after 1 second
-		{
-			clearTimeout(timer);
-			// element.innerHTML = "<h2>You ran out of time! You shall lose 10 HP!</h2>";
-			document.getElementById("global").innerHTML = game.currPlayer.name+" ran out of time! They shall lose 10 HP!";
-			game.currPlayer.damageHealthBy(10);
-			endTurn();
+		} else if (game.hasEnded() == 2) {
+			document.getElementById("instructions").innerHTML = player.data.name + " has won!";
+			document.getElementById("endTurn").disabled = true;
 			return;
 		}
 		else {
-			element.innerHTML = "You have "+secs+" seconds to finish your turn!";// Name= "+name+" currPlayer= "+game.currPlayer.name;
-			secs--;
-			// var timer = setTimeout('turnTimer('+secs+',"'+name+'","'+x+'")',1000);		// Issue: double quotes around string parameter were missing causing issues
+			document.getElementById("instructions").innerHTML = player.data.name + ", make a move.<br />";
+		}
+		// Display possible moves
+		var possibleMoves = game.possibleMovesFrom(game.board[player.data.position]);
+		if(possibleMoves.length > 0) {
+			game.startTurnFor(player.data);
+			turnTimer(10, player.data.name, "timer");
+			displayPlayerInfo();
+		}
+		else {
+			game.startTurnFor(player.data);
+			turnTimer(10, player.data.name, "timer");
+			displayPlayerInfo();
+			document.getElementById("global").innerHTML = game.currPlayer.name+" has no possible moves!";
+			endTurn();
 		}
 	}
 
-	/** Event Handler **/
-	window.addEventListener("keydown", keyCatcher, false);
-
-	// Parse Key Strokes
-	function keyCatcher(key) {
-
-		document.getElementById("global").innerHTML = "";
-
-		var possibleMoves = game.possibleMovesFrom(game.board[game.currPlayer.position]);
-		var up = game.currPlayer.position - 10;
-		var down = game.currPlayer.position + 10;
-		var right = game.currPlayer.position + 1;
-		var left = game.currPlayer.position - 1;
-
-		if (game.currItem != null && (game.currItem.name == "Teleport" || game.currItem.attackType == Item.TRAP)) {
-			up = teleportMove - 10;
-		 	down = teleportMove + 10;
-			right = teleportMove + 1;
-			left = teleportMove - 1;
-		}
-
-
-		// Up (W)
-		if(key.keyCode == "87" && possibleMoves.includes(up) && game.currPlayer.status == 1 ) {
-			console.log("keyCatcher(): Registered \'W\' Key");
-			rotateAbsolute(game.currPlayer.id, 0, 0, -90);
-			// moveRelative(game.currPlayer.id, 0, 22, 0);
-			movePiece(game.currPlayer.id, "Y+");
-			moveTo(game.currPlayer.position - 10);
-			teleportMove = game.currPlayer.position;
-		}
-		else if(key.keyCode == "87" && game.attackSpaces.includes(up) && game.currPlayer.status == 2) {
-			console.log("keyCatcher(): Registered \'W\' Key");
-			if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
-				teleportMove = game.currPlayer.position;
-				useItemOn(game.currPlayer.position - 10);
-			} else if (up >= game.lowerBounds) {
-				game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
-				teleportMove -= 10;
-				// movePiece(game.currPlayer.id, "Y+");
-				game.selectBlock(teleportMove, 0xFF00FF);
+	function moveTo(boardspace) {
+		if (game.currPlayer.status == 1) {
+			game.moveTo(game.board[boardspace]);
+			document.getElementById("endTurn").disabled = false;
+			if (game.currPlayer.status == 0) { // Player was trapped
+				document.getElementById("global").innerHTML = player.data.name + " was trapped!<br />";
+				game.clearAttackSpaces();
+				endTurn();
+			} else {													// Not trapped
+				displayItems();
+				document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
 			}
 		}
+	}
 
-		// Down (S)
-		else if(key.keyCode == "83" && possibleMoves.includes(down) && game.currPlayer.status == 1 ) {
-			console.log("keyCatcher(): Registered \'S\' Key");
-			rotateAbsolute(game.currPlayer.id, 0, 0, 90);
-			// moveRelative(game.currPlayer.id, 0, -22, 0);
-			movePiece(game.currPlayer.id, "Y-");
-			moveTo(game.currPlayer.position + 10);
-			teleportMove = game.currPlayer.position;
-		}
-		else if(key.keyCode == "83" && game.attackSpaces.includes(down) && game.currPlayer.status == 2) {
-			console.log("keyCatcher(): Registered \'S\' Key");
-			if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
-				teleportMove = game.currPlayer.position;
-				useItemOn(game.currPlayer.position + 10);
-			} else if (down <= game.topBounds) {
-				game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
-				teleportMove += 10;
-				// movePiece(game.currPlayer.id, "Y-");
-				game.selectBlock(teleportMove, 0xFF00FF);
-			}
-		}
+	function useItemOn(boardspace) {
+		var diff = game.currPlayer.position - boardspace;
+		var dir = 0;
+		if (diff >= 10) {	dir = -10; }
+		else if (diff <= -10) { dir = 10;	}
+		else if (diff >= 1 && diff < 10) { dir = -1; }
+		else if (diff <= -1 && diff > -10) { dir = 1; }
 
-
-		// Right (D)
-		else if(key.keyCode == "68" && possibleMoves.includes(right) && game.currPlayer.status == 1 ) {
-			console.log("keyCatcher(): Registered \'D\' Key");
-			rotateAbsolute(game.currPlayer.id, 0, 0, 180);
-			// moveRelative(game.currPlayer.id, 22, 0, 0);
-			movePiece(game.currPlayer.id, "X+");
-			moveTo(game.currPlayer.position + 1);
-			teleportMove = game.currPlayer.position;
+		if (game.currItem.attackType != Item.BASIC || game.currItem.name == "Teleport") {
+			dir = boardspace;
 		}
-		else if(key.keyCode == "68" && game.attackSpaces.includes(right) && game.currPlayer.status == 2) {
-			console.log("keyCatcher(): Registered \'D\' Key");
-			if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
-				teleportMove = game.currPlayer.position;
-				useItemOn(game.currPlayer.position + 1);
-			} else if (right % 10 <= game.rightOffset) {
-				game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
-				teleportMove += 1;
-				// movePiece(game.currPlayer.id, "X+");
-				game.selectBlock(teleportMove, 0xFF00FF);
-			}
+		if (game.currItem.name == "Teleport" || game.currItem.name == "Move Again") {
+			game.useItem(game.currItem, dir);
+			document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
+		} else {
+			game.useItem(game.currItem, dir);
+			document.getElementById("itemUsed").innerHTML = "Item used: " + player.data.name + " used " + game.currItem.name + ".<br />";
+		}
+		endTurn();
+	}
+
+	function endTurn() {
+		document.getElementById("basicAttacks").hidden = true;
+		game.endTurnFor(player.data);
+		updateCamera();
+		nextTurn();
+	}
+
+	function displayItems() {
+		var offense = "";
+		var defense = "";
+		document.getElementById("basicAttacks").hidden = false;
+		document.getElementById("basicAttacks").innerHTML = "Push";
+		for (var i = 0; i < game.currPlayer.offensive.length; i++) {
+			offense += "<button id=\"offensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.offensive[i]) + "\')\">";
+			offense += game.currPlayer.offensive[i].name + "</button>";
 		}
 
-		// Left (A)
-		else if(key.keyCode == "65" && possibleMoves.includes(left) && game.currPlayer.status == 1 ) {
-			console.log("keyCatcher(): Registered \'A\' Key");
-			rotateAbsolute(game.currPlayer.id, 0, 0, 0);
-			// moveRelative(game.currPlayer.id, -22, 0, 0);
-			movePiece(game.currPlayer.id, "X-");
-			moveTo(game.currPlayer.position - 1);
-			teleportMove = game.currPlayer.position;
+		for (var i = 0; i < game.currPlayer.defensive.length; i++) {
+			defense += "<button id=\"defensive" +i+ "\" onclick=\"itemSelected(\'" + game.items.indexOf(game.currPlayer.defensive[i]) + "\')\">";
+			defense += game.currPlayer.defensive[i].name + "</button>";
 		}
-		else if(key.keyCode == "65" && game.attackSpaces.includes(left) && game.currPlayer.status == 2) {
-			console.log("keyCatcher(): Registered \'A\' Key");
-			if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
-				teleportMove = game.currPlayer.position;
-				useItemOn(game.currPlayer.position - 1);
-			} else if (left % 10 >= game.leftOffset) {
-				game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
-				teleportMove -= 1;
-				// movePiece(game.currPlayer.id, "X-");
-				game.selectBlock(teleportMove, 0xFF00FF);
-			}
-		}
+		document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense + " * Can only use right most.";
+		document.getElementById("defensiveItems").innerHTML = "Defensive Items:  " + defense + " * Can only use right most.";
+	}
 
-		// Player's position, for potions (Spacebar)
-		else if(key.keyCode == "32" && (game.attackSpaces.includes(game.currPlayer.position) || game.currItem.name == "Teleport" || game.currItem.attackType == Item.TRAP) && game.currPlayer.status == 2) {
-			console.log("keyCatcher(): Registered \'Spacebar\' Key");
-			game.selectBlock(game.currPlayer.position, LAMBERT_COLOR);
-			if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
-				teleportMove = game.currPlayer.position;
-				useItemOn(game.currPlayer.position);
-			} else {
-				useItemOn(teleportMove);
-				teleportMove = game.currPlayer.position;
-			}
-		}
+	function itemSelected(index) {
+		var item = game.items[parseInt(index)]
+		game.chooseItem(item);
+		document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name;
 
-		// Offensive items (P)
-		else if(key.keyCode == "80" && game.currPlayer.offensive.length > 0 && game.currPlayer.status == 2) {
-			console.log("keyCatcher(): Registered \'P\' Key");
-			teleportMove = game.currPlayer.position;
-			game.clearMoveSpaces();
-			game.clearAttackSpaces();
-			itemSelected(game.items.indexOf(game.currPlayer.offensive[game.currPlayer.offensive.length - 1]));
-		}
-		// Defensive items (L)
-		else if(key.keyCode == "76" && game.currPlayer.defensive.length > 0 && game.currPlayer.status == 2) {
-			console.log("keyCatcher(): Registered \'L\' Key");
-			game.clearMoveSpaces();
-			game.clearAttackSpaces();
-			itemSelected(game.items.indexOf(game.currPlayer.defensive[game.currPlayer.defensive.length - 1]));
-		}
-		// Basic attack (B)
-		else if(key.keyCode == "66" && game.currPlayer.status != 1) {
-			console.log("keyCatcher(): Registered \'B\' Key");
-			teleportMove = game.currPlayer.position;
-			game.clearMoveSpaces();
-			game.clearAttackSpaces();
+	}
+
+	function selectBasicAttack() {
+		// Switch the button to the other basic attack
+		if (document.getElementById("basicAttacks").innerHTML == "Push") {
+			document.getElementById("basicAttacks").innerHTML = "Slash";
+			game.chooseItem(game.pushAttack);
+		} else {
+			document.getElementById("basicAttacks").innerHTML = "Push";
 			game.chooseItem(game.basicAttack);
 		}
+	}
 
-		// End turn (E)
-		else if(key.keyCode == "69" && game.currPlayer.status != 1) {
-			console.log("keyCatcher(): Registered \'B\' Key");
-			teleportMove = game.currPlayer.position;
-
-			endTurn();
+	function displayPlayerInfo() {
+		var pInfo = "";
+		pInfo += "Health:&nbsp\t&nbsp[";
+		for (var i = 0; i < 10; i++) {
+			if (game.currPlayer.getHealth() / 10 >= i) {
+				pInfo += "=";
+			} else {
+				pInfo += "&nbsp";
+			}
 		}
-		// Invalid
-		else {
-			console.log("keyCatcher(): Registered Invalid Key");
+		pInfo += "]";
+		pInfo += game.currPlayer.getHealth();
+		document.getElementById("status").innerHTML = pInfo;
+	}
+
+	function turnTimer(secs, name, x) {		// Issue: When player's turn ends, old print statement was still printing once before terminating. Had to add else statements
+	var element = document.getElementById(x);
+	if(game.currPlayer.name != name)			// Issue: needed to end timer when player ends turn
+	{
+		clearTimeout(timer);
+		// element.innerHTML = "<h2>You ended your turn!</h2>";
+		return;
+	}
+	else if(secs < 1)			// Issue: Player's status is undefined after 1 second
+	{
+		clearTimeout(timer);
+		// element.innerHTML = "<h2>You ran out of time! You shall lose 10 HP!</h2>";
+		document.getElementById("global").innerHTML = game.currPlayer.name+" ran out of time! They shall lose 10 HP!";
+		game.currPlayer.damageHealthBy(10);
+		endTurn();
+		return;
+	}
+	else {
+		element.innerHTML = "You have "+secs+" seconds to finish your turn!";// Name= "+name+" currPlayer= "+game.currPlayer.name;
+		secs--;
+		// var timer = setTimeout('turnTimer('+secs+',"'+name+'","'+x+'")',1000);		// Issue: double quotes around string parameter were missing causing issues
+	}
+}
+
+/** Event Handler **/
+window.addEventListener("keydown", keyCatcher, false);
+
+// Parse Key Strokes
+function keyCatcher(key) {
+
+	document.getElementById("global").innerHTML = "";
+
+	var possibleMoves = game.possibleMovesFrom(game.board[game.currPlayer.position]);
+	var up = game.currPlayer.position - 10;
+	var down = game.currPlayer.position + 10;
+	var right = game.currPlayer.position + 1;
+	var left = game.currPlayer.position - 1;
+
+	if (game.currItem != null && (game.currItem.name == "Teleport" || game.currItem.attackType == Item.TRAP)) {
+		up = teleportMove - 10;
+		down = teleportMove + 10;
+		right = teleportMove + 1;
+		left = teleportMove - 1;
+	}
+
+
+	// Up (W)
+	if(key.keyCode == "87" && possibleMoves.includes(up) && game.currPlayer.status == 1 ) {
+		console.log("keyCatcher(): Registered \'W\' Key");
+		rotateAbsolute(game.currPlayer.id, 0, 0, -90);
+		// moveRelative(game.currPlayer.id, 0, 22, 0);
+		movePiece(game.currPlayer.id, "Y+");
+		moveTo(game.currPlayer.position - 10);
+		teleportMove = game.currPlayer.position;
+	}
+	else if(key.keyCode == "87" && game.attackSpaces.includes(up) && game.currPlayer.status == 2) {
+		console.log("keyCatcher(): Registered \'W\' Key");
+		if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
+			teleportMove = game.currPlayer.position;
+			useItemOn(game.currPlayer.position - 10);
+		} else if (up >= game.lowerBounds) {
+			game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
+			teleportMove -= 10;
+			// movePiece(game.currPlayer.id, "Y+");
+			game.selectBlock(teleportMove, 0xFF00FF);
 		}
 	}
+
+	// Down (S)
+	else if(key.keyCode == "83" && possibleMoves.includes(down) && game.currPlayer.status == 1 ) {
+		console.log("keyCatcher(): Registered \'S\' Key");
+		rotateAbsolute(game.currPlayer.id, 0, 0, 90);
+		// moveRelative(game.currPlayer.id, 0, -22, 0);
+		movePiece(game.currPlayer.id, "Y-");
+		moveTo(game.currPlayer.position + 10);
+		teleportMove = game.currPlayer.position;
+	}
+	else if(key.keyCode == "83" && game.attackSpaces.includes(down) && game.currPlayer.status == 2) {
+		console.log("keyCatcher(): Registered \'S\' Key");
+		if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
+			teleportMove = game.currPlayer.position;
+			useItemOn(game.currPlayer.position + 10);
+		} else if (down <= game.topBounds) {
+			game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
+			teleportMove += 10;
+			// movePiece(game.currPlayer.id, "Y-");
+			game.selectBlock(teleportMove, 0xFF00FF);
+		}
+	}
+
+
+	// Right (D)
+	else if(key.keyCode == "68" && possibleMoves.includes(right) && game.currPlayer.status == 1 ) {
+		console.log("keyCatcher(): Registered \'D\' Key");
+		rotateAbsolute(game.currPlayer.id, 0, 0, 180);
+		// moveRelative(game.currPlayer.id, 22, 0, 0);
+		movePiece(game.currPlayer.id, "X+");
+		moveTo(game.currPlayer.position + 1);
+		teleportMove = game.currPlayer.position;
+	}
+	else if(key.keyCode == "68" && game.attackSpaces.includes(right) && game.currPlayer.status == 2) {
+		console.log("keyCatcher(): Registered \'D\' Key");
+		if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
+			teleportMove = game.currPlayer.position;
+			useItemOn(game.currPlayer.position + 1);
+		} else if (right % 10 <= game.rightOffset) {
+			game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
+			teleportMove += 1;
+			// movePiece(game.currPlayer.id, "X+");
+			game.selectBlock(teleportMove, 0xFF00FF);
+		}
+	}
+
+	// Left (A)
+	else if(key.keyCode == "65" && possibleMoves.includes(left) && game.currPlayer.status == 1 ) {
+		console.log("keyCatcher(): Registered \'A\' Key");
+		rotateAbsolute(game.currPlayer.id, 0, 0, 0);
+		// moveRelative(game.currPlayer.id, -22, 0, 0);
+		movePiece(game.currPlayer.id, "X-");
+		moveTo(game.currPlayer.position - 1);
+		teleportMove = game.currPlayer.position;
+	}
+	else if(key.keyCode == "65" && game.attackSpaces.includes(left) && game.currPlayer.status == 2) {
+		console.log("keyCatcher(): Registered \'A\' Key");
+		if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
+			teleportMove = game.currPlayer.position;
+			useItemOn(game.currPlayer.position - 1);
+		} else if (left % 10 >= game.leftOffset) {
+			game.selectBlock(teleportMove, (game.currItem.name == "Teleport") ? 0x00FF00 : 0xFF0000);
+			teleportMove -= 1;
+			// movePiece(game.currPlayer.id, "X-");
+			game.selectBlock(teleportMove, 0xFF00FF);
+		}
+	}
+
+	// Player's position, for potions (Spacebar)
+	else if(key.keyCode == "32" && (game.attackSpaces.includes(game.currPlayer.position) || game.currItem.name == "Teleport" || game.currItem.attackType == Item.TRAP) && game.currPlayer.status == 2) {
+		console.log("keyCatcher(): Registered \'Spacebar\' Key");
+		game.selectBlock(game.currPlayer.position, LAMBERT_COLOR);
+		if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
+			teleportMove = game.currPlayer.position;
+			useItemOn(game.currPlayer.position);
+		} else {
+			useItemOn(teleportMove);
+			teleportMove = game.currPlayer.position;
+		}
+	}
+
+	// Offensive items (P)
+	else if(key.keyCode == "80" && game.currPlayer.offensive.length > 0 && game.currPlayer.status == 2) {
+		console.log("keyCatcher(): Registered \'P\' Key");
+		teleportMove = game.currPlayer.position;
+		game.clearMoveSpaces();
+		game.clearAttackSpaces();
+		itemSelected(game.items.indexOf(game.currPlayer.offensive[game.currPlayer.offensive.length - 1]));
+	}
+	// Defensive items (L)
+	else if(key.keyCode == "76" && game.currPlayer.defensive.length > 0 && game.currPlayer.status == 2) {
+		console.log("keyCatcher(): Registered \'L\' Key");
+		game.clearMoveSpaces();
+		game.clearAttackSpaces();
+		itemSelected(game.items.indexOf(game.currPlayer.defensive[game.currPlayer.defensive.length - 1]));
+	}
+	// Basic attack (B)
+	else if(key.keyCode == "66" && game.currPlayer.status != 1) {
+		console.log("keyCatcher(): Registered \'B\' Key");
+		teleportMove = game.currPlayer.position;
+		game.clearMoveSpaces();
+		game.clearAttackSpaces();
+		game.chooseItem(game.basicAttack);
+	}
+
+	// End turn (E)
+	else if(key.keyCode == "69" && game.currPlayer.status != 1) {
+		console.log("keyCatcher(): Registered \'B\' Key");
+		teleportMove = game.currPlayer.position;
+
+		endTurn();
+	}
+	// Invalid
+	else {
+		console.log("keyCatcher(): Registered Invalid Key");
+	}
+}
 //}
 
 // More issues to fix:

@@ -142,19 +142,19 @@ class Gameplay {
     // Teleport - defensive, allows player to move to any valid boardspace
 
     this.items = [];
-    this.items.push(new Item("Musket", 0, 0, 2, 15, 8, "Musket Description"));            // 0
-    this.items.push(new Item("Bolt Action", 0, 0, 2, 30, 4, "Bolt Action Description"));  // 1
-    this.items.push(new Item("Broadsword", 0, 1, 1, 10, 7, "Broadsword Description"));    // 2
-    this.items.push(new Item("Fart", 0, 1, 1, 25, 4, "Fart Description"));                // 3
-    this.items.push(new Item("Big Fart", 0, 1, 2, 15, 5, "Big Fart Description"));        // 4
-    this.items.push(new Item("Nuke", 0, 1, 2, 25, 2, "Nuke Description"));                // 5
-    this.items.push(new Item("Sawed-Off", 0, 0, 1, 30, 4, "Sawed-Off Description"));      // 6
-    this.items.push(new Item("Beartrap", 0, 2, 0, 15, 5, "Beartrap Description"));        // 7
-    this.items.push(new Item("Landmine", 0, 2, 0, 30, 3, "Landmine Description"));        // 8
-    this.items.push(new Item("Minor Potion", 1, 0, 0, 10, 8, "Minor Potion Description"));// 9
-    this.items.push(new Item("Major Potion", 1, 0, 0, 30, 4, "Major Potion Description"));// 10
-    this.items.push(new Item("Move Again", 1, 0, 0, 0, 4, "Move Again Description"));     // 11
-    this.items.push(new Item("Teleport", 1, 1, 0, 0, 2, "Teleport Description"));        // 12
+    this.items.push(new Item("Musket", 0, 0, 2, 15, 8, "Musket has 15 damage and radius of 2."));            // 0
+    this.items.push(new Item("Bolt Action", 0, 0, 2, 30, 4, "Bolt Action sniper has 30 damage and radius of 2."));  // 1
+    this.items.push(new Item("Broadsword", 0, 1, 1, 10, 7, "Broadsword has 10 damage and radius of 1."));    // 2
+    this.items.push(new Item("Fart", 0, 1, 1, 25, 4, "Fart has 25 damage and radius of 1."));                // 3
+    this.items.push(new Item("Big Fart", 0, 1, 2, 15, 5, "Big Fart has 15 damage and radius of 2."));        // 4
+    this.items.push(new Item("Nuke", 0, 1, 2, 25, 2, "Nuke has 25 damage and radius of 2."));                // 5
+    this.items.push(new Item("Sawed-Off", 0, 0, 1, 30, 4, "Sawed-off shotgun has 30 damage and radius of 1."));      // 6
+    this.items.push(new Item("Beartrap", 0, 2, 0, 15, 5, "Place the trap on any available spot. Trapped player can not move for one full turn. Damage trapped player by 15 HP!"));        // 7
+    this.items.push(new Item("Landmine", 0, 2, 0, 30, 3, "Place the trap on any available spot. Damage trapped player by 30 HP!"));        // 8
+    this.items.push(new Item("Minor Potion", 1, 0, 0, 10, 8, "Heal by 10 HP!"));// 9
+    this.items.push(new Item("Major Potion", 1, 0, 0, 30, 4, "Heal by 30 HP!"));// 10
+    this.items.push(new Item("Move Again", 1, 0, 0, 0, 4, "Move again instead of attacking an opponent."));     // 11
+    this.items.push(new Item("Teleport", 1, 1, 0, 0, 2, "Teleport to any available spot."));        // 12
     this.items.push(new Item("Push", 0, 0, 1, 0, 4, "Push your opponents away from you. You can even push them off the edge!"));        // 13
 
     // Array of item drops based on the rarity of each item
@@ -515,6 +515,7 @@ class Gameplay {
     this.board[player.position].removePlayer();  // Remove player from Board
     this.playerList.removePlayer(player.id);    // Remove player from List
     setColorHex(player.id, 0xFF0000);
+    fallPiece(player.id);
     //IDEA should we set the player to null?
     // call any animations
   }
