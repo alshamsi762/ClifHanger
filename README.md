@@ -4,10 +4,7 @@
 
 1.Go to the cliffHanger github page at [CliffHanger](https://github.com/alshamsi762/CliffHanger)
 
-2.Download the game following these steps
-
-Download:
-![alt text](https://github.com/alshamsi762/CliffHanger/blob/master/Screen%20Shot%202018-03-15%20at%206.30.56%20PM.png "Download)
+2.Download the game as zip
 
 3.Un-zip the project you just downloaded
 
