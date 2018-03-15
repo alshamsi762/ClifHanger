@@ -35,6 +35,30 @@ var FP_EXP = 5;
 var SP_RED = 0.05;
 var SP_MIN = 0.00001;
 
+// Animations Performance Test: Graph frames rendered in the last second (FPS), msecs needed to render a frame (MS), and mbytes of allocated memory (MB). 
+/* Anjali uncomment for testing */
+/*(function performanceTest()
+{
+  var script=document.createElement('script');
+  script.onload=function measureStats() 
+  {
+    var stats=new Stats();
+    document.body.appendChild(stats.dom);
+
+    // adjust according the game screen
+    stats.domElement.style.top = '720px';
+
+    requestAnimationFrame(function loop()
+    {
+      stats.update();
+      requestAnimationFrame(loop)
+    });
+  };
+  script.src='//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';
+  document.head.appendChild(script)
+;})()
+*/
+
 if (TESTING) {
   var THREE = require('three');
 }
