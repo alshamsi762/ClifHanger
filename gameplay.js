@@ -245,6 +245,7 @@ class Gameplay {
     player.status = Player.IDLE;  // Change player status to idle
     setColorHex(player.id, 0xFFFF00);
     this.currPlayer = null;
+    this.currItem = this.basicAttack;
   }
 
   // Update currPlayer position, apply effects of any trap or add item, set currItem to Basic Attack and call possible attacks.
