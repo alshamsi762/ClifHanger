@@ -110,6 +110,7 @@
 
 		// Get the next player
 		document.getElementById("currentItem").innerHTML = "Current item: ";
+		document.getElementById("endTurn").disabled = true;
 		if (player == null) {
 			player = game.playerList.head;
 		} else if (player.next.data.id == -1){
