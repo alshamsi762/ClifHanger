@@ -295,19 +295,15 @@ class Gameplay {
      boardspace.removePlayer();
      newBoardspace.setPlayer(playerToPush);
      if(direction == -10) {
-       moveRelative(playerToPush.id, 0, 22, 0);
        movePiece(playerToPush.id, "Y+");
      }
      else if(direction == 10) {
-       moveRelative(playerToPush.id, 0, -22, 0);
        movePiece(playerToPush.id, "Y-");
      }
      else if(direction == -1) {
-       moveRelative(playerToPush.id, -22, 0, 0);
        movePiece(playerToPush.id, "X-");
      }
      else if(direction == 1) {
-       moveRelative(playerToPush.id, 22, 0, 0);
        movePiece(playerToPush.id, "X+");
      }
 
@@ -413,10 +409,10 @@ class Gameplay {
       } else if (item.name == "Move Again") { // Move Again
         if (this.moveSpaces.includes(this.currPlayer.position + dir)) {
           this.moveTo(this.board[this.currPlayer.position + dir]);
-          if(dir == -10) {moveRelative(this.currPlayer.id, 0, 22, 0);}
-          else if(dir == 10) {moveRelative(this.currPlayer.id, 0, -22, 0);}
-          else if(dir == -1) {moveRelative(this.currPlayer.id, -22, 0, 0);}
-          else if(dir == 1) {moveRelative(this.currPlayer.id, 22, 0, 0);}
+          if(dir == -10) {movePiece(this.currPlayer.id, "Y+");}
+          else if(dir == 10) {movePiece(this.currPlayer.id, "Y-");}
+          else if(dir == -1) {movePiece(this.currPlayer.id, "X-");}
+          else if(dir == 1) {movePiece(this.currPlayer.id, "X+");}
         }
       }
     }
