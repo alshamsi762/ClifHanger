@@ -8,6 +8,62 @@
 	height: 40px;
 	width: 40px;
 }
+/* win screen css */
+.winner {
+		display: none;
+		position: fixed;
+		z-index: 100;
+		width: 100%;
+		height: 100%;
+		left: 0;
+		top: 0;
+		background-color: rgb(0, 0, 0);
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+	.endStatement {
+		text-align: center;
+		background-color: #fefefe;
+		margin: 15% auto;
+		padding: 20px;
+		border: 1px solid #888;
+		align-content: center;
+		width: 40%;
+		height: 10%;
+		border-style: solid;
+		border-width: 5px;
+		border-color: #00FFFF;
+	}
+	.close {
+		color: #aaa;
+		float: right;
+		font-size: 60px;
+		font-weight: bold;
+	}
+	.close:hover,
+	.close:focus {
+		color: black;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	/* Description of game */
+	.desc {
+		display: none;
+		position: relative;
+	}
+	.desc .content {
+		visibility: hidden;
+		width: 650px;
+		background-color: lightcyan;
+		color: black;
+		text-align: center;
+		padding: 5px 0;
+		border-radius: 10px;
+		position: absolute;
+		z-index: 10;
+	}
+	.desc:hover .content {
+		visibility: visible;
+	}
 </style>
 <!-- Head -->
 <head>
@@ -29,9 +85,9 @@
 
 	</p>
 
-	<button id = "strtGameBttn" onclick="startGame()">Start Game</button>
-	<button id = "endTurn" onclick="endTurn()">End Turn</button>
-	<button id = "changeCam" onclick="changeCam()">ChangeCam</button>
+	<button id="strtGameBttn" class="btn btn-success" onclick="startGame()">Start Game</button>
+	<button id="endTurn" class="btn btn-danger" onclick="endTurn()">End Turn</button>
+	<button id="changeCam" class="btn btn-primary" onclick="changeCam()">ChangeCam</button>
 	<p id = "gameboard"></p>
 	<p id = "instructions"></p>
 	<p id = "timer"></p>
@@ -44,6 +100,48 @@
 	<p id = "currentItem"></p>
 	<p id = "damageGiven"></p>
 	<p id = "global"></p>
+
+	<!-- Winner screen -->
+	<div id="winScreen" class="winner">
+			<div class="endStatement">
+				<span class="close">&times;</span>
+				<p id="whowon" class="text-center" style="display:inline-block;height:100%;vertical-align:middle;font-weight: bold; font-size: 24px;"></p>
+			</div>
+	
+		</div>
+	
+	
+		<!-- Description of game -->
+		<div id="descGame" class="desc" style="font-weight: bold; font-size: 18px;"> Help
+			<span class="content" style="padding: 7px; font-weight: normal; font-size: 16px;">
+				<p class="text-info">CliffHanger is a 4-player game where the sole survivor in the end is the winner. Each player has 15 seconds to play their turn. A turn counts if a player moves. Attacking or using special items after moving is allowed but not required. </p> 
+				
+				<p class="text-info"> A player cannot end their turn without moving first. Each player has 100 HP (health points) to start with. Each attack or special item injures players differently. </p> 
+					<p class="text-info">Players can also use potions to heal or gain HP. A player dies if they get pushed off the stage, or lose all of their health points.<p>
+						<p class="text-info"> Each player can only have 6 offensive and 6 defensive items. Players can only use the item on top of their items queue. 10 items are dropped at the beginning of the game. A new item is dropped after every full turn. The outer layer of tiles is dropped after a certain number of turns to make the stage smaller for more action! </p>
+				<br/ >
+						<p class="text-warning lead">
+				Keyboard controls for gameplay: </p>
+				
+				<dt class="text-danger">A: </dt><dd class="text-info">Left </dd> <br />
+				
+				<dt class="text-danger">S: </dt><dd class="text-info">Down</dd> <br />
+				
+				<dt class="text-danger">D: </dt><dd class="text-info">Right </dd> <br />
+				
+				<dt class="text-danger">W: </dt><dd class="text-info">Up </dd> <br />
+				
+				<dt class="text-danger">P: </dt><dd class="text-info">Choose Offensive item </dd> <br />
+				
+				<dt class="text-danger">L: </dt><dd class="text-info">Choose Defensive item </dd> <br />
+				
+				<dt class="text-danger">B: </dt><dd class="text-info">Choose Basic attack </dd> <br />
+				
+				<dt class="text-danger">E: </dt><dd class="text-info">End turn </dd> <br />
+				
+				<dt class="text-danger">Spacebar: </dt><dd class="text-info">Apply potion/Choose teleport or trap position </dd> <br />
+				</span>
+		</div>
 
 	<!-- Game Element -->
 	<!-- <canvas id="gameScreen"></canavas> -->
@@ -95,6 +193,7 @@
 	//THREE.DefaultLoadingManager.onLoad = function ( ) {
 	function startGame() {
 
+		document.getElementById("descGame").style.display = "block";
 		document.getElementById("strtGameBttn").disabled = true;
 
 		game = new Gameplay(player1, player2, player3, player4);
@@ -109,7 +208,7 @@
 	function nextTurn() {
 
 		// Get the next player
-		document.getElementById("currentItem").innerHTML = "Current item: ";
+		document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name + " - " + game.currItem.description;
 		document.getElementById("endTurn").disabled = true;
 		if (player == null) {
 			player = game.playerList.head;
@@ -124,18 +223,22 @@
 		} else {
 			player = player.next;
 		}
-		document.getElementById("offensiveItems").innerHTML = "Offensive Items:  ";
-		document.getElementById("defensiveItems").innerHTML = "Defensive Items:  ";
+		document.getElementById("offensiveItems").innerHTML = "Offensive Items (P):  ";
+		document.getElementById("defensiveItems").innerHTML = "Defensive Items (L):  ";
 		document.getElementById("itemUsed").innerHTML = "Item used: ";
 
 		if (game.hasEnded() == 1) {
 			// Tell the player to start their turn
 			document.getElementById("instructions").innerHTML = "Not every game has a winner!<br />";
 			document.getElementById("endTurn").disabled = true;
+			document.getElementById("winScreen").style.display = "block";
+			document.getElementById("whowon").innerHTML = "Not every game has a winner!";
 			return;
 		} else if (game.hasEnded() == 2) {
 			document.getElementById("instructions").innerHTML = player.data.name + " has won!";
 			document.getElementById("endTurn").disabled = true;
+			document.getElementById("winScreen").style.display = "block";
+			document.getElementById("whowon").innerHTML = player.data.name + " has won!";
 			return;
 		}
 		else {
@@ -216,14 +319,14 @@
 			// defense += game.currPlayer.defensive[i].name + "</button>";
 			defense += game.currPlayer.defensive[i].name + " - ";
 		}
-		document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense;
-		document.getElementById("defensiveItems").innerHTML = "Defensive Items:  " + defense;
+		document.getElementById("offensiveItems").innerHTML = "Offensive Items (P):  " + offense;
+		document.getElementById("defensiveItems").innerHTML = "Defensive Items (L):  " + defense;
 	}
 
 	function itemSelected(index) {
 		var item = game.items[parseInt(index)]
 		game.chooseItem(item);
-		document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name;
+		document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name + " - " + game.currItem.description;
 
 	}
 
@@ -437,6 +540,15 @@ function keyCatcher(key) {
 	// Invalid
 	else {
 		console.log("keyCatcher(): Registered Invalid Key");
+	}
+}
+// close winner screen
+document.getElementsByClassName("close")[0].onclick = function () {
+		document.getElementById("winScreen").style.display = "none";
+}
+window.onclick = function (event) {
+	if (event.target == document.getElementById("winScreen")) {
+		document.getElementById("winScreen").style.display = "none";
 	}
 }
 //}
