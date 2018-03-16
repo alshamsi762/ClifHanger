@@ -109,7 +109,7 @@
 	function nextTurn() {
 
 		// Get the next player
-		document.getElementById("currentItem").innerHTML = "Current item: ";
+		document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name + " - " + game.currItem.description;
 		document.getElementById("endTurn").disabled = true;
 		if (player == null) {
 			player = game.playerList.head;
@@ -124,8 +124,8 @@
 		} else {
 			player = player.next;
 		}
-		document.getElementById("offensiveItems").innerHTML = "Offensive Items:  ";
-		document.getElementById("defensiveItems").innerHTML = "Defensive Items:  ";
+		document.getElementById("offensiveItems").innerHTML = "Offensive Items (P):  ";
+		document.getElementById("defensiveItems").innerHTML = "Defensive Items (L):  ";
 		document.getElementById("itemUsed").innerHTML = "Item used: ";
 
 		if (game.hasEnded() == 1) {
@@ -216,14 +216,14 @@
 			// defense += game.currPlayer.defensive[i].name + "</button>";
 			defense += game.currPlayer.defensive[i].name + " - ";
 		}
-		document.getElementById("offensiveItems").innerHTML = "Offensive Items:  " + offense;
-		document.getElementById("defensiveItems").innerHTML = "Defensive Items:  " + defense;
+		document.getElementById("offensiveItems").innerHTML = "Offensive Items (P):  " + offense;
+		document.getElementById("defensiveItems").innerHTML = "Defensive Items (L):  " + defense;
 	}
 
 	function itemSelected(index) {
 		var item = game.items[parseInt(index)]
 		game.chooseItem(item);
-		document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name;
+		document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name + " - " + game.currItem.description;
 
 	}
 
