@@ -2,22 +2,22 @@
 
 ## How to Run CliffHanger on your Machine
 
-1.Go to the cliffHanger github page at [CliffHanger](https://github.com/alshamsi762/CliffHanger)
+1. Go to the cliffHanger github page at [CliffHanger](https://github.com/alshamsi762/CliffHanger)
 
-2.Download the game as zip
+2. Download the game as a zip file, and un-zip it
 
-3.Un-zip the project you just downloaded
+3. Open terminal/command prompt and navigate to the folder you just unzipped
 
-4.Open terminal and navigate to the folder you just unzipped
-
-5.Execute the following
+4. Execute the following
 ``
 python server.py 2200
-`` in terminal or replace the port number given "2200" with the port you want
+`` in terminal/command prompt or replace the port number given "2200" with the port you want
 
-6.Open a web Browser and go to the http://localhost:2200/ or replace 2200 with the port you chose.
+5. Open a web Browser and go to the http://localhost:2200/ or replace 2200 with the port you chose
 
-7.You can Start the game from that web page To restart the game you need to refresh.
+6. You can click 'Start' on the web page to begin playing the game. Refresh the webpage to restart game!
+
+
 
 ## Description of the game
 
@@ -27,17 +27,17 @@ A turn counts if a player moves.
 Attacking or using special items after moving is allowed but not required.
 
 A player can’t end their turn without moving first.
-Each player has 100 HP to start with.
-Each attack or special item damages players differently.
-Players can also use potions to heal.
-A player dies if they get pushed off the stage.
+Each player has 100 HP (health points) to start with.
+Each attack or special item injures players differently.
+Players can also use potions to heal or gain HP.
+A player dies if they get pushed off the stage, or lose all of their health points.
 Each player can only have 6 offensive and 6 defensive items.
 Players can only use the item on top of their items’ queue.
 10 items are dropped at the beginning of the game.
 A new item is dropped after every full turn.
 The outer layer of tiles is dropped after a certain number of turns to make the stage smaller for more action!
 
-Keyboard controls:
+Keyboard controls for gameplay:
 
 A: Left
 
