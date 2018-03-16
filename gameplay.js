@@ -214,7 +214,7 @@ class Gameplay {
 
     // place items on board
     this.initialDrop();
-    this.currItem = this.basicAttack;
+
     // updateCamera();
 
   }
