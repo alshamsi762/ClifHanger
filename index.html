@@ -88,17 +88,17 @@
 	<button id="strtGameBttn" class="btn btn-success" onclick="startGame()">Start Game</button>
 	<button id="endTurn" class="btn btn-danger" onclick="endTurn()">End Turn</button>
 	<button id="changeCam" class="btn btn-primary" onclick="changeCam()">ChangeCam</button>
-	<p id = "gameboard"></p>
-	<p id = "instructions"></p>
-	<p id = "timer"></p>
-	<p id = "status"></p>
-	<p id = "itemUsed"></p>
+	<p id = "gameboard" ></p>
+	<p id = "instructions" class="text-left text-primary"></p>
+	<p id = "timer" class="text-left text-muted"></p>
+	<p id = "status" class="text-left text-info"></p> <br />
+	<p id = "itemUsed" class="text-left text-success" style="font-style: italic;"></p>
 	<button id = "basicAttacks" onclick = "selectBasicAttack()" hidden = true></button>
-	<p id = "basics"></p>
-	<p id = "offensiveItems"></p>
-	<p id = "defensiveItems"></p>
-	<p id = "currentItem"></p>
-	<p id = "damageGiven"></p>
+	<p id = "basics" class="text-left text-muted"></p>
+	<p id = "offensiveItems" class="text-left text-warning"></p>
+	<p id = "defensiveItems" class="text-left text-warning"></p>
+	<p id = "currentItem" class="text-left text-danger"></p>
+	<p id = "damageGiven" class="text-left bg-danger"></p>
 	<p id = "global"></p>
 
 	<!-- Winner screen -->
@@ -120,26 +120,26 @@
 					<p class="text-info">Players can also use potions to heal or gain HP. A player dies if they get pushed off the stage, or lose all of their health points.<p>
 						<p class="text-info"> Each player can only have 6 offensive and 6 defensive items. Players can only use the item on top of their items queue. 10 items are dropped at the beginning of the game. A new item is dropped after every full turn. The outer layer of tiles is dropped after a certain number of turns to make the stage smaller for more action! </p>
 				<br/ >
-						<p class="text-warning lead">
-				Keyboard controls for gameplay: </p>
+						<p class="text-warning"> <kbd>
+				Keyboard controls for gameplay:</kbd> </p>
 				
-				<dt class="text-danger">A: </dt><dd class="text-info">Left </dd> <br />
+				<dt class="text-danger"><kbd>A </kbd></dt><dd class="text-danger">Left </dd> <br />
 				
-				<dt class="text-danger">S: </dt><dd class="text-info">Down</dd> <br />
+				<dt class="text-danger"><kbd>S </kbd></dt><dd class="text-danger">Down</dd> <br />
 				
-				<dt class="text-danger">D: </dt><dd class="text-info">Right </dd> <br />
+				<dt class="text-danger"><kbd>D </kbd></dt><dd class="text-danger">Right </dd> <br />
 				
-				<dt class="text-danger">W: </dt><dd class="text-info">Up </dd> <br />
+				<dt class="text-danger"><kbd>W </kbd></dt><dd class="text-danger">Up </dd> <br />
 				
-				<dt class="text-danger">P: </dt><dd class="text-info">Choose Offensive item </dd> <br />
+				<dt class="text-danger"><kbd>P </kbd></dt><dd class="text-danger">Choose Offensive item </dd> <br />
 				
-				<dt class="text-danger">L: </dt><dd class="text-info">Choose Defensive item </dd> <br />
+				<dt class="text-danger"><kbd>L </kbd></dt><dd class="text-danger">Choose Defensive item </dd> <br />
 				
-				<dt class="text-danger">B: </dt><dd class="text-info">Choose Basic attack </dd> <br />
+				<dt class="text-danger"><kbd>B </kbd></dt><dd class="text-danger">Choose Basic attack </dd> <br />
 				
-				<dt class="text-danger">E: </dt><dd class="text-info">End turn </dd> <br />
+				<dt class="text-danger"><kbd>E </kbd></dt><dd class="text-danger">End turn </dd> <br />
 				
-				<dt class="text-danger">Spacebar: </dt><dd class="text-info">Apply potion/Choose teleport or trap position </dd> <br />
+				<dt class="text-danger"><kbd>Spacebar </kbd></dt><dd class="text-danger">Apply potion/Choose teleport or trap position </dd> <br />
 				</span>
 		</div>
 
