@@ -25,7 +25,7 @@ function telePiece(index, target){
       moveAbsolute(index, tobj.position.x, tobj.position.y, obj.position.z);
 
       // Grow
-      growPiece(index);
+      //growPiece(index);
 
       // Exit
       cancelAnimationFrame(childID);

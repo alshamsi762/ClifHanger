@@ -145,14 +145,14 @@ class Gameplay {
     this.items.push(new Item("Musket", 0, 0, 2, 15, 8, "Musket has 15 damage and radius of 2."));            // 0
     this.items.push(new Item("Bolt Action", 0, 0, 2, 30, 4, "Bolt Action sniper has 30 damage and radius of 2."));  // 1
     this.items.push(new Item("Broadsword", 0, 1, 1, 10, 7, "Broadsword has 10 damage and radius of 1."));    // 2
-    this.items.push(new Item("Fart", 0, 1, 1, 25, 4, "Fart has 25 damage and radius of 1."));                // 3
-    this.items.push(new Item("Big Fart", 0, 1, 2, 15, 5, "Big Fart has 15 damage and radius of 2."));        // 4
+    this.items.push(new Item("Fart", 0, 1, 1, 0, 4, "Fart has 25 damage and radius of 1."));                // 3
+    this.items.push(new Item("Big Fart", 0, 1, 2, 0, 5, "Big Fart has 15 damage and radius of 2."));        // 4
     this.items.push(new Item("Nuke", 0, 1, 2, 25, 2, "Nuke has 25 damage and radius of 2."));                // 5
     this.items.push(new Item("Sawed-Off", 0, 0, 1, 30, 4, "Sawed-off shotgun has 30 damage and radius of 1."));      // 6
     this.items.push(new Item("Beartrap", 0, 2, 0, 15, 5, "Place the trap on any available spot. Trapped player can not move for one full turn. Damage trapped player by 15 HP!"));        // 7
     this.items.push(new Item("Landmine", 0, 2, 0, 30, 3, "Place the trap on any available spot. Damage trapped player by 30 HP!"));        // 8
-    this.items.push(new Item("Minor Potion", 1, 0, 0, 10, 8, "Heal by 10 HP!"));// 9
-    this.items.push(new Item("Major Potion", 1, 0, 0, 30, 4, "Heal by 30 HP!"));// 10
+    this.items.push(new Item("Minor Potion", 1, 0, 0, 0, 8, "Heal by 10 HP!"));// 9
+    this.items.push(new Item("Major Potion", 0, 0, 0, 30, 4, "Heal by 30 HP!"));// 10
     this.items.push(new Item("Move Again", 1, 0, 0, 0, 4, "Move again instead of attacking an opponent."));     // 11
     this.items.push(new Item("Teleport", 1, 1, 0, 0, 2, "Teleport to any available spot."));        // 12
     this.items.push(new Item("Push", 0, 0, 1, 0, 4, "Push your opponents away from you. You can even push them off the edge!"));        // 13
@@ -228,7 +228,8 @@ class Gameplay {
     setColorHex(0, 0xFFFF00);
     setColorHex(1, 0xFFFF00);
     setColorHex(2, 0xFFFF00);
-    setColorHex(3, 0xFFFF00);
+    //setColorHex(3, 0xFFFF00);
+    setColorRGB(3, 500, 500, 0);
     setColorHex(player.id, 0x00FF00);
     this.currPlayer = player;
     this.moveSpaces = this.possibleMovesFrom(this.board[player.position]); // Calculate possible moves
@@ -297,21 +298,25 @@ class Gameplay {
      boardspace.removePlayer();
      newBoardspace.setPlayer(playerToPush);
      if(direction == -10) {
+       moveRelative(playerToPush.id, 0, 22, 0);
        movePiece(playerToPush.id, "Y+");
      }
      else if(direction == 10) {
+       moveRelative(playerToPush.id, 0, -22, 0);
        movePiece(playerToPush.id, "Y-");
      }
      else if(direction == -1) {
+       moveRelative(playerToPush.id, -22, 0, 0);
        movePiece(playerToPush.id, "X-");
      }
      else if(direction == 1) {
+       moveRelative(playerToPush.id, 22, 0, 0);
        movePiece(playerToPush.id, "X+");
      }
 
      if (newBoardspace.fallStage == Boardspace.FALLEN) {
-       this.killPlayer(playerToPush);
-       fallPiece(playerToPush.id);
+       // this.killPlayer(playerToPush);
+       // fallPiece(playerToPush.id);
      }
    }
  }
@@ -322,7 +327,7 @@ class Gameplay {
     if (boardspace.hasPlayer()) {
       boardspace.player.damageHealthBy(item.damage);
       growPiece(boardspace.player.id);
-      if (boardspace.player.getHealth() == 0) {
+      if (boardspace.player.getHealth() <= 0) {
         this.killPlayer(boardspace.player);
       }
     }
@@ -441,6 +446,10 @@ class Gameplay {
     // Apply changes
     this.board[itemPos].setLoot(item);
     setColorHex(itemPos+4, 0x00FFFF);
+
+    // Error - Anirudh
+    lookAtMeNow(itemPos+4);
+
     // Call UI
     return itemPos;
   }
@@ -706,6 +715,9 @@ class Gameplay {
       }
       this.board[itemPos].setLoot(item);
       setColorHex(itemPos+4, 0x00FFFF);
+      // Error - Anirudh
+      lookAtMeNow(itemPos+4);
+
       count++;
     }
   }

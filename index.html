@@ -86,8 +86,8 @@
 	</p>
 
 	<button id="strtGameBttn" class="btn btn-success" onclick="startGame()">Start Game</button>
-	<button id="endTurn" class="btn btn-danger" onclick="endTurn()">End Turn</button>
-	<button id="changeCam" class="btn btn-primary" onclick="changeCam()">ChangeCam</button>
+	<button id="endTurn" class="btn btn-danger" onclick="changeCam()">End Turn</button>
+	<button id="changeCam" class="btn btn-primary" onclick="endTurn()">ChangeCam</button>
 	<p id = "gameboard" ></p>
 	<p id = "instructions" class="text-left text-primary"></p>
 	<p id = "timer" class="text-left text-muted"></p>
@@ -171,10 +171,10 @@
 	<script type="text/javascript">
 
 	// <!-- <script> -->
-	let player1 = new Player(0, 100, 0, [], [], "Andrew", 0);
-	let player2 = new Player(1, 100, 0, [], [], "Amjad", 0);
-	let player3 = new Player(2, 100, 0, [], [], "Sultan", 0);
-	let player4 = new Player(3, 100, 0, [], [], "Anirudh", 0);
+	let player1 = new Player(0, 80, 0, [], [], "Andrew", 0);
+	let player2 = new Player(1, 80, 0, [], [], "Amjad", 0);
+	let player3 = new Player(2, 80, 0, [], [], "Sultan", 0);
+	let player4 = new Player(3, 80, 0, [], [], "Anirudh", 0);
 	loadSTL0('_front/_assets/Spider_Scaled.stl');
 	loadSTL1('_front/_assets/Spider_Scaled.stl');
 	loadSTL2('_front/_assets/Spider_Scaled.stl');
@@ -248,12 +248,12 @@
 		var possibleMoves = game.possibleMovesFrom(game.board[player.data.position]);
 		if(possibleMoves.length > 0) {
 			game.startTurnFor(player.data);
-			turnTimer(15, player.data.name, "timer");
+			turnTimer(20, player.data.name, "timer");
 			displayPlayerInfo();
 		}
 		else {
 			game.startTurnFor(player.data);
-			turnTimer(15, player.data.name, "timer");
+			turnTimer(20, player.data.name, "timer");
 			displayPlayerInfo();
 			document.getElementById("global").innerHTML = game.currPlayer.name+" has no possible moves!";
 			endTurn();
@@ -369,7 +369,7 @@
 		clearTimeout(timer);
 		// element.innerHTML = "<h2>You ran out of time! You shall lose 10 HP!</h2>";
 		document.getElementById("global").innerHTML = game.currPlayer.name+" ran out of time! They shall lose 10 HP!";
-		game.currPlayer.damageHealthBy(10);
+		// game.currPlayer.damageHealthBy(10);
 		growPiece(game.currPlayer.id);
 		endTurn();
 		return;
@@ -404,7 +404,7 @@ function keyCatcher(key) {
 
 
 	// Up (W)
-	if(key.keyCode == "87" && possibleMoves.includes(up) && game.currPlayer.status == 1 ) {
+	if(key.keyCode == "83" && possibleMoves.includes(up) && game.currPlayer.status == 1 ) {
 		console.log("keyCatcher(): Registered \'W\' Key");
 		rotateAbsolute(game.currPlayer.id, 0, 0, -90);
 		// moveRelative(game.currPlayer.id, 0, 22, 0);
@@ -412,7 +412,7 @@ function keyCatcher(key) {
 		moveTo(game.currPlayer.position - 10);
 		teleportMove = game.currPlayer.position;
 	}
-	else if(key.keyCode == "87" && game.attackSpaces.includes(up) && game.currPlayer.status == 2) {
+	else if(key.keyCode == "83" && game.attackSpaces.includes(up) && game.currPlayer.status == 2) {
 		console.log("keyCatcher(): Registered \'W\' Key");
 		if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
 			teleportMove = game.currPlayer.position;
@@ -426,7 +426,7 @@ function keyCatcher(key) {
 	}
 
 	// Down (S)
-	else if(key.keyCode == "83" && possibleMoves.includes(down) && game.currPlayer.status == 1 ) {
+	else if(key.keyCode == "87" && possibleMoves.includes(down) && game.currPlayer.status == 1 ) {
 		console.log("keyCatcher(): Registered \'S\' Key");
 		rotateAbsolute(game.currPlayer.id, 0, 0, 90);
 		// moveRelative(game.currPlayer.id, 0, -22, 0);
@@ -434,7 +434,7 @@ function keyCatcher(key) {
 		moveTo(game.currPlayer.position + 10);
 		teleportMove = game.currPlayer.position;
 	}
-	else if(key.keyCode == "83" && game.attackSpaces.includes(down) && game.currPlayer.status == 2) {
+	else if(key.keyCode == "87" && game.attackSpaces.includes(down) && game.currPlayer.status == 2) {
 		console.log("keyCatcher(): Registered \'S\' Key");
 		if (game.currItem.name != "Teleport" && game.currItem.attackType != Item.TRAP) {
 			teleportMove = game.currPlayer.position;
@@ -522,12 +522,12 @@ function keyCatcher(key) {
 	}
 	// Basic attack (B)
 	else if(key.keyCode == "66" && game.currPlayer.status != 1) {
-		console.log("keyCatcher(): Registered \'B\' Key");
-		teleportMove = game.currPlayer.position;
-		game.clearMoveSpaces();
-		game.clearAttackSpaces();
-		game.chooseItem(game.basicAttack);
-		document.getElementById("currentItem").innerHTML = "Current item: " + "Basic attack";
+		// console.log("keyCatcher(): Registered \'B\' Key");
+		// teleportMove = game.currPlayer.position;
+		// game.clearMoveSpaces();
+		// game.clearAttackSpaces();
+		// game.chooseItem(game.basicAttack);
+		// document.getElementById("currentItem").innerHTML = "Current item: " + "Basic attack";
 	}
 
 	// End turn (E)

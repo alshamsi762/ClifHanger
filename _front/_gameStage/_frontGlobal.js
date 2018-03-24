@@ -21,7 +21,7 @@ var LIGHT_INTENSITY = 0.5;
 var PLATE_SIZE = 20;
 var PLATE_THICKNESS = 5;
 var CAM_FOV = 45;
-var CAM_FAR_PLANE = 5000;
+var CAM_FAR_PLANE = 305 //5000;
 var CAM_NEAR_PLANE = 1;
 var CAM_POS = {X:99, Y:-99, Z:300};
 var CAM_LOOK = {X:99, Y:-99, Z:0};
@@ -34,6 +34,7 @@ var FP_BUF = 1000;
 var FP_EXP = 5;
 var SP_RED = 0.05;
 var SP_MIN = 0.00001;
+var MOV_ERR = 2;
 
 // Animations Performance Test: Graph frames rendered in the last second (FPS), msecs needed to render a frame (MS), and mbytes of allocated memory (MB).
 /* Anjali uncomment for testing */

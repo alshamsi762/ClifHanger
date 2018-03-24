@@ -4,7 +4,7 @@ function movePiece(index, dir) {
     // Local Vars
     var obj = obj3DArray[index];
     var initalP = obj.position.x;
-    var finalP = initalP + (PLATE_SIZE + PLATE_GAP);
+    var finalP = initalP + (PLATE_SIZE + PLATE_GAP) + MOV_ERR;
     var delta = finalP - initalP;
 
     // Test
@@ -122,7 +122,7 @@ function movePiece(index, dir) {
     // Local Vars
     var obj = obj3DArray[index];
     var initalP = obj.position.y;
-    var finalP = initalP + (PLATE_SIZE + PLATE_GAP);
+    var finalP = initalP + (PLATE_SIZE + PLATE_GAP) + MOV_ERR;
     var delta = finalP - initalP;
 
     // Test
