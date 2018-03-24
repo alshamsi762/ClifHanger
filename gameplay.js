@@ -748,6 +748,6 @@ class Gameplay {
   // NOTE: TESTED!
   randomItem()
   {
-    return this.items[Math.floor(Math.random())];
+    return this.items[Math.floor(Math.random() * this.items.length)];
   }
 }
