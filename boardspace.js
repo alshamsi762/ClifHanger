@@ -85,7 +85,7 @@ class Boardspace {
 
   // Check if boardspace can be moved on to
   playerCanEnter() {
-    return (this.position >= 0 && this.position <= 99 && this.player == null && this.fallStage < FALLEN);
+    return (this.position >= 0 && this.position <= 99);
   }
 
   static get STABLE() { return STABLE; }

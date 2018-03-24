@@ -458,8 +458,8 @@ class Gameplay {
       fallPiece(i+4);
       if(this.board[i].hasPlayer())
       {
-        fallPiece(this.board[i].player.id);
-        this.killPlayer(this.board[i].player);
+        // fallPiece(this.board[i].player.id);
+        // this.killPlayer(this.board[i].player);
       }
 
       this.board[99 - i].fallStage = Boardspace.FALLEN;
@@ -468,8 +468,8 @@ class Gameplay {
       // setColorHex(99 - i + 4, 0xFF0000);
       if(this.board[99 - i].hasPlayer())
       {
-        fallPiece(this.board[99 - i].player.id);
-        this.killPlayer(this.board[99 - i].player);
+        // fallPiece(this.board[99 - i].player.id);
+        // this.killPlayer(this.board[99 - i].player);
       }
     }
 
@@ -481,8 +481,8 @@ class Gameplay {
       fallPiece(i+4);
       if(this.board[i].hasPlayer())
       {
-        fallPiece(this.board[i].player.id);
-        this.killPlayer(this.board[i].player);
+        // fallPiece(this.board[i].player.id);
+        // this.killPlayer(this.board[i].player);
       }
 
       this.board[99 - i].fallStage = Boardspace.FALLEN;
@@ -492,8 +492,8 @@ class Gameplay {
 
       if(this.board[99 - i].hasPlayer())
       {
-        fallPiece(this.board[99 - i].player.id);
-        this.killPlayer(this.board[99 - i].player);
+        // fallPiece(this.board[99 - i].player.id);
+        // this.killPlayer(this.board[99 - i].player);
       }
     }
 
@@ -748,6 +748,6 @@ class Gameplay {
   // NOTE: TESTED!
   randomItem()
   {
-    return this.items[Math.floor(Math.random() * this.items.length)];
+    return this.items[Math.floor(Math.random())];
   }
 }

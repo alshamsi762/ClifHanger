@@ -20,26 +20,14 @@ class Player {
     if (typeof(amount) != 'number') { return; }
     if (amount % 1 !== 0 || amount < 0) { return; }
 
-    if (this.health - amount < 0) {
-      this.health = 0;
-    } else if (this.health > 0) {
-      this.health -= amount;
-    } else {
-      this.health = 0;
-    }
+    this.health -= amount;
   }
   // Heals the player's health by the amount.
   healHealthBy(amount) {
     if (typeof(amount) != 'number') { return; }
     if (amount % 1 !== 0 || amount < 0) { return; }
 
-    if (this.health <= 0) {
-      this.health = 0;
-    } else if (this.health + amount <= 100) {
-      this.health += amount;
-    } else {
-      this.health = 100;
-    }
+    this.health += amount;
   }
 
   // Change the player's position
@@ -51,10 +39,8 @@ class Player {
   pushOffensiveItem(offensiveItem) {
     if (offensiveItem instanceof Item) {
       if (this.offensive == null) { this.offensive = []; }
-      if (this.offensive.length < 6) {
         this.offensive.push(offensiveItem);
         return true;
-      }
     }
     return false;
   }
@@ -63,10 +49,8 @@ class Player {
   pushDefensiveItem(defensiveItem) {
     if (defensiveItem instanceof Item) {
       if (this.defensive == null) { this.defensive = []; }
-      if (this.defensive.length < 6) {
         this.defensive.push(defensiveItem);
         return true;
-      }
     }
     return false;
   }

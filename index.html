@@ -107,38 +107,38 @@
 				<span class="close">&times;</span>
 				<p id="whowon" class="text-center" style="display:inline-block;height:100%;vertical-align:middle;font-weight: bold; font-size: 24px;"></p>
 			</div>
-	
+
 		</div>
-	
-	
+
+
 		<!-- Description of game -->
 		<div id="descGame" class="desc" style="font-weight: bold; font-size: 18px;"> Help
 			<span class="content" style="padding: 7px; font-weight: normal; font-size: 16px;">
-				<p class="text-info">CliffHanger is a 4-player game where the sole survivor in the end is the winner. Each player has 15 seconds to play their turn. A turn counts if a player moves. Attacking or using special items after moving is allowed but not required. </p> 
-				
-				<p class="text-info"> A player cannot end their turn without moving first. Each player has 100 HP (health points) to start with. Each attack or special item injures players differently. </p> 
+				<p class="text-info">CliffHanger is a 4-player game where the sole survivor in the end is the winner. Each player has 15 seconds to play their turn. A turn counts if a player moves. Attacking or using special items after moving is allowed but not required. </p>
+
+				<p class="text-info"> A player cannot end their turn without moving first. Each player has 100 HP (health points) to start with. Each attack or special item injures players differently. </p>
 					<p class="text-info">Players can also use potions to heal or gain HP. A player dies if they get pushed off the stage, or lose all of their health points.<p>
 						<p class="text-info"> Each player can only have 6 offensive and 6 defensive items. Players can only use the item on top of their items queue. 10 items are dropped at the beginning of the game. A new item is dropped after every full turn. The outer layer of tiles is dropped after a certain number of turns to make the stage smaller for more action! </p>
 				<br/ >
 						<p class="text-warning"> <kbd>
 				Keyboard controls for gameplay:</kbd> </p>
-				
+
 				<dt class="text-danger"><kbd>A </kbd></dt><dd class="text-danger">Left </dd> <br />
-				
+
 				<dt class="text-danger"><kbd>S </kbd></dt><dd class="text-danger">Down</dd> <br />
-				
+
 				<dt class="text-danger"><kbd>D </kbd></dt><dd class="text-danger">Right </dd> <br />
-				
+
 				<dt class="text-danger"><kbd>W </kbd></dt><dd class="text-danger">Up </dd> <br />
-				
+
 				<dt class="text-danger"><kbd>P </kbd></dt><dd class="text-danger">Choose Offensive item </dd> <br />
-				
+
 				<dt class="text-danger"><kbd>L </kbd></dt><dd class="text-danger">Choose Defensive item </dd> <br />
-				
+
 				<dt class="text-danger"><kbd>B </kbd></dt><dd class="text-danger">Choose Basic attack </dd> <br />
-				
+
 				<dt class="text-danger"><kbd>E </kbd></dt><dd class="text-danger">End turn </dd> <br />
-				
+
 				<dt class="text-danger"><kbd>Spacebar </kbd></dt><dd class="text-danger">Apply potion/Choose teleport or trap position </dd> <br />
 				</span>
 		</div>
@@ -209,7 +209,7 @@
 
 		// Get the next player
 		document.getElementById("currentItem").innerHTML = "Current item: " + game.currItem.name + " - " + game.currItem.description;
-		document.getElementById("endTurn").disabled = true;
+		document.getElementById("endTurn").disabled = false;
 		if (player == null) {
 			player = game.playerList.head;
 		} else if (player.next.data.id == -1){
@@ -531,7 +531,7 @@ function keyCatcher(key) {
 	}
 
 	// End turn (E)
-	else if(key.keyCode == "69" && game.currPlayer.status != 1) {
+	else if(key.keyCode == "69") {
 		console.log("keyCatcher(): Registered \'B\' Key");
 		teleportMove = game.currPlayer.position;
 
