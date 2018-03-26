@@ -252,11 +252,11 @@
 			displayPlayerInfo();
 		}
 		else {
-			game.startTurnFor(player.data);
-			turnTimer(20, player.data.name, "timer");
-			displayPlayerInfo();
-			document.getElementById("global").innerHTML = game.currPlayer.name+" has no possible moves!";
-			endTurn();
+			// game.startTurnFor(player.data);
+			// turnTimer(20, player.data.name, "timer");
+			// displayPlayerInfo();
+			// document.getElementById("global").innerHTML = game.currPlayer.name+" has no possible moves!";
+			// endTurn();
 		}
 	}
 
@@ -266,8 +266,8 @@
 			document.getElementById("endTurn").disabled = false;
 			if (game.currPlayer.status == 0) { // Player was trapped
 				document.getElementById("global").innerHTML = player.data.name + " was trapped!<br />";
-				game.clearAttackSpaces();
-				endTurn();
+				// game.clearAttackSpaces();
+				// endTurn();
 			} else {													// Not trapped
 				displayItems();
 				document.getElementById("instructions").innerHTML = player.data.name + ", attack someone near you or end your turn.<br />";
