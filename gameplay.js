@@ -312,6 +312,7 @@ class Gameplay {
      if (newBoardspace.fallStage == Boardspace.FALLEN) {
        this.killPlayer(playerToPush);
        fallPiece(playerToPush.id);
+       // Does not work if board has not shrunk yet
      }
    }
  }
